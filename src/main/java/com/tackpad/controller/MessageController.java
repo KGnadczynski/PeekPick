@@ -14,6 +14,7 @@ import com.tackpad.services.CompanyBranchService;
 import com.tackpad.services.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
@@ -49,7 +50,7 @@ public class MessageController extends BaseController {
      * @return @{link ResponseEntity}
      */
     @GetMapping(value = "/page/{page}")
-    @CrossOrigin
+    @PreAuthorize("#oauth2.hasScope('bar') and #oauth2.hasScope('read')")
     ResponseEntity getPage(@PathVariable("page") int page,
                            @QueryParam("pageSize") Integer pageSize,
                            @QueryParam("messageIdList") String messageIdList,
