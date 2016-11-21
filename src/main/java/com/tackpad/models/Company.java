@@ -53,6 +53,8 @@ public class Company {
     @ManyToOne(cascade = CascadeType.PERSIST)
     public CompanyCategory category;
 
+
+
     /** Do walidacji formularza tworzenia firmy.*/
     public interface CreateComapanyValidation {}
 

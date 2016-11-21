@@ -7,6 +7,7 @@ import com.tackpad.converters.LongListConverter;
 import com.tackpad.converters.MessageTypeListConverter;
 import com.tackpad.models.CompanyBranch;
 import com.tackpad.models.Message;
+import com.tackpad.models.oauth2.User;
 import com.tackpad.requests.enums.ListingSortType;
 import com.tackpad.responses.Page;
 import com.tackpad.responses.enums.BadRequestResponseType;
@@ -15,6 +16,7 @@ import com.tackpad.services.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
@@ -50,8 +52,7 @@ public class MessageController extends BaseController {
      * @return @{link ResponseEntity}
      */
     @GetMapping(value = "/page/{page}")
-    @PreAuthorize("#oauth2.hasScope('bar') and #oauth2.hasScope('read')")
-    ResponseEntity getPage(@PathVariable("page") int page,
+    ResponseEntity getPage(@AuthenticationPrincipal User user, @PathVariable("page") int page,
                            @QueryParam("pageSize") Integer pageSize,
                            @QueryParam("messageIdList") String messageIdList,
                            @QueryParam("companyBranchId") Long companyBranchId,
