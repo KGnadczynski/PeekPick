@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@Table(name = "role")
 public class Role implements GrantedAuthority {
 
 	private static final long serialVersionUID = 1L;
