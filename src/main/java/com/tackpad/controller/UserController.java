@@ -16,10 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
 
@@ -103,6 +100,16 @@ public class UserController  extends BaseController {
         return success(createBusinessUserForm);
     }
 
+    @PostMapping("/email/{email}")
+    ResponseEntity checkEmailIsUsed(@PathVariable("email") String email) {
+
+        //Unikalnosc meila
+        if (userService.getByEmail(email) != null) {
+            return badRequest(BadRequestResponseType.EMAIL_ADDRESS_IS_USED);
+        }
+
+        return success(email);
+    }
 
     @InitBinder("createBusinessUserForm")
     void initBinder(WebDataBinder binder) {
