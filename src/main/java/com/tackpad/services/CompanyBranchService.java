@@ -7,6 +7,8 @@ import com.tackpad.responses.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
  * CompanyBranch service.
  * @author Przemysaw Zynis
@@ -48,6 +50,18 @@ public class CompanyBranchService extends BaseService {
 
         return companyBranchDao.findById(id);
     }
+
+    /**
+     *
+     * Pobieranie po id
+     *
+     * @return lista głównych kategorii
+     */
+    public List<CompanyBranch> getListByCompanyId(Long id) {
+
+        return companyBranchDao.findListByCompanyId(id);
+    }
+
 
     /** Save.*/
     public void save(CompanyBranch companyBranch) {

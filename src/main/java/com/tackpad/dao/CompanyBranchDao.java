@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface CompanyBranchDao extends BaseDao<CompanyBranch> {
 	List<CompanyBranch> getPage(int page, int pageSize);
-	Company findById();
+	List<CompanyBranch> findListByCompanyId(Long companyId);
 }

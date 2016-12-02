@@ -17,9 +17,16 @@
 package com.tackpad.models.oauth2;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.tackpad.models.enums.UserStatus;
+import com.tackpad.requests.CreateBusinessUserForm;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,17 +35,26 @@ import java.util.Set;
 public class User {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
 	@NotEmpty
+	@NotNull(groups = CreateBusinessUserForm.CreateBossinessValidation.class)
 	private String name;
 
 	@NotEmpty
-	@Column(unique = true, nullable = false)
+	@JsonProperty("email")
+	@Column(name = "email", unique = true, nullable = false)
+	@NotNull(groups = CreateBusinessUserForm.CreateBossinessValidation.class)
 	private String login;
 
+	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
+	private UserStatus status;
+
 	@NotEmpty
+	@Length(min = 6, groups = CreateBusinessUserForm.CreateBossinessValidation.class)
+	@NotNull(groups = CreateBusinessUserForm.CreateBossinessValidation.class)
 	private String password;
 
 	@JsonIgnore
@@ -53,16 +69,16 @@ public class User {
 		super();
 		this.id = user.getId();
 		this.name = user.getName();
-		this.login = user.getLogin();
+		this.login = user.getEmail();
 		this.password = user.getPassword();
 		this.roles = user.getRoles();
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -74,11 +90,11 @@ public class User {
 		this.name = name;
 	}
 
-	public String getLogin() {
+	public String getEmail() {
 		return login;
 	}
 
-	public void setLogin(String login) {
+	public void setEmail(String login) {
 		this.login = login;
 	}
 
@@ -94,8 +110,16 @@ public class User {
 		return roles;
 	}
 
+
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
 	}
 
+	public UserStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(UserStatus status) {
+		this.status = status;
+	}
 }

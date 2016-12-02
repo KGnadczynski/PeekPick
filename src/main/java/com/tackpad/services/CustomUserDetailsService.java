@@ -17,42 +17,47 @@
 package com.tackpad.services;
 
 
+import com.tackpad.dao.UserDao;
+import com.tackpad.models.enums.UserStatus;
 import com.tackpad.models.oauth2.User;
-import com.tackpad.models.oauth2.UserRepository;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import sun.rmi.runtime.Log;
 
 import java.util.Collection;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-	private final UserRepository userRepository;
+    private static final Logger logger = Logger.getLogger(CustomUserDetailsService.class);
 
-	@Autowired
-	public CustomUserDetailsService(UserRepository userRepository) {
-		this.userRepository = userRepository;
-	}
+    @Autowired
+    public UserDao userDao;
 
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User user = userRepository.findByLogin(username);
-		if (user == null) {
-			throw new UsernameNotFoundException(String.format("User %s does not exist!", username));
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+		User user = userDao.findByEmail(email);
+
+        if (user == null) {
+			throw new UsernameNotFoundException(String.format("User %s does not exist!", email));
 		}
-		return new UserRepositoryUserDetails(user);
+		return new UserRepositoryUserDetails(user, user.getStatus());
 	}
 
 	private final static class UserRepositoryUserDetails extends User implements UserDetails {
 
 		private static final long serialVersionUID = 1L;
 
-		private UserRepositoryUserDetails(User user) {
+        private UserStatus status;
+
+		private UserRepositoryUserDetails(User user, UserStatus status) {
 			super(user);
+            this.status = status;
 		}
 
 		@Override
@@ -62,7 +67,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 		@Override
 		public String getUsername() {
-			return getLogin();
+			return getEmail();
 		}
 
 		@Override
@@ -72,7 +77,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 		@Override
 		public boolean isAccountNonLocked() {
-			return true;
+            return !status.equals(UserStatus.NON_ACTIVE);
 		}
 
 		@Override
@@ -82,7 +87,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 		@Override
 		public boolean isEnabled() {
-			return true;
+            return !status.equals(UserStatus.DELETED);
 		}
 
 	}

@@ -6,6 +6,7 @@ import com.tackpad.models.CompanyBranch;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -30,8 +31,11 @@ public class CompanyBranchDaoImpl extends BaseDaoImpl<CompanyBranch> implements 
 	}
 
 	@Override
-	public Company findById() {
-		return null;
+	public List<CompanyBranch> findListByCompanyId(Long companyId) {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria criteria = session.createCriteria(CompanyBranch.class);
+		criteria.add(Restrictions.eq("company.id", companyId));
+		return criteria.list();
 	}
 
 	@Override
@@ -39,4 +43,5 @@ public class CompanyBranchDaoImpl extends BaseDaoImpl<CompanyBranch> implements 
 		Session session = sessionFactory.getCurrentSession();
 		return (CompanyBranch) session.get(CompanyBranch.class, id);
 	}
+
 }

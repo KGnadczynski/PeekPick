@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  */
 @Controller
 @RequestMapping("/test")
-public class TestController extends BaseController{
+public class TestController extends BaseController {
 
     @Autowired
     public CompanyCategoryService companyCategoryService;
@@ -58,28 +58,6 @@ public class TestController extends BaseController{
 
         companyService.save(company);
 
-        Company company2 = new Company();
-        company2.name = "Najgorsza firma na świecie";
-        company2.latitude = 54.374269;
-        company2.longitude = 18.631857;
-        company2.city = "Gdańsk";
-        company2.street = "Grunwaldzka";
-        company2.streetNo = "15d";
-        company2.category = companyCategory2;
-
-        companyService.save(company2);
-
-        Company company3 = new Company();
-        company3.name = "Firemka ";
-        company3.latitude = 54.374269;
-        company3.longitude = 18.631857;
-        company3.city = "Gdańsk";
-        company3.street = "Fajna ulica";
-        company3.streetNo = "15d";
-        company3.category = companyCategory3;
-
-        companyService.save(company3);
-
         CompanyBranch companyBranch = new CompanyBranch();
         companyBranch.name = "Oddział 1";
         companyBranch.latitude = 54.374269;
@@ -97,7 +75,7 @@ public class TestController extends BaseController{
         companyBranch2.city = "Gdańsk";
         companyBranch2.street = "Grunwaldzka";
         companyBranch2.streetNo = "12d";
-        companyBranch2.company = company2;
+        companyBranch2.company = company;
         companyBranchService.save(companyBranch2);
 
         CompanyBranch companyBranch3 = new CompanyBranch();
@@ -107,7 +85,7 @@ public class TestController extends BaseController{
         companyBranch3.city = "Gdańsk";
         companyBranch3.street = "Grunwaldzka";
         companyBranch3.streetNo = "12d";
-        companyBranch3.company = company3;
+        companyBranch3.company = company;
         companyBranchService.save(companyBranch3);
 
         return success();

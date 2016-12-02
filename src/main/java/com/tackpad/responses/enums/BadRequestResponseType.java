@@ -12,5 +12,11 @@ public enum  BadRequestResponseType {
     INVALID_CATEGORY_ID,
 
     /** .*/
-    INVALID_COMPANY_BRUNCH_ID;
+    INVALID_COMPANY_BRUNCH_ID,
+
+    /** .*/
+    EMAIL_ADDRESS_IS_USED,
+
+    /** .*/
+    INVALID_TOKEN;
 }

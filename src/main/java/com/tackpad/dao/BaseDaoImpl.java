@@ -19,7 +19,19 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 	public void save(T t)  {
 		Session session = sessionFactory.getCurrentSession();
 		session.saveOrUpdate(t);
-}
+	}
+
+	@Override
+	public void merge(T t) {
+		Session session = sessionFactory.getCurrentSession();
+		session.merge(t);
+	}
+
+	@Override
+	public void delete(T t) {
+		Session session = sessionFactory.getCurrentSession();
+		session.delete(t);
+	}
 
 	@Override
 	public T findById(Long id) {
