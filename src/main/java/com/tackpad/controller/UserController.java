@@ -100,7 +100,7 @@ public class UserController  extends BaseController {
         return success(createBusinessUserForm);
     }
 
-    @PostMapping("/email/{email}")
+    @GetMapping("/email/{email}")
     ResponseEntity checkEmailIsUsed(@PathVariable("email") String email) {
 
         //Unikalnosc meila
