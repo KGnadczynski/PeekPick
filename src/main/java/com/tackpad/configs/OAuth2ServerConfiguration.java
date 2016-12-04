@@ -61,7 +61,7 @@ public class OAuth2ServerConfiguration {
 				.authorizeRequests()
 					.antMatchers(HttpMethod.POST, "/messages").authenticated()
 					.antMatchers(HttpMethod.GET, "/users/business/me").authenticated()
-				.anyRequest().anonymous();
+				.anyRequest().permitAll();
 			// @formatter:on
 		}
 
