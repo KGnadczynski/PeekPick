@@ -110,7 +110,7 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 				sql.append("ORDER BY distance ");
 				break;
 			case CREATE_DATE:
-				sql.append("ORDER BY messageCreateDate ");
+				sql.append("ORDER BY messageCreateDate desc");
 				break;
 		}
 
