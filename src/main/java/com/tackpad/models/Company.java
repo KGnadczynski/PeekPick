@@ -1,7 +1,7 @@
 package com.tackpad.models;
 
 
-import com.tackpad.requests.CreateBusinessUserForm;
+import com.tackpad.models.oauth2.User;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -21,22 +21,22 @@ public class Company {
 
     /** Nazwa.*/
     @Column(nullable = false)
-    @NotNull(groups = {CreateComapanyValidation.class, CreateBusinessUserForm.CreateBossinessValidation.class})
+    @NotNull(groups = {CreateComapanyValidation.class, User.CreateBusinessUserValidation.class})
     public String name;
 
     /** Miasto.*/
     @Column(nullable = false)
-    @NotNull(groups = {CreateComapanyValidation.class, CreateBusinessUserForm.CreateBossinessValidation.class})
+    @NotNull(groups = {CreateComapanyValidation.class, User.CreateBusinessUserValidation.class})
     public String city;
 
     /** Ulica.*/
     @Column(nullable = false)
-    @NotNull(groups = {CreateComapanyValidation.class, CreateBusinessUserForm.CreateBossinessValidation.class})
+    @NotNull(groups = {CreateComapanyValidation.class, User.CreateBusinessUserValidation.class})
     public String street;
 
     /** Numer lokalu.*/
     @Column(nullable = false)
-    @NotNull(groups = {CreateComapanyValidation.class, CreateBusinessUserForm.CreateBossinessValidation.class})
+    @NotNull(groups = {CreateComapanyValidation.class, User.CreateBusinessUserValidation.class})
     public String streetNo;
 
     /** Długość geograficzna.*/
@@ -49,7 +49,7 @@ public class Company {
 
     /** Kategoria.*/
     @Valid
-    @NotNull(groups = {CreateComapanyValidation.class, CreateBusinessUserForm.CreateBossinessValidation.class})
+    @NotNull(groups = {CreateComapanyValidation.class, User.CreateBusinessUserValidation.class})
     @ManyToOne(cascade = CascadeType.PERSIST)
     public CompanyCategory category;
 

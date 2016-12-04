@@ -18,14 +18,13 @@ package com.tackpad.models.oauth2;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.tackpad.models.Company;
 import com.tackpad.models.enums.UserStatus;
-import com.tackpad.requests.CreateBusinessUserForm;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
@@ -39,13 +38,13 @@ public class User {
 	private Long id;
 
 	@NotEmpty
-	@NotNull(groups = CreateBusinessUserForm.CreateBossinessValidation.class)
+	@NotNull(groups = CreateBusinessUserValidation.class)
 	private String name;
 
 	@NotEmpty
 	@JsonProperty("email")
 	@Column(name = "email", unique = true, nullable = false)
-	@NotNull(groups = CreateBusinessUserForm.CreateBossinessValidation.class)
+	@NotNull(groups = CreateBusinessUserValidation.class)
 	private String login;
 
 	@Column(nullable = false)
@@ -53,9 +52,13 @@ public class User {
 	private UserStatus status;
 
 	@NotEmpty
-	@Length(min = 6, groups = CreateBusinessUserForm.CreateBossinessValidation.class)
-	@NotNull(groups = CreateBusinessUserForm.CreateBossinessValidation.class)
+	@Length(min = 6, groups = CreateBusinessUserValidation.class)
+	@NotNull(groups = CreateBusinessUserValidation.class)
 	private String password;
+
+	@Valid
+	@ManyToOne(optional = true)
+	private Company company;
 
 	@JsonIgnore
 	@ManyToMany(fetch = FetchType.EAGER)
@@ -122,4 +125,15 @@ public class User {
 	public void setStatus(UserStatus status) {
 		this.status = status;
 	}
+
+	public Company getCompany() {
+		return company;
+	}
+
+	public void setCompany(Company company) {
+		this.company = company;
+	}
+
+	/** Do walidacji formularza tworzenia widomosci.*/
+	public interface CreateBusinessUserValidation {}
 }

@@ -1,7 +1,7 @@
 package com.tackpad.models;
 
 
-import com.tackpad.requests.CreateBusinessUserForm;
+import com.tackpad.models.oauth2.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -16,7 +16,7 @@ public class CompanyCategory {
 
     @Id
     @GeneratedValue
-    @NotNull(groups = {Company.CreateComapanyValidation.class, CreateBusinessUserForm.CreateBossinessValidation.class})
+    @NotNull(groups = {Company.CreateComapanyValidation.class, User.CreateBusinessUserValidation.class})
     public Long id;
 
     /** Nazwa.*/

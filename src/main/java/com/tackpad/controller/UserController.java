@@ -3,21 +3,22 @@ package com.tackpad.controller;
 import com.tackpad.models.Company;
 import com.tackpad.models.CompanyBranch;
 import com.tackpad.models.CompanyCategory;
-import com.tackpad.models.Token;
 import com.tackpad.models.enums.UserStatus;
 import com.tackpad.models.oauth2.User;
-import com.tackpad.requests.CreateBusinessUserForm;
 import com.tackpad.responses.enums.BadRequestResponseType;
 import com.tackpad.services.*;
 import it.ozimov.springboot.templating.mail.service.exception.CannotSendEmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.ws.rs.QueryParam;
 import java.io.UnsupportedEncodingException;
 
 /**
@@ -46,15 +47,14 @@ public class UserController  extends BaseController {
     public TokenService tokenService;
 
     @PostMapping("/business")
-    ResponseEntity create(@Validated(CreateBusinessUserForm.CreateBossinessValidation.class)
-                          @RequestBody CreateBusinessUserForm createBusinessUserForm, Errors errors) {
+    ResponseEntity create(@Validated(User.CreateBusinessUserValidation.class)
+                          @RequestBody User user, Errors errors) {
 
         if (errors.hasErrors()) {
             return badRequest(errors.getAllErrors());
         }
 
-        User user = createBusinessUserForm.user;
-        Company company = createBusinessUserForm.company;
+        Company company = user.getCompany();
 
         //Unikalnosc meila
         if (userService.getByEmail(user.getEmail()) != null) {
@@ -81,8 +81,10 @@ public class UserController  extends BaseController {
         company.latitude = 1.0;
         company.longitude = 1.0;
 
-        userService.save(user);
         companyService.save(company);
+
+        user.setCompany(company);
+        userService.save(user);
 
         companyBranch.company = company;
 
@@ -97,18 +99,26 @@ public class UserController  extends BaseController {
             e.printStackTrace();
         }
 
-        return success(createBusinessUserForm);
+        return success(user);
     }
 
-    @GetMapping("/email/{email}")
-    ResponseEntity checkEmailIsUsed(@PathVariable("email") String email) {
+    @GetMapping("/email")
+    ResponseEntity checkEmailIsUsed(@QueryParam("email") String email) {
 
         //Unikalnosc meila
         if (userService.getByEmail(email) != null) {
             return badRequest(BadRequestResponseType.EMAIL_ADDRESS_IS_USED);
         }
 
-        return success(email);
+        return success();
+    }
+
+    @GetMapping("/business/me")
+    ResponseEntity getMy(Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User user = userService.getByEmail(userDetails.getUsername());
+
+        return success(user);
     }
 
     @InitBinder("createBusinessUserForm")
