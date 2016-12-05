@@ -18,5 +18,8 @@ public enum  BadRequestResponseType {
     EMAIL_ADDRESS_IS_USED,
 
     /** .*/
-    INVALID_TOKEN;
+    INVALID_TOKEN,
+
+    /** .*/
+    UPLOAD_IMAGE_FAIL;
 }

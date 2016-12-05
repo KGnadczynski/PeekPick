@@ -9,7 +9,7 @@ import com.tackpad.models.enums.MessageStatus;
 import com.tackpad.models.enums.MessageType;
 import com.tackpad.requests.enums.ListingSortType;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,7 +114,7 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 				break;
 		}
 
-		Query query = session.createSQLQuery(sql.toString());
+		SQLQuery query = session.createSQLQuery(sql.toString());
 
 		if (companyBranchId != null) {
 			query.setParameter("companyBranchId", companyBranchId);
@@ -146,7 +146,7 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 			message.id = (Long.parseLong(row[0].toString()));
 			message.type = MessageType.valueOf(row[1].toString());
 			message.startDate = format.parse(row[2].toString());
-			message.endDate = format.parse(row[3].toString());
+			message.endDate = (row[3] != null) ? format.parse(row[3].toString()) : null;
 			message.createDate = format.parse(row[4].toString());
 			message.content = row[5].toString();
 			message.status = MessageStatus.valueOf(row[6].toString());
@@ -185,4 +185,5 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 		Session session = sessionFactory.getCurrentSession();
 		return (Message) session.get(Message.class, id);
 	}
+
 }

@@ -11,8 +11,8 @@ import javax.validation.constraints.NotNull;
  * Firma.
  * @author Przemysław Zynis
  */
-@Entity(name = "company")
-@Table(name = "company")
+@Entity
+@Table
 public class Company {
 
     @Id

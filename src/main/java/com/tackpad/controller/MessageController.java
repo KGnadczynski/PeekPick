@@ -1,23 +1,20 @@
 package com.tackpad.controller;
 
 
-import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
 import com.tackpad.converters.LongListConverter;
 import com.tackpad.converters.MessageTypeListConverter;
 import com.tackpad.models.CompanyBranch;
 import com.tackpad.models.Message;
+import com.tackpad.models.MessageImage;
 import com.tackpad.models.oauth2.User;
 import com.tackpad.requests.enums.ListingSortType;
 import com.tackpad.responses.Page;
 import com.tackpad.responses.enums.BadRequestResponseType;
-import com.tackpad.services.CompanyBranchService;
-import com.tackpad.services.MessageService;
+import com.tackpad.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -34,17 +31,20 @@ import java.text.ParseException;
 @RequestMapping("/messages")
 public class MessageController extends BaseController {
 
-    Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
-            "cloud_name", "great-software",
-            "api_key", "663115442842357",
-            "api_secret", "Yacqx7ZfBisrLjs_QfqQ2gzV3kE"));
-
-
     @Autowired
     public MessageService messageService;
 
     @Autowired
     public CompanyBranchService companyBranchService;
+
+    @Autowired
+    public ImageStoreService imageStoreService;
+
+    @Autowired
+    public MessageImageService messageImageService;
+
+    @Autowired
+    public UserService userService;
 
     /** Poviera strone wiadomosci.
      *
@@ -52,7 +52,7 @@ public class MessageController extends BaseController {
      * @return @{link ResponseEntity}
      */
     @GetMapping(value = "/page/{page}")
-    ResponseEntity getPage(@AuthenticationPrincipal User user, @PathVariable("page") int page,
+    ResponseEntity getPage(@PathVariable("page") int page,
                            @QueryParam("pageSize") Integer pageSize,
                            @QueryParam("messageIdList") String messageIdList,
                            @QueryParam("companyBranchId") Long companyBranchId,
@@ -79,6 +79,15 @@ public class MessageController extends BaseController {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+        for (Message message : messagePage.objectList) {
+            MessageImage messageImage = messageImageService.getByMessageId(message.id);
+
+            if (messageImage != null) {
+                message.mainImageUrl = messageImage.imageUrl;
+            }
+        }
+
         return success(messagePage);
     }
 
@@ -103,38 +112,6 @@ public class MessageController extends BaseController {
 
         messageService.save(message);
         return success();
-    }
-
-    @PostMapping(value = "/upload")
-    public String uploadPhoto(@RequestPart("file") MultipartFile file) throws IOException {
-
-       /* SingletonManager manager = new SingletonManager();
-        manager.setCloudinary(cloudinary);
-        manager.init();
-
-        Map uploadResult = cloudinary.uploader().upload(photoUpload.getFile().getBytes(),
-                ObjectUtils.asMap("resource_type", "auto"));
-        *//*PhotoUploadValidator validator = new PhotoUploadValidator();
-        validator.validate(photoUpload, result);
-
-        Map uploadResult = null;
-        if (photoUpload.getFile() != null && !photoUpload.getFile().isEmpty()) {
-            uploadResult = Singleton.getCloudinary().uploader().upload(photoUpload.getFile().getBytes(),
-                    ObjectUtils.asMap("resource_type", "auto"));
-            photoUpload.setPublicId((String) uploadResult.get("public_id"));
-            Object version = uploadResult.get("version");
-            if (version instanceof Integer) {
-                photoUpload.setVersion(new Long((Integer) version));
-            } else {
-                photoUpload.setVersion((Long) version);
-            }
-
-            photoUpload.setSignature((String) uploadResult.get("signature"));
-            photoUpload.setFormat((String) uploadResult.get("format"));
-            photoUpload.setResourceType((String) uploadResult.get("resource_type"));
-        }*/
-
-        return "upload";
     }
 
 }

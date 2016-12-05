@@ -58,7 +58,7 @@ public abstract class BaseController {
     public ResponseEntity badRequest(BadRequestResponseType badRequestResponseType ) {
 
         BadRequestResponse badRequestResponse = new BadRequestResponse();
-        badRequestResponse.type = badRequestResponseType;
+        badRequestResponse.error = badRequestResponseType;
 
         logger.info("Response: {}: " + badRequestResponse);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(badRequestResponse);

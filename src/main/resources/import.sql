@@ -11,7 +11,7 @@ insert into user_role(user_id, role_id) values (1,2);
 insert into user_role(user_id, role_id) values (2,1);
 insert into user_role(user_id, role_id) values (3,1);
 
-INSERT INTO companyCategory
+INSERT INTO companycategory
 (id, name, parentCategory_id) VALUES
   (1, "Kultura i rozrywka", null),
   (2, "Gastronomia i Nocne Życie", null),
@@ -21,7 +21,7 @@ INSERT INTO companyCategory
   (6, "Usułgi inne", null),
   (7, "Sport i Turystyka", null);
 
-INSERT INTO companyCategory
+INSERT INTO companycategory
 (id, name, parentCategory_id) VALUES
   (8, "Artyści, zespoły", 1),
   (9, "Escape roomy, parki rozrywki", 1),
@@ -29,7 +29,7 @@ INSERT INTO companyCategory
   (11, "Muzeum, wystawy", 1),
   (12, "Inne", 1);
 
-INSERT INTO companyCategory
+INSERT INTO companycategory
 (id, name, parentCategory_id) VALUES
   (13, "Food truck", 2),
   (14, "Kawiarnie", 2),

@@ -8,5 +8,5 @@ import com.tackpad.responses.enums.BadRequestResponseType;
  */
 public class BadRequestResponse {
 
-    public BadRequestResponseType type;
+    public BadRequestResponseType error;
 }

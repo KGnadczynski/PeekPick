@@ -60,6 +60,7 @@ public class OAuth2ServerConfiguration {
 			http
 				.authorizeRequests()
 					.antMatchers(HttpMethod.POST, "/messages").authenticated()
+					.antMatchers(HttpMethod.POST, "/messages/messageId/{\\\\d+}/image").authenticated()
 					.antMatchers(HttpMethod.GET, "/users/business/me").authenticated()
 				.anyRequest().permitAll();
 			// @formatter:on

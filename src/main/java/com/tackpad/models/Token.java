@@ -6,8 +6,8 @@ import com.tackpad.models.oauth2.User;
 
 import javax.persistence.*;
 
-@Entity(name = "token")
-@Table(name = "token")
+@Entity
+@Table
 public class Token {
 
     @Id

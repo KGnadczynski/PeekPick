@@ -5,8 +5,8 @@ import javax.persistence.*;
 /**
  * Oddzial firmy
  */
-@Entity(name = "companyBranch")
-@Table(name = "companyBranch")
+@Entity
+@Table
 public class CompanyBranch {
 
     @Id

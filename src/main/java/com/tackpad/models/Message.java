@@ -14,8 +14,8 @@ import java.util.Date;
  * Widomość.
  * @author Przemysław Zynis
  */
-@Entity(name = "message")
-@Table(name = "message")
+@Entity
+@Table
 public class Message {
 
     @Id
@@ -41,8 +41,7 @@ public class Message {
 
     /** Koniec promocji.*/
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
-    @Column(nullable = false)
-    @NotNull(groups = CreateMessageValidation.class)
+    @Column
     public Date endDate;
 
     /** Data dodania.*/
@@ -62,6 +61,9 @@ public class Message {
 
     @Transient
     public double distance;
+
+    @Transient
+    public String mainImageUrl;
 
     /** Do walidacji formularza tworzenia widomosci.*/
     public interface CreateMessageValidation {}

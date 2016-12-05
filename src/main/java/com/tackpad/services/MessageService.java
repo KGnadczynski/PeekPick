@@ -57,7 +57,10 @@ public class MessageService extends BaseService {
         return response;
     }
 
-    /** Save.*/
+    public Message getById(Long messageId) {
+        return messageDao.findById(messageId);
+    }
+
     public void save(Message message) {
         messageDao.save(message);
     }
