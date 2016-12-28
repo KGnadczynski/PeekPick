@@ -41,10 +41,12 @@ public class Company {
 
     /** Długość geograficzna.*/
     @Column(nullable = false)
+    @NotNull(groups = {CreateComapanyValidation.class, User.CreateBusinessUserValidation.class})
     public Double latitude;
 
     /** Szerokość geograficzna.*/
     @Column(nullable = false)
+    @NotNull(groups = {CreateComapanyValidation.class, User.CreateBusinessUserValidation.class})
     public Double longitude;
 
     /** Kategoria.*/

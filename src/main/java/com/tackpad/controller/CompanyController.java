@@ -65,6 +65,23 @@ public class CompanyController extends BaseController {
         return success();
     }
 
+    /**
+     * Pobiera po id.
+     * @param companyId - id firmy
+     * @return @{link ResponseEntity}
+     */
+    @PostMapping
+    ResponseEntity getById(@PathVariable("companyId") Long companyId) {
+
+        Company company = companyService.getById(companyId);
+
+        if (company == null) {
+            return badRequest(BadRequestResponseType.INVALID_ID);
+        }
+
+        return success(company);
+    }
+
     @InitBinder("company")
     void initBinder(WebDataBinder binder) {
         binder.initDirectFieldAccess();

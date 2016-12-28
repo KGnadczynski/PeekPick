@@ -38,6 +38,10 @@ public class CompanyService extends BaseService {
         return response;
     }
 
+    public Company getById(Long id) {
+        return companyDao.findById(id);
+    }
+
     /** Save.*/
     public void save(Company company) {
         companyDao.save(company);

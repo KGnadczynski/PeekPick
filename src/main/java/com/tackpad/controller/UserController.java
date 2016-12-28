@@ -74,12 +74,8 @@ public class UserController  extends BaseController {
         companyBranch.city = company.city;
         companyBranch.name = company.name;
         companyBranch.streetNo = company.streetNo;
-
-        //TODO pobieranie lokalizacji z googla
-        companyBranch.latitude = 1.0;
-        companyBranch.longitude = 1.0;
-        company.latitude = 1.0;
-        company.longitude = 1.0;
+        companyBranch.latitude = company.latitude;
+        companyBranch.longitude = company.longitude;
 
         companyService.save(company);
 
