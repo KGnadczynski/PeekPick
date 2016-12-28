@@ -70,7 +70,7 @@ public class CompanyController extends BaseController {
      * @param companyId - id firmy
      * @return @{link ResponseEntity}
      */
-    @PostMapping
+    @GetMapping(value = "/companyId/{companyId}")
     ResponseEntity getById(@PathVariable("companyId") Long companyId) {
 
         Company company = companyService.getById(companyId);
