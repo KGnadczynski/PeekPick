@@ -133,6 +133,10 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 			query.setParameter("searchTerm", "%" + searchTerm + "%");
 		}
 
+		if (range != null) {
+			query.setParameter("range", range);
+		}
+
 
 		query.setFirstResult(pageSize * page);
 		query.setMaxResults(pageSize);
