@@ -111,7 +111,7 @@ public class MessageController extends BaseController {
         }
 
         messageService.save(message);
-        return success();
+        return success(message);
     }
 
 }
