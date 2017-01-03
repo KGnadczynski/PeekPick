@@ -18,7 +18,7 @@ INSERT INTO companycategory
   (3, "Zakupy Małe", null),
   (4, "Zakupy Duże", null),
   (5, "Usługi dla Ciała", null),
-  (6, "Usułgi inne", null),
+  (6, "Usułgi Inne", null),
   (7, "Sport i Turystyka", null);
 
 INSERT INTO companycategory
@@ -37,3 +37,48 @@ INSERT INTO companycategory
   (16, "Puby", 2),
   (17, "Restauracje", 2),
   (18, "Inne", 2);
+
+INSERT INTO companycategory
+(id, name, parentCategory_id) VALUES
+  (19, "Księgarnia, pamiątki, upominki", 3),
+  (20, "Odzież i obuwie", 3),
+  (21, "Sklepy sportowe", 3),
+  (22, "Sklepy spożywcze", 3),
+  (23, "Inne", 3);
+
+INSERT INTO companycategory
+(id, name, parentCategory_id) VALUES
+  (24, "AGD, RTV", 4),
+  (25, "Budowlane, ogrodnicze", 4),
+  (26, "Meble, oświetlenie, akcesoria", 4),
+  (27, "Salony samochodowe", 4),
+  (28, "Inne", 4);
+
+INSERT INTO companycategory
+(id, name, parentCategory_id) VALUES
+  (29, "Dietetycy i zdrowa żywność", 5),
+  (30, "Gabinety lekarskie", 5),
+  (31, "Salony masażu, spa, solarium", 5),
+  (32, "Salony tatuażu", 5),
+  (33, "Salony fryzjerskie i kosmetyczne", 5),
+  (34, "Inne", 5);
+
+INSERT INTO companycategory
+(id, name, parentCategory_id) VALUES
+  (35, "Budowlane", 6),
+  (36, "Edukacyjne", 6),
+  (37, "Finansowe", 6),
+  (38, "Fotograficzne, komputerowe", 6),
+  (39, "Mechanicy, wulkanizacja, stacje paliw", 6),
+  (40, "Inne", 6);
+
+INSERT INTO companycategory
+(id, name, parentCategory_id) VALUES
+  (41, "Baseny i parki wodne", 7),
+  (42, "Hotele i Pensjonaty", 7),
+  (43, "Kluby sportowe", 7),
+  (44, "Kursy, szkolenia", 7),
+  (45, "Siłownia i fitness", 7),
+  (46, "Sporty ekstremalne", 7),
+  (47, "Sporty towarzyskie", 7),
+  (48, "Inne", 7);
