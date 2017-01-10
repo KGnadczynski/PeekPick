@@ -91,6 +91,18 @@ public class MessageController extends BaseController {
         return success(messagePage);
     }
 
+    @GetMapping(value = "/{messageId}")
+    ResponseEntity getMessage(@PathVariable("messageId") Long messageId) {
+
+        Message message = messageService.getById(messageId);
+
+        if (message == null) {
+            return badRequest(BadRequestResponseType.INVALID_ID);
+        }
+
+        return success(message);
+    }
+
     /**
      * Tworzy wiadomość.
      * @param message - wiadomość
