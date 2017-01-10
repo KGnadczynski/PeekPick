@@ -100,6 +100,12 @@ public class MessageController extends BaseController {
             return badRequest(BadRequestResponseType.INVALID_ID);
         }
 
+        MessageImage messageImage = messageImageService.getByMessageId(message.id);
+
+        if (messageImage != null) {
+            message.mainImageUrl = messageImage.imageUrl;
+        }
+
         return success(message);
     }
 
