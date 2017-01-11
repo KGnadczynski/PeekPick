@@ -78,6 +78,10 @@ public class Company {
     @Length(max = 20)
     public String phoneNumber;
 
+    @Column(length = 30)
+    @Length(max = 30)
+    public String email;
+
     @Column(length = 200)
     @Length(max = 200)
     public String openingHours;

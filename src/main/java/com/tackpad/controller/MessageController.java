@@ -111,7 +111,7 @@ public class MessageController extends BaseController {
 
     @GetMapping(value = "/companyId/{companyId}/count")
     ResponseEntity getCount(@PathVariable("companyId") Long companyId) {
-        return success(messageService.getById(companyId));
+        return success(messageService.getCount(companyId));
     }
 
     /**
