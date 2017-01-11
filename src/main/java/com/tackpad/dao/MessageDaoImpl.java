@@ -9,9 +9,11 @@ import com.tackpad.models.enums.MessageStatus;
 import com.tackpad.models.enums.MessageType;
 import com.tackpad.requests.enums.ListingSortType;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -185,6 +187,14 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 		}
 
 		return messageList;
+	}
+
+	@Override
+	public Integer findCount(Long companyId) {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria criteria = session.createCriteria(Message.class);
+		criteria.add(Restrictions.eq("companyBranch.company.id", companyId));
+		return (Integer) criteria.uniqueResult();
 	}
 
 	@Override

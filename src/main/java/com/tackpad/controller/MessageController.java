@@ -109,6 +109,11 @@ public class MessageController extends BaseController {
         return success(message);
     }
 
+    @GetMapping(value = "/companyId/{companyId}/count")
+    ResponseEntity getCount(@PathVariable("companyId") Long companyId) {
+        return success(messageService.getById(companyId));
+    }
+
     /**
      * Tworzy wiadomość.
      * @param message - wiadomość

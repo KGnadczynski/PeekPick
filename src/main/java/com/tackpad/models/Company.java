@@ -1,11 +1,14 @@
 package com.tackpad.models;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tackpad.models.oauth2.User;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 /**
  * Firma.
@@ -49,13 +52,30 @@ public class Company {
     @NotNull(groups = {CreateComapanyValidation.class, User.CreateBusinessUserValidation.class})
     public Double longitude;
 
+
     /** Kategoria.*/
     @Valid
     @NotNull(groups = {CreateComapanyValidation.class, User.CreateBusinessUserValidation.class})
     @ManyToOne(cascade = CascadeType.PERSIST)
     public CompanyCategory category;
 
+    /** Data dodania.*/
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "DEFAULT_TIMEZONE")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
+    @Column(nullable = false)
+    public Date createDate = new Date();
 
+    @Column
+    public String description;
+
+    @Column
+    public String website;
+
+    @Column
+    public String phoneNumber;
+
+    @Column
+    public String openingHours;
 
     /** Do walidacji formularza tworzenia firmy.*/
     public interface CreateComapanyValidation {}

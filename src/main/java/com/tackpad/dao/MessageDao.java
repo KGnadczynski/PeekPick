@@ -15,4 +15,5 @@ public interface MessageDao extends BaseDao<Message> {
 						  List<Long> companyCategoryMainIdList, List<MessageType> messageTypeList, Double latitude,
 						  Double longitude, Integer range, String searchTerm, ListingSortType listingSortType) throws ParseException;
 
+    Integer findCount(Long companyId);
 }
