@@ -37,20 +37,20 @@ public class Message {
     /** Start promocji.*/
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "DEFAULT_TIMEZONE")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
-    @Column(nullable = false, columnDefinition = "TIMESTAMPTZ(3)")
+    @Column(nullable = false)
     @NotNull(groups = CreateMessageValidation.class)
     public Date startDate;
 
     /** Koniec promocji.*/
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "DEFAULT_TIMEZONE")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
-    @Column(columnDefinition = "TIMESTAMPTZ(3)")
+    @Column
     public Date endDate;
 
     /** Data dodania.*/
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "DEFAULT_TIMEZONE")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
-    @Column(nullable = false, columnDefinition = "TIMESTAMPTZ(3)")
+    @Column(nullable = false)
     public Date createDate = new Date();
 
     /** Status.*/
