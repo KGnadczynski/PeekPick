@@ -54,6 +54,7 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 				"cb.streetNo as companyBranchStreetNo, " +
 				"cb.latitude as companyBranchLatitude, " +
 				"cb.longitude as companyBranchLongitude, " +
+				"c.id as companyId, " +
 				"c.name as companyName, " +
 				"cc.id as companyCategoryId, " +
 				"cc.name as companyCategoryName ");
@@ -166,19 +167,21 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 			companyBranch.longitude = Double.valueOf(row[13].toString());
 
 			Company company = new Company();
-			company.name = row[14].toString();
+			company.id = (Long.parseLong(row[14].toString()));
+			company.name = row[15].toString();
 
 			companyBranch.company = company;
-			if (latitude != null && longitude != null) {
-				message.distance = Double.parseDouble(row[17].toString());
-			}
 			message.companyBranch = companyBranch;
 
 			CompanyCategory companyCategory = new CompanyCategory();
-			companyCategory.id = Long.parseLong(row[15].toString());
-			companyCategory.name = row[16].toString();
+			companyCategory.id = Long.parseLong(row[16].toString());
+			companyCategory.name = row[17].toString();
 
 			company.category = companyCategory;
+
+			if (latitude != null && longitude != null) {
+				message.distance = Double.parseDouble(row[18].toString());
+			}
 		}
 
 		return messageList;
