@@ -35,21 +35,21 @@ public class Message {
     public MessageType type;
 
     /** Start promocji.*/
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ", timezone = "DEFAULT_TIMEZONE")
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "DEFAULT_TIMEZONE")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
     @Column(nullable = false, columnDefinition = "TIMESTAMPTZ(3)")
     @NotNull(groups = CreateMessageValidation.class)
     public Date startDate;
 
     /** Koniec promocji.*/
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ", timezone = "DEFAULT_TIMEZONE")
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "DEFAULT_TIMEZONE")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
     @Column(columnDefinition = "TIMESTAMPTZ(3)")
     public Date endDate;
 
     /** Data dodania.*/
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ", timezone = "DEFAULT_TIMEZONE")
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "DEFAULT_TIMEZONE")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
     @Column(nullable = false, columnDefinition = "TIMESTAMPTZ(3)")
     public Date createDate = new Date();
 
