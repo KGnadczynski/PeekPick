@@ -3,6 +3,7 @@ package com.tackpad.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tackpad.models.oauth2.User;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -65,16 +66,20 @@ public class Company {
     @Column(nullable = false)
     public Date createDate = new Date();
 
-    @Column
+    @Column(length = 1000)
+    @Length(max = 1000)
     public String description;
 
-    @Column
+    @Column(length = 100)
+    @Length(max = 100)
     public String website;
 
-    @Column
+    @Column(length = 20)
+    @Length(max = 20)
     public String phoneNumber;
 
-    @Column
+    @Column(length = 200)
+    @Length(max = 200)
     public String openingHours;
 
     /** Do walidacji formularza tworzenia firmy.*/
