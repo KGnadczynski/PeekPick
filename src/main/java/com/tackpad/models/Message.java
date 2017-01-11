@@ -5,6 +5,7 @@ package com.tackpad.models;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tackpad.models.enums.MessageStatus;
 import com.tackpad.models.enums.MessageType;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -34,19 +35,22 @@ public class Message {
     public MessageType type;
 
     /** Start promocji.*/
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
-    @Column(nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ", timezone = "DEFAULT_TIMEZONE")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
+    @Column(nullable = false, columnDefinition = "TIMESTAMPTZ(3)")
     @NotNull(groups = CreateMessageValidation.class)
     public Date startDate;
 
     /** Koniec promocji.*/
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
-    @Column
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ", timezone = "DEFAULT_TIMEZONE")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
+    @Column(columnDefinition = "TIMESTAMPTZ(3)")
     public Date endDate;
 
     /** Data dodania.*/
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
-    @Column(nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ", timezone = "DEFAULT_TIMEZONE")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
+    @Column(nullable = false, columnDefinition = "TIMESTAMPTZ(3)")
     public Date createDate = new Date();
 
     /** Status.*/
