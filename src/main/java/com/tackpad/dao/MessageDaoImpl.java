@@ -13,6 +13,7 @@ import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -197,7 +198,7 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 		criteria.createAlias("cb.company", "c");
 
 		criteria.add(Restrictions.eq("c.id", companyId));
-		return (Integer) criteria.uniqueResult();
+		return (Integer) criteria.setProjection(Projections.rowCount()).uniqueResult();
 	}
 
 	@Override
