@@ -3,6 +3,7 @@ package com.tackpad.controller;
 
 import com.tackpad.converters.LongListConverter;
 import com.tackpad.converters.MessageTypeListConverter;
+import com.tackpad.models.Company;
 import com.tackpad.models.CompanyBranch;
 import com.tackpad.models.Message;
 import com.tackpad.models.MessageImage;
@@ -43,6 +44,9 @@ public class MessageController extends BaseController {
 
     @Autowired
     public MessageImageService messageImageService;
+
+    @Autowired
+    public CompanyService companyService;
 
     @Autowired
     public UserService userService;
@@ -112,6 +116,12 @@ public class MessageController extends BaseController {
 
     @GetMapping(value = "/companyId/{companyId}/count")
     ResponseEntity getCount(@PathVariable("companyId") Long companyId) {
+
+        Company company = companyService.getById(companyId);
+        if (company == null) {
+            return badRequest(BadRequestResponseType.INVALID_ID);
+        }
+        
         CountResponse countResponse = new CountResponse();
         countResponse.count = messageService.getCount(companyId);
         return success(countResponse);
