@@ -8,5 +8,5 @@ import com.tackpad.responses.enums.BadRequestResponseType;
  */
 public class CountResponse {
 
-    public int count;
+    public long count;
 }

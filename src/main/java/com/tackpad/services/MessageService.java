@@ -61,7 +61,7 @@ public class MessageService extends BaseService {
         return messageDao.findById(messageId);
     }
 
-    public Integer getCount(Long companyId) {
+    public Long getCount(Long companyId) {
         return messageDao.findCount(companyId);
     }
 

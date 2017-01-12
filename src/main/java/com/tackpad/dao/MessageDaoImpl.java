@@ -191,14 +191,14 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 	}
 
 	@Override
-	public Integer findCount(Long companyId) {
+	public Long findCount(Long companyId) {
 		Session session = sessionFactory.getCurrentSession();
 		Criteria criteria = session.createCriteria(Message.class, "m");
 		criteria.createAlias("m.companyBranch", "cb");
 		criteria.createAlias("cb.company", "c");
 
 		criteria.add(Restrictions.eq("c.id", companyId));
-		return (Integer) criteria.setProjection(Projections.rowCount()).uniqueResult();
+		return (Long) criteria.setProjection(Projections.rowCount()).uniqueResult();
 	}
 
 	@Override

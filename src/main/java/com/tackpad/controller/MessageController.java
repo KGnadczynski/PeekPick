@@ -121,7 +121,7 @@ public class MessageController extends BaseController {
         if (company == null) {
             return badRequest(BadRequestResponseType.INVALID_ID);
         }
-        
+
         CountResponse countResponse = new CountResponse();
         countResponse.count = messageService.getCount(companyId);
         return success(countResponse);
