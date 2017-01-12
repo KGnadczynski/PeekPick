@@ -8,6 +8,7 @@ import com.tackpad.models.Message;
 import com.tackpad.models.MessageImage;
 import com.tackpad.models.oauth2.User;
 import com.tackpad.requests.enums.ListingSortType;
+import com.tackpad.responses.CountResponse;
 import com.tackpad.responses.Page;
 import com.tackpad.responses.enums.BadRequestResponseType;
 import com.tackpad.services.*;
@@ -111,7 +112,9 @@ public class MessageController extends BaseController {
 
     @GetMapping(value = "/companyId/{companyId}/count")
     ResponseEntity getCount(@PathVariable("companyId") Long companyId) {
-        return success(messageService.getCount(companyId));
+        CountResponse countResponse = new CountResponse();
+        countResponse.count = messageService.getCount(companyId);
+        return success(countResponse);
     }
 
     /**
