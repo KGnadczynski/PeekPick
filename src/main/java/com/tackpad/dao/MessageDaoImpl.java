@@ -195,8 +195,7 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 		Session session = sessionFactory.getCurrentSession();
 		Criteria criteria = session.createCriteria(Message.class, "m");
 		criteria.createAlias("m.companyBranch", "cb");
-		criteria.createAlias("cb.company", "c");
-
+		criteria.createAlias("cb.company", "c");	
 		criteria.add(Restrictions.eq("c.id", companyId));
 		return (Long) criteria.setProjection(Projections.rowCount()).uniqueResult();
 	}
