@@ -4,6 +4,7 @@ package com.tackpad.controller;
 import com.tackpad.models.Company;
 import com.tackpad.models.Image;
 import com.tackpad.models.oauth2.User;
+import com.tackpad.responses.Page;
 import com.tackpad.responses.enums.BadRequestResponseType;
 import com.tackpad.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.ws.rs.QueryParam;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Objects;
@@ -67,6 +69,17 @@ public class CompanyImageController extends BaseController {
             return badRequest(BadRequestResponseType.UPLOAD_IMAGE_FAIL);
         }
 
+    }
+
+    @GetMapping(value = "/companyId/{companyId}")
+    ResponseEntity getCompanyLogo(@PathVariable("companyId") Long companyId) {
+
+        Image image = messageImageService.getByCompanyId(companyId);
+        if (image == null) {
+            return badRequest(BadRequestResponseType.INVALID_ID);
+        }
+
+        return success(image);
     }
 
 
