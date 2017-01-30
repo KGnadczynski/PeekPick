@@ -6,8 +6,7 @@ import com.tackpad.converters.MessageTypeListConverter;
 import com.tackpad.models.Company;
 import com.tackpad.models.CompanyBranch;
 import com.tackpad.models.Message;
-import com.tackpad.models.MessageImage;
-import com.tackpad.models.oauth2.User;
+import com.tackpad.models.Image;
 import com.tackpad.requests.enums.ListingSortType;
 import com.tackpad.responses.CountResponse;
 import com.tackpad.responses.Page;
@@ -15,15 +14,11 @@ import com.tackpad.responses.enums.BadRequestResponseType;
 import com.tackpad.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.ws.rs.QueryParam;
-import java.io.IOException;
 import java.text.ParseException;
 
 /**
@@ -86,10 +81,16 @@ public class MessageController extends BaseController {
         }
 
         for (Message message : messagePage.objectList) {
-            MessageImage messageImage = messageImageService.getByMessageId(message.id);
+            Image messageImage = messageImageService.getByMessageId(message.id);
 
             if (messageImage != null) {
                 message.mainImageUrl = messageImage.imageUrl;
+            }
+
+            Image companyLogoImage = messageImageService.getByCompanyId(message.companyBranch.company.id);
+
+            if (companyLogoImage != null) {
+                message.companyBranch.company.mainImageUrl = companyLogoImage.imageUrl;
             }
         }
 
@@ -105,10 +106,10 @@ public class MessageController extends BaseController {
             return badRequest(BadRequestResponseType.INVALID_ID);
         }
 
-        MessageImage messageImage = messageImageService.getByMessageId(message.id);
+        Image image = messageImageService.getByMessageId(message.id);
 
-        if (messageImage != null) {
-            message.mainImageUrl = messageImage.imageUrl;
+        if (image != null) {
+            message.mainImageUrl = image.imageUrl;
         }
 
         return success(message);

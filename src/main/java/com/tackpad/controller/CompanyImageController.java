@@ -1,7 +1,7 @@
 package com.tackpad.controller;
 
 
-import com.tackpad.models.Message;
+import com.tackpad.models.Company;
 import com.tackpad.models.Image;
 import com.tackpad.models.oauth2.User;
 import com.tackpad.responses.enums.BadRequestResponseType;
@@ -15,16 +15,17 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Objects;
 
 /**
  * 
  */
 @RestController
-@RequestMapping("/messageimages")
-public class MessageImageController extends BaseController {
+@RequestMapping("/companyimages")
+public class CompanyImageController extends BaseController {
 
     @Autowired
-    public MessageService messageService;
+    public CompanyService companyService;
 
     @Autowired
     public UserService userService;
@@ -35,24 +36,24 @@ public class MessageImageController extends BaseController {
     @Autowired
     public MessageImageService messageImageService;
 
-    @RequestMapping(value = "/messageId/{messageId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/companyId/{companyId}", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<?> uploadFile(
             Authentication authentication,
-            @PathVariable("messageId") Long messageId,
+            @PathVariable("companyId") Long companyId,
             @RequestParam("file") MultipartFile multipartFile) {
 
-        Message message = messageService.getById(messageId);
+        Company company = companyService.getById(companyId);
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User user = userService.getByEmail(userDetails.getUsername());
 
-        if (message == null || !message.companyBranch.company.id.equals(user.getCompany().id)) {
+        if (!Objects.equals(user.getCompany().id, companyId)) {
             return badRequest(BadRequestResponseType.INVALID_ID);
         }
 
         try {
             Image image = imageStoreService.uploadMessagePhoto(multipartFile.getBytes());
-            image.message = message;
+            image.company = company;
 
             messageImageService.save(image);
             return success(image);

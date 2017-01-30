@@ -3,7 +3,7 @@ package com.tackpad.services;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import com.tackpad.models.MessageImage;
+import com.tackpad.models.Image;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -22,19 +22,19 @@ public class ImageStoreService extends BaseService {
             "api_key", "663115442842357",
             "api_secret", "Yacqx7ZfBisrLjs_QfqQ2gzV3kE"));
 
-    public MessageImage uploadMessagePhoto(byte[] file) throws IOException, ParseException {
+    public Image uploadMessagePhoto(byte[] file) throws IOException, ParseException {
 
         Map responseMap = upload(file);
 
-        MessageImage messageImage = new MessageImage();
-        messageImage.imageId = (String) responseMap.get("public_id");
-        messageImage.imageUrl = (String) responseMap.get("secure_url");
+        Image image = new Image();
+        image.imageId = (String) responseMap.get("public_id");
+        image.imageUrl = (String) responseMap.get("secure_url");
 
-        return messageImage;
+        return image;
     }
 
 
-    public Map upload(byte[] file) throws ParseException, IOException {
+    private Map upload(byte[] file) throws ParseException, IOException {
         return cloudinary.uploader().upload(file, ObjectUtils.emptyMap());
     }
 

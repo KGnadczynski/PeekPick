@@ -16,7 +16,7 @@ public class CompanyCategory {
 
     @Id
     @GeneratedValue
-    @NotNull(groups = {Company.CreateComapanyValidation.class, User.CreateBusinessUserValidation.class})
+    @NotNull(groups = {Company.CreateComapanyValidation.class, User.CreateBusinessUserValidation.class, Company.UpdateComapanyValidation.class})
     public Long id;
 
     /** Nazwa.*/

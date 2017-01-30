@@ -25,38 +25,38 @@ public class Company {
 
     /** Nazwa.*/
     @Column(nullable = false)
-    @NotNull(groups = {CreateComapanyValidation.class, User.CreateBusinessUserValidation.class})
+    @NotNull(groups = {CreateComapanyValidation.class, User.CreateBusinessUserValidation.class, UpdateComapanyValidation.class})
     public String name;
 
     /** Miasto.*/
     @Column(nullable = false)
-    @NotNull(groups = {CreateComapanyValidation.class, User.CreateBusinessUserValidation.class})
+    @NotNull(groups = {CreateComapanyValidation.class, User.CreateBusinessUserValidation.class, UpdateComapanyValidation.class})
     public String city;
 
     /** Ulica.*/
     @Column(nullable = false)
-    @NotNull(groups = {CreateComapanyValidation.class, User.CreateBusinessUserValidation.class})
+    @NotNull(groups = {CreateComapanyValidation.class, User.CreateBusinessUserValidation.class, UpdateComapanyValidation.class})
     public String street;
 
     /** Numer lokalu.*/
     @Column(nullable = false)
-    @NotNull(groups = {CreateComapanyValidation.class, User.CreateBusinessUserValidation.class})
+    @NotNull(groups = {CreateComapanyValidation.class, User.CreateBusinessUserValidation.class, UpdateComapanyValidation.class})
     public String streetNo;
 
     /** Długość geograficzna.*/
     @Column(nullable = false)
-    @NotNull(groups = {CreateComapanyValidation.class, User.CreateBusinessUserValidation.class})
+    @NotNull(groups = {CreateComapanyValidation.class, User.CreateBusinessUserValidation.class, UpdateComapanyValidation.class})
     public Double latitude;
 
     /** Szerokość geograficzna.*/
     @Column(nullable = false)
-    @NotNull(groups = {CreateComapanyValidation.class, User.CreateBusinessUserValidation.class})
+    @NotNull(groups = {CreateComapanyValidation.class, User.CreateBusinessUserValidation.class, UpdateComapanyValidation.class})
     public Double longitude;
 
 
     /** Kategoria.*/
     @Valid
-    @NotNull(groups = {CreateComapanyValidation.class, User.CreateBusinessUserValidation.class})
+    @NotNull(groups = {CreateComapanyValidation.class, User.CreateBusinessUserValidation.class, UpdateComapanyValidation.class})
     @ManyToOne(cascade = CascadeType.PERSIST)
     public CompanyCategory category;
 
@@ -86,7 +86,11 @@ public class Company {
     @Length(max = 200)
     public String openingHours;
 
+    @Transient
+    public String mainImageUrl;
+
     /** Do walidacji formularza tworzenia firmy.*/
     public interface CreateComapanyValidation {}
+    public interface UpdateComapanyValidation {}
 
 }

@@ -1,8 +1,7 @@
 package com.tackpad.dao;
 
 
-import com.tackpad.models.CompanyBranch;
-import com.tackpad.models.MessageImage;
+import com.tackpad.models.Image;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -14,16 +13,24 @@ import javax.transaction.Transactional;
 
 @Repository
 @Transactional
-public class MessageImageImpl extends BaseDaoImpl<MessageImage> implements MessageImageDao {
+public class MessageImageImpl extends BaseDaoImpl<Image> implements MessageImageDao {
 
 	@Autowired
 	SessionFactory sessionFactory;
 
 	@Override
-	public MessageImage findByMessageId(Long messageId) {
+	public Image findByMessageId(Long messageId) {
 		Session session = sessionFactory.getCurrentSession();
-		Criteria criteria = session.createCriteria(MessageImage.class);
+		Criteria criteria = session.createCriteria(Image.class);
 		criteria.add(Restrictions.eq("message.id", messageId));
-		return (MessageImage) criteria.uniqueResult();
+		return (Image) criteria.uniqueResult();
+	}
+
+	@Override
+	public Image findByCompanyId(Long companyId) {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria criteria = session.createCriteria(Image.class);
+		criteria.add(Restrictions.eq("company.id", companyId));
+		return (Image) criteria.uniqueResult();
 	}
 }
