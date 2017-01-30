@@ -29,4 +29,7 @@ public class MessageImageService extends BaseService {
         messageImageDao.save(image);
     }
 
+    public void delete(Image image) {
+        messageImageDao.delete(image);
+    }
 }

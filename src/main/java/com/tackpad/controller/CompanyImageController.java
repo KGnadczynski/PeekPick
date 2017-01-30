@@ -52,7 +52,12 @@ public class CompanyImageController extends BaseController {
         }
 
         try {
-            Image image = imageStoreService.uploadMessagePhoto(multipartFile.getBytes());
+            Image image = messageImageService.getByCompanyId(companyId);
+            if (image != null) {
+                messageImageService.delete(image);
+            }
+
+            image = imageStoreService.uploadMessagePhoto(multipartFile.getBytes());
             image.company = company;
 
             messageImageService.save(image);
