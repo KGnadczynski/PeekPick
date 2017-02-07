@@ -1,10 +1,12 @@
 package com.tackpad.controller;
 
 import com.tackpad.models.Company;
+import com.tackpad.models.CompanyBranch;
 import com.tackpad.models.CompanyCategory;
 import com.tackpad.models.oauth2.User;
 import com.tackpad.responses.Page;
 import com.tackpad.responses.enums.BadRequestResponseType;
+import com.tackpad.services.CompanyBranchService;
 import com.tackpad.services.CompanyCategoryService;
 import com.tackpad.services.CompanyService;
 import com.tackpad.services.UserService;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.QueryParam;
+import java.util.List;
 import java.util.Objects;
 
 
@@ -34,6 +37,9 @@ public class CompanyController extends BaseController {
 
     @Autowired
     public CompanyCategoryService companyCategoryService;
+
+    @Autowired
+    public CompanyBranchService companyBranchService;
 
     @Autowired
     public UserService userService;
@@ -93,7 +99,18 @@ public class CompanyController extends BaseController {
             return badRequest(BadRequestResponseType.INVALID_CATEGORY_ID);
         }
 
+        List<CompanyBranch> companyBranchList = companyBranchService.getListByCompanyId(companyId);
+
+        CompanyBranch companyBranch = companyBranchList.get(0);
+        companyBranch.latitude = company.latitude;
+        companyBranch.longitude = company.longitude;
+        companyBranch.city = company.city;
+        companyBranch.street = company.street;
+        companyBranch.streetNo = company.streetNo;
+
+        companyBranchService.save(companyBranch);
         companyService.save(company);
+        
         return success();
     }
 
