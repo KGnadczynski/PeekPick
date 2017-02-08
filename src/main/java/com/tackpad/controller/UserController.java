@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
@@ -129,7 +131,9 @@ public class UserController  extends BaseController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User user = userService.getByEmail(userDetails.getUsername());
 
-        if (!user.getPassword().equals(updatePasswordForm.password)) {
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+        if (!user.getPassword().equals(passwordEncoder.encode(updatePasswordForm.password))) {
             return badRequest(BadRequestResponseType.WRONG_PASSWORD);
         }
 
