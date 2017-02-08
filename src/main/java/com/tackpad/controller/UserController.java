@@ -138,10 +138,6 @@ public class UserController  extends BaseController {
             return badRequest(BadRequestResponseType.WRONG_PASSWORD);
         }
 
-        if (userService.getByEmail(updatePasswordForm.newPassword) != null) {
-            return badRequest(BadRequestResponseType.EMAIL_ADDRESS_IS_USED);
-        }
-
         userService.updatePassword(user, updatePasswordForm.newPassword);
 
         return success(user);
@@ -162,6 +158,10 @@ public class UserController  extends BaseController {
 
         if (!passwordEncoder.matches(updateEmailForm.password, user.getPassword())) {
             return badRequest(BadRequestResponseType.WRONG_PASSWORD);
+        }
+
+        if (userService.getByEmail(updateEmailForm.email) != null) {
+            return badRequest(BadRequestResponseType.EMAIL_ADDRESS_IS_USED);
         }
 
         try {
