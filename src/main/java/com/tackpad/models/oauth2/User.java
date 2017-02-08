@@ -54,7 +54,6 @@ public class User {
 	@NotEmpty
 	@Length(min = 6, groups = CreateBusinessUserValidation.class)
 	@NotNull(groups = CreateBusinessUserValidation.class)
-	@JsonIgnore
 	private String password;
 
 	@Valid
@@ -102,12 +101,13 @@ public class User {
 		this.login = login;
 	}
 
-	public String getPassword() {
-		return password;
-	}
-
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	@JsonIgnore
+	public String getPassword(){
+		return password;
 	}
 
 	public Set<Role> getRoles() {
