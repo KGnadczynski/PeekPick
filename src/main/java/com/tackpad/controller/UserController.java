@@ -133,7 +133,7 @@ public class UserController  extends BaseController {
 
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-        if (!user.getPassword().equals(passwordEncoder.encode(updatePasswordForm.password))) {
+        if (!passwordEncoder.matches(updatePasswordForm.password, user.getPassword())) {
             return badRequest(BadRequestResponseType.WRONG_PASSWORD);
         }
 
