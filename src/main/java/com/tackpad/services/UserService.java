@@ -33,7 +33,11 @@ public class UserService extends BaseService {
 
     public void updatePassword(User user, String password) {
         user.setPassword(passwordEncoder.encode(password));
-        userDao.save(user);
+        userDao.merge(user);
+    }
+
+    public void update(User user) {
+        userDao.merge(user);
     }
 
     public void create(User user) {

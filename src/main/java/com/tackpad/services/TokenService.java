@@ -41,6 +41,17 @@ public class TokenService extends BaseService {
         return token.value;
     }
 
+    public String createChangeEmailToken(User user, String email) {
+        Token token = new Token();
+        token.tokenType = TokenType.COMPLETE_REGISTER;
+        token.user = user;
+        token.data = email;
+        token.value = UUID.randomUUID().toString();
+        tokenDao.save(token);
+
+        return token.value;
+    }
+
     public void delete(Token token) {
         tokenDao.delete(token);
     }

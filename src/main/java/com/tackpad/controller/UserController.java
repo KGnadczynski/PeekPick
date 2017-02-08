@@ -5,6 +5,7 @@ import com.tackpad.models.CompanyBranch;
 import com.tackpad.models.CompanyCategory;
 import com.tackpad.models.enums.UserStatus;
 import com.tackpad.models.oauth2.User;
+import com.tackpad.requests.UpdateEmailForm;
 import com.tackpad.requests.UpdatePasswordForm;
 import com.tackpad.responses.enums.BadRequestResponseType;
 import com.tackpad.services.*;
@@ -139,7 +140,30 @@ public class UserController  extends BaseController {
 
         userService.updatePassword(user, updatePasswordForm.password);
 
-        return success();
+        return success(user);
+    }
+
+    @PutMapping(value = "/email")
+    ResponseEntity updateEmail(Authentication authentication,
+                                  @Validated @RequestBody UpdateEmailForm updateEmailForm, Errors errors) {
+
+        if (errors.hasErrors()) {
+            return badRequest(errors.getAllErrors());
+        }
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User user = userService.getByEmail(userDetails.getUsername());
+
+        try {
+            String tokenValue = tokenService.createChangeEmailToken(user, updateEmailForm.email);
+            sendEmailService.sendChangeEmailConfirm(updateEmailForm.email, user.getCompany().name, tokenValue);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (CannotSendEmailException e) {
+            e.printStackTrace();
+        }
+
+        return success(user);
     }
 
     @InitBinder("createBusinessUserForm")

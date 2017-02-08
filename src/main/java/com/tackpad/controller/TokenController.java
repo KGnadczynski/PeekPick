@@ -33,10 +33,20 @@ public class TokenController extends BaseController {
             return badRequest(BadRequestResponseType.INVALID_TOKEN);
         }
 
-       if (token.tokenType == TokenType.COMPLETE_REGISTER) {
-           token.user.setStatus(UserStatus.ACTIVE);
-           userService.merge(token.user);
-       }
+        switch (token.tokenType) {
+
+            case COMPLETE_REGISTER:
+                token.user.setStatus(UserStatus.ACTIVE);
+                userService.merge(token.user);
+                break;
+            case CHANGE_EMAIL:
+                token.user.setEmail(token.data);
+                userService.merge(token.user);
+                break;
+
+            default:
+                throw new UnsupportedOperationException("Wrong token type: {} " + token.tokenType);
+        }
 
         tokenService.delete(token);
         return success("Aktywowano");

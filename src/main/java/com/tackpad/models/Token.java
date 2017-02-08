@@ -21,6 +21,9 @@ public class Token {
     @Column(nullable = false)
     public String value;
 
+    @Column
+    public String data;
+
     @ManyToOne(optional = true)
     public User user;
 }

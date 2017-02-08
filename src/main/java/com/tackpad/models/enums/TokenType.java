@@ -5,6 +5,8 @@ package com.tackpad.models.enums;
  */
 public enum TokenType {
 
-    COMPLETE_REGISTER;
+    COMPLETE_REGISTER,
+
+    CHANGE_EMAIL;
 
 }
