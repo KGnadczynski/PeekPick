@@ -138,7 +138,7 @@ public class UserController  extends BaseController {
             return badRequest(BadRequestResponseType.WRONG_PASSWORD);
         }
 
-        userService.updatePassword(user, updatePasswordForm.password);
+        userService.updatePassword(user, updatePasswordForm.newPassword);
 
         return success(user);
     }
