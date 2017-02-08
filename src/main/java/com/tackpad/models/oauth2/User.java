@@ -54,6 +54,7 @@ public class User {
 	@NotEmpty
 	@Length(min = 6, groups = CreateBusinessUserValidation.class)
 	@NotNull(groups = CreateBusinessUserValidation.class)
+	@JsonIgnore
 	private String password;
 
 	@Valid

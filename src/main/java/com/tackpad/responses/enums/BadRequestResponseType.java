@@ -5,21 +5,17 @@ package com.tackpad.responses.enums;
  */
 public enum  BadRequestResponseType {
 
-    /** .*/
     INVALID_ID,
 
-    /** .*/
     INVALID_CATEGORY_ID,
 
-    /** .*/
     INVALID_COMPANY_BRUNCH_ID,
 
-    /** .*/
     EMAIL_ADDRESS_IS_USED,
 
-    /** .*/
     INVALID_TOKEN,
 
-    /** .*/
-    UPLOAD_IMAGE_FAIL;
+    UPLOAD_IMAGE_FAIL,
+
+    WRONG_PASSWORD;
 }

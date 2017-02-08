@@ -5,6 +5,7 @@ import com.tackpad.models.CompanyBranch;
 import com.tackpad.models.CompanyCategory;
 import com.tackpad.models.enums.UserStatus;
 import com.tackpad.models.oauth2.User;
+import com.tackpad.requests.UpdatePasswordForm;
 import com.tackpad.responses.enums.BadRequestResponseType;
 import com.tackpad.services.*;
 import it.ozimov.springboot.templating.mail.service.exception.CannotSendEmailException;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.QueryParam;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by Przemysław Żynis on 02.12.2016.
@@ -115,6 +118,27 @@ public class UserController  extends BaseController {
         User user = userService.getByEmail(userDetails.getUsername());
 
         return success(user);
+    }
+
+    @PutMapping(value = "/password")
+    ResponseEntity updatePassword(Authentication authentication,
+                                  @Validated @RequestBody UpdatePasswordForm updatePasswordForm, Errors errors) {
+
+        if (errors.hasErrors()) {
+            return badRequest(errors.getAllErrors());
+        }
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User user = userService.getByEmail(userDetails.getUsername());
+
+        if (!user.getPassword().equals(updatePasswordForm.password)) {
+            return badRequest(BadRequestResponseType.WRONG_PASSWORD);
+        }
+
+        user.setPassword(updatePasswordForm.password);
+        userService.save(user);
+
+        return success();
     }
 
     @InitBinder("createBusinessUserForm")
