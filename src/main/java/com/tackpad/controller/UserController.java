@@ -13,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
@@ -23,8 +21,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.QueryParam;
 import java.io.UnsupportedEncodingException;
-import java.util.List;
-import java.util.Objects;
 
 /**
  * Created by Przemysław Żynis on 02.12.2016.
@@ -61,7 +57,6 @@ public class UserController  extends BaseController {
 
         Company company = user.getCompany();
 
-        //Unikalnosc meila
         if (userService.getByEmail(user.getEmail()) != null) {
             return badRequest(BadRequestResponseType.EMAIL_ADDRESS_IS_USED);
         }
@@ -86,10 +81,7 @@ public class UserController  extends BaseController {
 
         user.setCompany(company);
 
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-        userService.save(user);
+        userService.create(user);
 
         companyBranch.company = company;
 
@@ -141,10 +133,7 @@ public class UserController  extends BaseController {
             return badRequest(BadRequestResponseType.WRONG_PASSWORD);
         }
 
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        user.setPassword(passwordEncoder.encode(updatePasswordForm.password));
-
-        userService.save(user);
+        userService.updatePassword(user, updatePasswordForm.password);
 
         return success();
     }

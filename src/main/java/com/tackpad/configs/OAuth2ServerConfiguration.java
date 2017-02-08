@@ -119,9 +119,9 @@ public class OAuth2ServerConfiguration {
 			return tokenServices;
 		}
 
-		@Override
-		public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
-			oauthServer.passwordEncoder(new BCryptPasswordEncoder());
+		@Bean
+		public PasswordEncoder passwordEncoder() {
+			return new BCryptPasswordEncoder();
 		}
 
 	}
