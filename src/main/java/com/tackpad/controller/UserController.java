@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
@@ -83,6 +85,10 @@ public class UserController  extends BaseController {
         companyService.save(company);
 
         user.setCompany(company);
+
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
         userService.save(user);
 
         companyBranch.company = company;
@@ -135,7 +141,9 @@ public class UserController  extends BaseController {
             return badRequest(BadRequestResponseType.WRONG_PASSWORD);
         }
 
-        user.setPassword(updatePasswordForm.password);
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        user.setPassword(passwordEncoder.encode(updatePasswordForm.password));
+
         userService.save(user);
 
         return success();
