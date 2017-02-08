@@ -54,6 +54,7 @@ public class User {
 	@NotEmpty
 	@Length(min = 6, groups = CreateBusinessUserValidation.class)
 	@NotNull(groups = CreateBusinessUserValidation.class)
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private String password;
 
 	@Valid
@@ -105,7 +106,6 @@ public class User {
 		this.password = password;
 	}
 
-	@JsonIgnore
 	public String getPassword(){
 		return password;
 	}
