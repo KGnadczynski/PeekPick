@@ -63,7 +63,7 @@ public class MessageController extends BaseController {
                            @QueryParam("searchTerm") String searchTerm,
                            @QueryParam("latitude") Double latitude,
                            @QueryParam("longitude") Double longitude,
-                           @QueryParam("range") Integer range,
+                           @QueryParam("range") Double range,
                            @QueryParam("sortType") String sortType) {
 
         Page<Message> messagePage = null;

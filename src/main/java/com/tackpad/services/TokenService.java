@@ -43,7 +43,7 @@ public class TokenService extends BaseService {
 
     public String createChangeEmailToken(User user, String email) {
         Token token = new Token();
-        token.tokenType = TokenType.COMPLETE_REGISTER;
+        token.tokenType = TokenType.CHANGE_EMAIL;
         token.user = user;
         token.data = email;
         token.value = UUID.randomUUID().toString();

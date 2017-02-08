@@ -37,7 +37,7 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 	public List<Message> getPage(int page, int pageSize, List<Long> messageIdList, Long companyBranchId,  Long companyId,
 								 List<Long> companyCategoryMainIdList, List<Long> companyCategoryIdList,
 								 List<MessageType> messageTypeList,
-								 Double latitude, Double longitude, Integer range, String searchTerm,
+								 Double latitude, Double longitude, Double range, String searchTerm,
 								 ListingSortType listingSortType) throws ParseException {
 
 		Session session = sessionFactory.getCurrentSession();

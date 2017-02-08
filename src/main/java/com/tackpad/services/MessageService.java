@@ -31,7 +31,7 @@ public class MessageService extends BaseService {
     public Page<Message> getPage(Integer pageNum, Integer pageSize, List<Long> messageIdList, Long companyBranchId, Long companyId,
                                  List<Long> companyCategoryMainIdList,
                                  List<Long> companyCategoryIdList, List<MessageType> messageTypeList,
-                                 Double latitude, Double longitude, Integer range, String searchTerm,
+                                 Double latitude, Double longitude, Double range, String searchTerm,
                                  ListingSortType listingSortType) throws ParseException {
 
         if (pageSize == null) {
