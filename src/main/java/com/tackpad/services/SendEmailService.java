@@ -36,7 +36,7 @@ public class SendEmailService extends BaseService {
         modelObject.put("link", serverUrl + "/tokens/value/" + tokenValue);
 
         final Email email = EmailImpl.builder()
-                .from(new InternetAddress("cicero@mala-tempora.currunt", "TackPad"))
+                .from(new InternetAddress(emailAddress, "TackPad"))
                 .to(Lists.newArrayList(new InternetAddress(emailAddress, companyName)))
                 .subject("TackPad. Potwierdzanie adresu email")
                 .body("")//Empty body

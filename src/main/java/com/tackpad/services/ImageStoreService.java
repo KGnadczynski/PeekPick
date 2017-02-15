@@ -27,8 +27,8 @@ public class ImageStoreService extends BaseService {
         Map responseMap = upload(file);
 
         Image image = new Image();
-        image.imageId = (String) responseMap.get("public_id");
-        image.imageUrl = (String) responseMap.get("secure_url");
+        image.setImageId((String) responseMap.get("public_id"));
+        image.setImageUrl((String) responseMap.get("secure_url"));
 
         return image;
     }

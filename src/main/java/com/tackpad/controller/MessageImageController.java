@@ -46,13 +46,14 @@ public class MessageImageController extends BaseController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User user = userService.getByEmail(userDetails.getUsername());
 
-        if (message == null || !message.companyBranch.company.id.equals(user.getCompany().id)) {
+
+        if (message == null || !message.getUser().getCompany().getId().equals(user.getCompany().getId())) {
             return badRequest(BadRequestResponseType.INVALID_ID);
         }
 
         try {
             Image image = imageStoreService.uploadMessagePhoto(multipartFile.getBytes());
-            image.message = message;
+            image.setMessage(message);
 
             messageImageService.save(image);
             return success(image);

@@ -7,6 +7,7 @@ import com.tackpad.models.Company;
 import com.tackpad.models.CompanyBranch;
 import com.tackpad.models.Message;
 import com.tackpad.models.Image;
+import com.tackpad.models.oauth2.User;
 import com.tackpad.requests.enums.ListingSortType;
 import com.tackpad.responses.CountResponse;
 import com.tackpad.responses.Page;
@@ -14,12 +15,15 @@ import com.tackpad.responses.enums.BadRequestResponseType;
 import com.tackpad.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.QueryParam;
 import java.text.ParseException;
+import java.util.List;
 
 /**
  * 
@@ -81,17 +85,30 @@ public class MessageController extends BaseController {
         }
 
         for (Message message : messagePage.objectList) {
-            Image messageImage = messageImageService.getByMessageId(message.id);
+            Image messageImage = messageImageService.getByMessageId(message.getId());
 
             if (messageImage != null) {
-                message.mainImageUrl = messageImage.imageUrl;
+                message.setMainImageUrl(messageImage.getImageUrl());
             }
 
-            Image companyLogoImage = messageImageService.getByCompanyId(message.companyBranch.company.id);
+            Image companyLogoImage = messageImageService.getByCompanyId(message.getUser().getCompany().getId());
 
             if (companyLogoImage != null) {
-                message.companyBranch.company.mainImageUrl = companyLogoImage.imageUrl;
+                message.getUser().getCompany().setMainImageUrl(companyLogoImage.getImageUrl());
             }
+
+            try {
+                Page<CompanyBranch> companyBranchPage = companyBranchService.getPage(page, pageSize,
+                        null, null,  null, latitude,
+                        longitude, null, null, ListingSortType.DISTANCE);
+
+                if (!companyBranchPage.objectList.isEmpty()) {
+                    message.setNearestCompanyBranch(companyBranchPage.objectList.get(0));
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
         }
 
         return success(messagePage);
@@ -106,10 +123,10 @@ public class MessageController extends BaseController {
             return badRequest(BadRequestResponseType.INVALID_ID);
         }
 
-        Image image = messageImageService.getByMessageId(message.id);
+        Image image = messageImageService.getByMessageId(message.getId());
 
         if (image != null) {
-            message.mainImageUrl = image.imageUrl;
+            message.setMainImageUrl(image.getImageUrl());
         }
 
         return success(message);
@@ -134,19 +151,25 @@ public class MessageController extends BaseController {
      * @return @{link ResponseEntity}
      */
     @PostMapping
-    ResponseEntity create(@Validated(Message.CreateMessageValidation.class)
-                                                   @RequestBody Message message, Errors errors) {
+    ResponseEntity create(Authentication authentication,
+                          @Validated(Message.CreateMessageValidation.class)
+                          @RequestBody Message message, Errors errors) {
 
         if (errors.hasErrors()) {
             return badRequest(errors.getAllErrors());
         }
 
-        CompanyBranch companyBranch = companyBranchService.getById(message.companyBranch.id);
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User user = userService.getByEmail(userDetails.getUsername());
 
-        if (companyBranch == null) {
-            return badRequest(BadRequestResponseType.INVALID_COMPANY_BRUNCH_ID);
+        for (CompanyBranch companyBranchContainId : message.getCompanyBranchList()) {
+            CompanyBranch companyBranch = companyBranchService.getById(companyBranchContainId.getId());
+            if (companyBranch == null || !user.getCompany().getId().equals(companyBranch.getCompany().getId())) {
+                return badRequest(BadRequestResponseType.INVALID_COMPANY_BRUNCH_ID);
+            }
         }
 
+        message.setUser(user);
         messageService.save(message);
         return success(message);
     }

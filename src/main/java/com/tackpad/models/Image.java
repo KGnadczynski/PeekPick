@@ -2,39 +2,40 @@ package com.tackpad.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tackpad.models.enums.ImageType;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
-/**
- * Created by Przemysław Żynis on 05.12.2016.
- */
 @Entity
 @Table
+@Getter
+@Setter
 public class Image {
 
     @Id
     @GeneratedValue
-    public Long id;
+    private Long id;
 
     @ManyToOne
-    public Message message;
+    private Message message;
 
     @ManyToOne
-    public Company company;
+    private Company company;
 
     @Column(nullable = false, length = 200)
-    public String imageUrl;
+    private String imageUrl;
 
     @Column(nullable = false, length = 200)
-    public String imageId;
+    private String imageId;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "DEFAULT_TIMEZONE")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
     @Column(nullable = false)
-    public Date date = new Date();
+    private Date date = new Date();
 
     /** Typ.*/
     @Column(nullable = false)

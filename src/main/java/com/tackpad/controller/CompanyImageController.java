@@ -49,7 +49,7 @@ public class CompanyImageController extends BaseController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User user = userService.getByEmail(userDetails.getUsername());
 
-        if (!Objects.equals(user.getCompany().id, companyId)) {
+        if (!Objects.equals(user.getCompany().getId(), companyId)) {
             return badRequest(BadRequestResponseType.INVALID_ID);
         }
 
@@ -60,7 +60,7 @@ public class CompanyImageController extends BaseController {
             }
 
             image = imageStoreService.uploadMessagePhoto(multipartFile.getBytes());
-            image.company = company;
+            image.setCompany(company);
 
             messageImageService.save(image);
             return success(image);

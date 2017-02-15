@@ -5,6 +5,7 @@ import com.tackpad.models.CompanyBranch;
 import com.tackpad.models.CompanyCategory;
 import com.tackpad.models.enums.UserStatus;
 import com.tackpad.models.oauth2.User;
+import com.tackpad.requests.CreateBossinessUserForm;
 import com.tackpad.requests.UpdateEmailForm;
 import com.tackpad.requests.UpdatePasswordForm;
 import com.tackpad.responses.enums.BadRequestResponseType;
@@ -51,48 +52,42 @@ public class UserController  extends BaseController {
     public TokenService tokenService;
 
     @PostMapping("/business")
-    ResponseEntity create(@Validated(User.CreateBusinessUserValidation.class)
-                          @RequestBody User user, Errors errors) {
+    ResponseEntity create(@Validated(CreateBossinessUserForm.CreateBusinessUserValidation.class)
+                          @RequestBody CreateBossinessUserForm createBossinessUserForm, Errors errors) {
 
         if (errors.hasErrors()) {
             return badRequest(errors.getAllErrors());
         }
 
-        Company company = user.getCompany();
+        User user = createBossinessUserForm.getUser();
+        CompanyBranch companyBranch = createBossinessUserForm.getCompanyBranch();
+        Company company = companyBranch.getCompany();
 
         if (userService.getByEmail(user.getEmail()) != null) {
             return badRequest(BadRequestResponseType.EMAIL_ADDRESS_IS_USED);
         }
 
-        CompanyCategory companyCategory = companyCategoryService.getById(company.category.id);
+        CompanyCategory companyCategory = companyCategoryService.getById(company.getCategory().getId());
         if (companyCategory == null) {
             return badRequest(BadRequestResponseType.INVALID_CATEGORY_ID);
         }
-        company.category = companyCategory;
+        company.setCategory(companyCategory);
 
         user.setStatus(UserStatus.NON_ACTIVE);
 
-        CompanyBranch companyBranch = new CompanyBranch();
-        companyBranch.street = company.street;
-        companyBranch.city = company.city;
-        companyBranch.name = company.name;
-        companyBranch.streetNo = company.streetNo;
-        companyBranch.latitude = company.latitude;
-        companyBranch.longitude = company.longitude;
-
         companyService.save(company);
 
-        user.setCompany(company);
+        user.setCompany(company);;
 
         userService.create(user);
 
-        companyBranch.company = company;
-
+        companyBranch.setCompany(company);
+        companyBranch.setMain(true);
         companyBranchService.save(companyBranch);
 
         try {
             String tokenValue = tokenService.createConfirmAccountToken(user);
-            sendEmailService.sendRegisterEmailConfirm(user.getEmail(), company.name, tokenValue);
+            sendEmailService.sendRegisterEmailConfirm(user.getEmail(), company.getName(), tokenValue);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (CannotSendEmailException e) {
@@ -166,7 +161,7 @@ public class UserController  extends BaseController {
 
         try {
             String tokenValue = tokenService.createChangeEmailToken(user, updateEmailForm.email);
-            sendEmailService.sendChangeEmailConfirm(updateEmailForm.email, user.getCompany().name, tokenValue);
+            sendEmailService.sendChangeEmailConfirm(updateEmailForm.email, user.getCompany().getName(), tokenValue);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (CannotSendEmailException e) {
@@ -176,8 +171,9 @@ public class UserController  extends BaseController {
         return success(user);
     }
 
-    @InitBinder("createBusinessUserForm")
+    /*@InitBinder("createBusinessUserForm")
     void initBinder(WebDataBinder binder) {
         binder.initDirectFieldAccess();
-    }
+    }*/
+
 }

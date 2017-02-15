@@ -70,7 +70,7 @@ public class CompanyController extends BaseController {
             return badRequest(errors.getAllErrors());
         }
 
-        CompanyCategory companyCategory = companyCategoryService.getById(company.category.id);
+        CompanyCategory companyCategory = companyCategoryService.getById(company.getCategory().getId());
         if (companyCategory == null) {
             return badRequest(BadRequestResponseType.INVALID_CATEGORY_ID);
         }
@@ -90,25 +90,15 @@ public class CompanyController extends BaseController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User user = userService.getByEmail(userDetails.getUsername());
 
-        if (!Objects.equals(user.getCompany().id, companyId)) {
+        if (!Objects.equals(user.getCompany().getId(), companyId)) {
             return badRequest(BadRequestResponseType.INVALID_ID);
         }
 
-        CompanyCategory companyCategory = companyCategoryService.getById(company.category.id);
+        CompanyCategory companyCategory = companyCategoryService.getById(company.getCategory().getId());
         if (companyCategory == null) {
             return badRequest(BadRequestResponseType.INVALID_CATEGORY_ID);
         }
 
-        List<CompanyBranch> companyBranchList = companyBranchService.getListByCompanyId(companyId);
-
-        CompanyBranch companyBranch = companyBranchList.get(0);
-        companyBranch.latitude = company.latitude;
-        companyBranch.longitude = company.longitude;
-        companyBranch.city = company.city;
-        companyBranch.street = company.street;
-        companyBranch.streetNo = company.streetNo;
-
-        companyBranchService.save(companyBranch);
         companyService.save(company);
         
         return success();

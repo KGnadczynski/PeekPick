@@ -3,10 +3,13 @@ package com.tackpad.services;
 
 import com.tackpad.dao.CompanyBranchDao;
 import com.tackpad.models.CompanyBranch;
+import com.tackpad.models.Message;
+import com.tackpad.requests.enums.ListingSortType;
 import com.tackpad.responses.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -68,4 +71,29 @@ public class CompanyBranchService extends BaseService {
         companyBranchDao.save(companyBranch);
     }
 
+    public Page<CompanyBranch> getPage(Integer page, Integer pageSize, List<Long> messageIdList, Long companyBranchId, Long companyId, Double latitude,
+                                 Double longitude, Double range, String searchTerm, ListingSortType listingSortType) throws ParseException {
+
+        if (pageSize == null) {
+            pageSize = DEFAULT_PAGE_SIZE;
+        }
+
+        if (pageSize > MAX_PAGE_SIZE) {
+            pageSize = MAX_PAGE_SIZE;
+        }
+
+        if (listingSortType == null) {
+            listingSortType = ListingSortType.CREATE_DATE;
+        }
+
+        Page<CompanyBranch> response = new Page<>();
+        response.objectList = companyBranchDao.getPage(page - 1, pageSize, messageIdList,companyBranchId,  companyId, latitude,
+                longitude, range, searchTerm, listingSortType);
+
+        if (response.objectList.size() < pageSize) {
+            response.isLastPage = true;
+        }
+
+        return response;
+    }
 }

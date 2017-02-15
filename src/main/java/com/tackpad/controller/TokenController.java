@@ -33,19 +33,19 @@ public class TokenController extends BaseController {
             return badRequest(BadRequestResponseType.INVALID_TOKEN);
         }
 
-        switch (token.tokenType) {
+        switch (token.getTokenType()) {
 
             case COMPLETE_REGISTER:
-                token.user.setStatus(UserStatus.ACTIVE);
-                userService.merge(token.user);
+                token.getUser().setStatus(UserStatus.ACTIVE);
+                userService.merge(token.getUser());
                 break;
             case CHANGE_EMAIL:
-                token.user.setEmail(token.data);
-                userService.merge(token.user);
+                token.getUser().setEmail(token.getData());
+                userService.merge(token.getUser());
                 break;
 
             default:
-                throw new UnsupportedOperationException("Wrong token type: {} " + token.tokenType);
+                throw new UnsupportedOperationException("Wrong token type: {} " + token.getTokenType());
         }
 
         tokenService.delete(token);

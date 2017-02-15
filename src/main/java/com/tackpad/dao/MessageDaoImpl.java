@@ -1,12 +1,10 @@
 package com.tackpad.dao;
 
 
-import com.tackpad.models.Company;
-import com.tackpad.models.CompanyBranch;
-import com.tackpad.models.CompanyCategory;
-import com.tackpad.models.Message;
+import com.tackpad.models.*;
 import com.tackpad.models.enums.MessageStatus;
 import com.tackpad.models.enums.MessageType;
+import com.tackpad.models.oauth2.User;
 import com.tackpad.requests.enums.ListingSortType;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
@@ -43,67 +41,91 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 		Session session = sessionFactory.getCurrentSession();
 
 		StringBuilder sql = new StringBuilder();
-		sql.append("SELECT m.id as messageId, " +
-				"m.type as messageType, " +
-				"m.startDate as messageStartDate, " +
-				"m.endDate as messageEndDate, " +
-				"m.createDate as messageCreateDate, " +
-				"m.content as messageContent, " +
-				"m.status as messageStatus, " +
-				"cb.name as companyBranchName, " +
-				"cb.city as companyCity, " +
-				"cb.id as companyBranchId, " +
-				"cb.street as companyBranchStreet, " +
-				"cb.streetNo as companyBranchStreetNo, " +
-				"cb.latitude as companyBranchLatitude, " +
-				"cb.longitude as companyBranchLongitude, " +
-				"c.id as companyId, " +
-				"c.name as companyName, " +
-				"cc.id as companyCategoryId, " +
-				"cc.name as companyCategoryName ");
+		sql.append("SELECT MES.id as messageId, " +
+				"MES.type as messageType, " +
+				"MES.startDate as messageStartDate, " +
+				"MES.endDate as messageEndDate, " +
+				"MES.createDate as messageCreateDate, " +
+				"MES.content as messageContent, " +
+				"MES.status as messageStatus, " +
+				"USR.id as userId, " +
+				"USR.email as userEmail, " +
+				"USR.name as userName, " +
+				"COM.id as companyId, " +
+				"COM.name as companyName, " +
+				"COM_CAT.id as companyCategoryId, " +
+				"COM_CAT.name as companyCategoryName, " +
+				"PAR_COM_CAT.id as mainCategoryId, " +
+				"PAR_COM_CAT.name as mainCategoryName, " +
+				"MES_LOC.id as messageLocationId, " +
+				"MES_LOC.city as messageLocationCity, " +
+				"MES_LOC.street as messageLocationStreet, " +
+				"MES_LOC.streetNo as messageLocationStreetNo, " +
+				"MES_LOC.latitude as messageLocationLatitude, " +
+				"MES_LOC.longitude as messageLocationLongitude, " +
+				"count(MESS_COM_BRA.Message_id) as companyBranchCount ");
 
 		if (latitude != null && longitude != null) {
-			sql.append(", ( 6371 * acos( cos( radians(:ulatitude) ) " +
-					"* cos( radians( cb.latitude ) ) " +
-					"* cos( radians( cb.longitude ) - radians(:ulongitude) ) " +
+			
+			sql.append(", (CASE WHEN location_id IS NULL " +
+					"THEN " +
+					"(SELECT ( 6371 * acos( cos( radians(:ulatitude) ) " +
+					"* cos( radians( COM_BRA.latitude ) ) " +
+					"* cos( radians( COM_BRA.longitude ) - radians(:ulongitude) ) " +
 					"+ sin( radians(:ulatitude) ) " +
-					"* sin( radians( cb.latitude ) ) ) ) AS distance ");
+					"* sin( radians( COM_BRA.latitude )))) as distance from companybranch as COM_BRA " +
+					"                LEFT JOIN message_companybranch as MESS_COM_BRA ON COM_BRA.id = MESS_COM_BRA.companyBranchList_id " +
+					"                where MESS_COM_BRA.Message_id = MES.id " +
+					"                order by distance limit 1 ) " +
+					"ELSE " +
+					"( 6371 * acos( cos( radians(:ulatitude) ) " +
+					"* cos( radians( MES_LOC.latitude ) ) " +
+					"* cos( radians( MES_LOC.longitude ) - radians(:ulongitude) ) " +
+					"+ sin( radians(:ulatitude) ) " +
+					"* sin( radians( MES_LOC.latitude ) ) ) ) " +
+					"            END ) as distance ");
 		}
 
-		sql.append("FROM message as m ");
 
-		sql.append("LEFT JOIN companyBranch as cb ON cb.id = m.companyBranch_id ");
-		sql.append("LEFT JOIN company c ON c.id = cb.company_id ");
-		sql.append("LEFT JOIN companyCategory cc ON cc.id = c.category_id ");
-		sql.append("LEFT JOIN companyCategory ccp ON ccp.id = cc.parentCategory_id where 1=1 ");
+		sql.append("FROM message as MES ");
+		sql.append("LEFT JOIN messagelocation as MES_LOC ON MES_LOC.id = MES.location_id ");
+		sql.append("LEFT JOIN user as USR ON USR.id = MES.user_id ");
+		sql.append("LEFT JOIN company as COM ON COM.id = USR.company_id ");
+		sql.append("LEFT JOIN companyCategory COM_CAT ON COM_CAT.id = COM.category_id ");
+		sql.append("LEFT JOIN companyCategory PAR_COM_CAT ON PAR_COM_CAT.id = COM_CAT.parentCategory_id ");
+
+		sql.append("INNER JOIN message_companybranch MESS_COM_BRA On MESS_COM_BRA.Message_id = MES.id ");
+		sql.append("INNER JOIN companybranch COM_BRA On COM_BRA.id = MESS_COM_BRA.companyBranchList_id where 1=1 ");
 
 		if (companyBranchId != null) {
-			sql.append(" and cb.id = :companyBranchId ");
+			sql.append(" and COM_BRA.id = :companyBranchId ");
 		}
 
 		if (messageIdList != null) {
-			sql.append(" and m.id IN ('" + StringUtils.join(messageIdList, "','") + "') ");
+			sql.append(" and MES.id IN ('" + StringUtils.join(messageIdList, "','") + "') ");
 		}
 
 		if (companyId != null) {
-			sql.append(" and c.id = :companyId ");
+			sql.append(" and COM.id = :companyId ");
 		}
 
 		if (companyCategoryMainIdList != null) {
-			sql.append(" and ccp.id IN (" + StringUtils.join(companyCategoryMainIdList, ",") + ") ");
+			sql.append(" and PAR_COM_CAT.id IN (" + StringUtils.join(companyCategoryMainIdList, ",") + ") ");
 		}
 
 		if (companyCategoryIdList != null) {
-			sql.append(" and c.category_id IN (" + StringUtils.join(companyCategoryIdList, ",") + ") ");
+			sql.append(" and COM.category_id IN (" + StringUtils.join(companyCategoryIdList, ",") + ") ");
 		}
 
 		if (messageTypeList != null) {
-			sql.append(" and m.type IN ('" + StringUtils.join(messageTypeList, "','") + "') ");
+			sql.append(" and MES.type IN ('" + StringUtils.join(messageTypeList, "','") + "') ");
 		}
 
 		if (searchTerm != null) {
-			sql.append(" and c.name LIKE :searchTerm OR cb.name LIKE :searchTerm OR m.content LIKE :searchTerm ");
+			sql.append(" and COM.name LIKE :searchTerm OR COM_BRA.name LIKE :searchTerm OR MES.content LIKE :searchTerm ");
 		}
+
+		sql.append(" GROUP BY MESS_COM_BRA.Message_id ");
 
 		if (range != null) {
 			sql.append(" HAVING distance < :range ");
@@ -151,40 +173,53 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 
 		for(Object[] row : rows){
 			Message message = new Message();
-			message.id = (Long.parseLong(row[0].toString()));
-			message.type = MessageType.valueOf(row[1].toString());
-			message.startDate = format.parse(row[2].toString());
-			message.endDate = (row[3] != null) ? format.parse(row[3].toString()) : null;
-			message.createDate = format.parse(row[4].toString());
-			message.content = row[5].toString();
-			message.status = MessageStatus.valueOf(row[6].toString());
+			message.setId(Long.parseLong(row[0].toString()));
+			message.setType(MessageType.valueOf(row[1].toString()));
+			message.setStartDate(format.parse(row[2].toString()));
+			message.setEndDate((row[3] != null) ? format.parse(row[3].toString()) : null);
+			message.setCreateDate(format.parse(row[4].toString()));
+			message.setContent(row[5].toString());
+			message.setStatus(MessageStatus.valueOf(row[6].toString()));
 			messageList.add(message);
 
-			CompanyBranch companyBranch = new CompanyBranch();
-			companyBranch.name = row[7].toString();
-			companyBranch.city = row[8].toString();
-			companyBranch.id = (Long.parseLong(row[9].toString()));
-			companyBranch.street = row[10].toString();
-			companyBranch.streetNo = row[11].toString();
-			companyBranch.latitude = Double.valueOf(row[12].toString());
-			companyBranch.longitude = Double.valueOf(row[13].toString());
+			User user = new User();
+			user.setId(Long.parseLong(row[7].toString()));
+			user.setLogin(row[8].toString());
+			user.setName(row[9].toString());
+			message.setUser(user);
 
 			Company company = new Company();
-			company.id = (Long.parseLong(row[14].toString()));
-			company.name = row[15].toString();
-
-			companyBranch.company = company;
-			message.companyBranch = companyBranch;
+			company.setId(Long.valueOf(row[10].toString()));
+			company.setName(row[11].toString());
+			user.setCompany(company);
 
 			CompanyCategory companyCategory = new CompanyCategory();
-			companyCategory.id = Long.parseLong(row[16].toString());
-			companyCategory.name = row[17].toString();
+			companyCategory.setId(Long.parseLong(row[12].toString()));
+			companyCategory.setName(row[13].toString());
+			company.setCategory(companyCategory);
 
-			company.category = companyCategory;
+			CompanyCategory parentCompanyCategory = new CompanyCategory();
+			parentCompanyCategory.setId(Long.parseLong(row[14].toString()));
+			parentCompanyCategory.setName(row[15].toString());
+			companyCategory.setParentCategory(parentCompanyCategory);
+
+			if (row[16] != null) {
+				MessageLocation messageLocation = new MessageLocation();
+				messageLocation.id = Long.valueOf(row[16].toString());
+				messageLocation.city = row[17].toString();
+				messageLocation.street = row[18].toString();
+				messageLocation.streetNo = row[19].toString();
+				messageLocation.latitude = Double.valueOf(row[20].toString());
+				messageLocation.longitude = Double.valueOf(row[21].toString());
+				message.setLocation(messageLocation); ;
+			}
+
+			message.setCompanyBranchCount(Integer.parseInt(row[22].toString()));
 
 			if (latitude != null && longitude != null) {
-				message.distance = Double.parseDouble(row[18].toString());
+				message.setDistance(Double.parseDouble(row[23].toString()));
 			}
+
 		}
 
 		return messageList;
@@ -194,9 +229,9 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 	public Long findCount(Long companyId) {
 		Session session = sessionFactory.getCurrentSession();
 		Criteria criteria = session.createCriteria(Message.class, "m");
-		criteria.createAlias("m.companyBranch", "cb");
-		criteria.createAlias("cb.company", "c");	
-		criteria.add(Restrictions.eq("c.id", companyId));
+		criteria.createAlias("m.user", "USR");
+		criteria.createAlias("USR.company", "COM");
+		criteria.add(Restrictions.eq("COM.id", companyId));
 		return (Long) criteria.setProjection(Projections.rowCount()).uniqueResult();
 	}
 

@@ -2,6 +2,9 @@ package com.tackpad.models;
 
 
 import com.tackpad.models.oauth2.User;
+import com.tackpad.requests.CreateBossinessUserForm;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -12,19 +15,21 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table
+@Getter
+@Setter
 public class CompanyCategory {
 
     @Id
     @GeneratedValue
-    @NotNull(groups = {Company.CreateComapanyValidation.class, User.CreateBusinessUserValidation.class, Company.UpdateComapanyValidation.class})
-    public Long id;
+    @NotNull(groups = {Company.CreateComapanyValidation.class, CreateBossinessUserForm.CreateBusinessUserValidation.class, Company.UpdateComapanyValidation.class})
+    private Long id;
 
     /** Nazwa.*/
     @Column(nullable = false)
-    public String name;
+    private String name;
 
     /** Kategoria nedrzędna.*/
     @ManyToOne
-    public CompanyCategory parentCategory;
+    private CompanyCategory parentCategory;
 
 }

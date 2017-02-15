@@ -3,6 +3,9 @@ package com.tackpad.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tackpad.models.oauth2.User;
+import com.tackpad.requests.CreateBossinessUserForm;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -17,79 +20,31 @@ import java.util.Date;
  */
 @Entity
 @Table
+@Getter
+@Setter
 public class Company {
 
     @Id
     @GeneratedValue
-    public Long id;
+    private Long id;
 
-    /** Nazwa.*/
     @Column(nullable = false)
-    @NotNull(groups = {CreateComapanyValidation.class, User.CreateBusinessUserValidation.class, UpdateComapanyValidation.class})
-    public String name;
+    @NotNull(groups = {CreateComapanyValidation.class, CreateBossinessUserForm.CreateBusinessUserValidation.class, UpdateComapanyValidation.class})
+    private String name;
 
-    /** Miasto.*/
-    @Column(nullable = false)
-    @NotNull(groups = {CreateComapanyValidation.class, User.CreateBusinessUserValidation.class, UpdateComapanyValidation.class})
-    public String city;
-
-    /** Ulica.*/
-    @Column(nullable = false)
-    @NotNull(groups = {CreateComapanyValidation.class, User.CreateBusinessUserValidation.class, UpdateComapanyValidation.class})
-    public String street;
-
-    /** Numer lokalu.*/
-    @Column(nullable = false)
-    @NotNull(groups = {CreateComapanyValidation.class, User.CreateBusinessUserValidation.class, UpdateComapanyValidation.class})
-    public String streetNo;
-
-    /** Długość geograficzna.*/
-    @Column(nullable = false)
-    @NotNull(groups = {CreateComapanyValidation.class, User.CreateBusinessUserValidation.class, UpdateComapanyValidation.class})
-    public Double latitude;
-
-    /** Szerokość geograficzna.*/
-    @Column(nullable = false)
-    @NotNull(groups = {CreateComapanyValidation.class, User.CreateBusinessUserValidation.class, UpdateComapanyValidation.class})
-    public Double longitude;
-
-
-    /** Kategoria.*/
     @Valid
-    @NotNull(groups = {CreateComapanyValidation.class, User.CreateBusinessUserValidation.class, UpdateComapanyValidation.class})
+    @NotNull(groups = {CreateComapanyValidation.class, CreateBossinessUserForm.CreateBusinessUserValidation.class, UpdateComapanyValidation.class})
     @ManyToOne(cascade = CascadeType.PERSIST)
-    public CompanyCategory category;
+    private CompanyCategory category;
 
-    /** Data dodania.*/
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "DEFAULT_TIMEZONE")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
     @Column(nullable = false)
-    public Date createDate = new Date();
-
-    @Column(length = 1000)
-    @Length(max = 1000)
-    public String description;
-
-    @Column(length = 100)
-    @Length(max = 100)
-    public String website;
-
-    @Column(length = 20)
-    @Length(max = 20)
-    public String phoneNumber;
-
-    @Column(length = 30)
-    @Length(max = 30)
-    public String email;
-
-    @Column(length = 200)
-    @Length(max = 200)
-    public String openingHours;
+    private Date createDate = new Date();
 
     @Transient
-    public String mainImageUrl;
+    private String mainImageUrl;
 
-    /** Do walidacji formularza tworzenia firmy.*/
     public interface CreateComapanyValidation {}
     public interface UpdateComapanyValidation {}
 

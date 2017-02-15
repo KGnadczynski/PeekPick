@@ -3,27 +3,31 @@ package com.tackpad.models;
 
 import com.tackpad.models.enums.TokenType;
 import com.tackpad.models.oauth2.User;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
 @Table
+@Getter
+@Setter
 public class Token {
 
     @Id
     @GeneratedValue
-    public Long id;
+    private Long id;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    public TokenType tokenType;
+    private TokenType tokenType;
 
     @Column(nullable = false)
-    public String value;
+    private String value;
 
     @Column
-    public String data;
+    private String data;
 
     @ManyToOne(optional = true)
-    public User user;
+    private User user;
 }

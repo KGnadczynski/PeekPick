@@ -33,23 +33,23 @@ public class TokenService extends BaseService {
 
     public String createConfirmAccountToken(User user) {
         Token token = new Token();
-        token.tokenType = TokenType.COMPLETE_REGISTER;
-        token.user = user;
-        token.value = UUID.randomUUID().toString();
+        token.setTokenType(TokenType.COMPLETE_REGISTER);
+        token.setUser(user);
+        token.setValue(UUID.randomUUID().toString());
         tokenDao.save(token);
 
-        return token.value;
+        return token.getValue();
     }
 
     public String createChangeEmailToken(User user, String email) {
         Token token = new Token();
-        token.tokenType = TokenType.CHANGE_EMAIL;
-        token.user = user;
-        token.data = email;
-        token.value = UUID.randomUUID().toString();
+        token.setTokenType(TokenType.CHANGE_EMAIL);
+        token.setUser(user);
+        token.setData(email);
+        token.setValue(UUID.randomUUID().toString());
         tokenDao.save(token);
 
-        return token.value;
+        return token.getValue();
     }
 
     public void delete(Token token) {

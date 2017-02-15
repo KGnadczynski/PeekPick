@@ -20,6 +20,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tackpad.models.Company;
 import com.tackpad.models.enums.UserStatus;
+import com.tackpad.requests.CreateBossinessUserForm;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -29,6 +32,8 @@ import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "user")
 public class User {
@@ -38,13 +43,13 @@ public class User {
 	private Long id;
 
 	@NotEmpty
-	@NotNull(groups = CreateBusinessUserValidation.class)
+	@NotNull(groups = CreateBossinessUserForm.CreateBusinessUserValidation.class)
 	private String name;
 
 	@NotEmpty
 	@JsonProperty("email")
 	@Column(name = "email", unique = true, nullable = false)
-	@NotNull(groups = CreateBusinessUserValidation.class)
+	@NotNull(groups = CreateBossinessUserForm.CreateBusinessUserValidation.class)
 	private String login;
 
 	@Column(nullable = false)
@@ -52,8 +57,8 @@ public class User {
 	private UserStatus status;
 
 	@NotEmpty
-	@Length(min = 6, groups = CreateBusinessUserValidation.class)
-	@NotNull(groups = CreateBusinessUserValidation.class)
+	@Length(min = 6, groups = CreateBossinessUserForm.CreateBusinessUserValidation.class)
+	@NotNull(groups = CreateBossinessUserForm.CreateBusinessUserValidation.class)
 	@JsonIgnore
 	private String password;
 
@@ -71,35 +76,11 @@ public class User {
 
 	public User(User user) {
 		super();
-		this.id = user.getId();
-		this.name = user.getName();
-		this.login = user.getEmail();
+		this.id = user.id;
+		this.name = user.name;
+		this.login = user.login;
 		this.password = user.getPassword();
-		this.roles = user.getRoles();
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getEmail() {
-		return login;
-	}
-
-	public void setEmail(String login) {
-		this.login = login;
+		this.roles = user.roles;
 	}
 
 	@JsonIgnore
@@ -112,31 +93,13 @@ public class User {
 		this.password = password;
 	}
 
-	public Set<Role> getRoles() {
-		return roles;
+	@JsonIgnore
+	public String getEmail() {
+		return login;
 	}
 
-
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
+	@JsonProperty
+	public void setEmail(String email) {
+		this.login = email;
 	}
-
-	public UserStatus getStatus() {
-		return status;
-	}
-
-	public void setStatus(UserStatus status) {
-		this.status = status;
-	}
-
-	public Company getCompany() {
-		return company;
-	}
-
-	public void setCompany(Company company) {
-		this.company = company;
-	}
-
-	/** Do walidacji formularza tworzenia widomosci.*/
-	public interface CreateBusinessUserValidation {}
 }
