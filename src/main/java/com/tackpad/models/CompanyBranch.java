@@ -23,36 +23,37 @@ public class CompanyBranch {
 
     @Id
     @GeneratedValue
+    @NotNull(groups = {UpdateCompanyBranchValidation.class})
     private Long id;
 
     /** Nazwa.*/
     @Column(nullable = false)
-    @NotNull(groups = CreateBossinessUserForm.CreateBusinessUserValidation.class)
+    @NotNull(groups = {CreateBossinessUserForm.CreateBusinessUserValidation.class, UpdateCompanyBranchValidation.class})
     private String name;
 
     /** Miasto.*/
     @Column(nullable = false)
-    @NotNull(groups = CreateBossinessUserForm.CreateBusinessUserValidation.class)
+     @NotNull(groups = {CreateBossinessUserForm.CreateBusinessUserValidation.class, UpdateCompanyBranchValidation.class})
     private String city;
 
     /** Ulica.*/
     @Column(nullable = false)
-    @NotNull(groups = CreateBossinessUserForm.CreateBusinessUserValidation.class)
+     @NotNull(groups = {CreateBossinessUserForm.CreateBusinessUserValidation.class, UpdateCompanyBranchValidation.class})
     private String street;
 
     /** Numer lokalu.*/
     @Column(nullable = false)
-    @NotNull(groups = CreateBossinessUserForm.CreateBusinessUserValidation.class)
+     @NotNull(groups = {CreateBossinessUserForm.CreateBusinessUserValidation.class, UpdateCompanyBranchValidation.class})
     private String streetNo;
 
     /** Długość geograficzna.*/
     @Column
-    @NotNull(groups = CreateBossinessUserForm.CreateBusinessUserValidation.class)
+     @NotNull(groups = {CreateBossinessUserForm.CreateBusinessUserValidation.class, UpdateCompanyBranchValidation.class})
     private Double latitude;
 
     /** Szerokość geograficzna.*/
     @Column
-    @NotNull(groups = CreateBossinessUserForm.CreateBusinessUserValidation.class)
+     @NotNull(groups = {CreateBossinessUserForm.CreateBusinessUserValidation.class, UpdateCompanyBranchValidation.class})
     private Double longitude;
 
     @Column(length = 1000)
@@ -76,7 +77,7 @@ public class CompanyBranch {
     private String openingHours;
 
     @Valid
-    @NotNull(groups = CreateBossinessUserForm.CreateBusinessUserValidation.class)
+     @NotNull(groups = {CreateBossinessUserForm.CreateBusinessUserValidation.class, UpdateCompanyBranchValidation.class})
     @ManyToOne
     private Company company;
 
@@ -90,4 +91,6 @@ public class CompanyBranch {
 
     @Transient
     private double distance;
+
+    public interface UpdateCompanyBranchValidation {}
 }

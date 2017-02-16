@@ -96,4 +96,8 @@ public class CompanyBranchService extends BaseService {
 
         return response;
     }
+
+    public CompanyBranch getMainCompanyBranch(Long companyId) {
+        return companyBranchDao.getMainCompanyBranch(companyId);
+    }
 }

@@ -6,6 +6,7 @@ import com.tackpad.models.enums.MessageStatus;
 import com.tackpad.models.enums.MessageType;
 import com.tackpad.models.oauth2.User;
 import com.tackpad.requests.enums.ListingSortType;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -85,6 +86,7 @@ public class CompanyBranchDaoImpl extends BaseDaoImpl<CompanyBranch> implements 
 
 		sql.append("FROM companybranch as COM_BRA ");
 		sql.append("LEFT JOIN company as COM ON COM.id = COM_BRA.company_id ");
+		sql.append("INNER JOIN message_companybranch MESS_COM_BRA On MESS_COM_BRA.companyBranchList_id = COM_BRA.id ");
 
 		if (companyBranchId != null) {
 			sql.append(" and COM_BRA.id = :companyBranchId ");
@@ -94,13 +96,23 @@ public class CompanyBranchDaoImpl extends BaseDaoImpl<CompanyBranch> implements 
 			sql.append(" and COM.id = :companyId ");
 		}
 
-		switch (listingSortType) {
-			case DISTANCE:
-				sql.append("ORDER BY distance ");
-				break;
-			case CREATE_DATE:
-				sql.append("ORDER BY companyBranchCreateDate desc");
-				break;
+		if (messageIdList != null) {
+			sql.append(" and MESS_COM_BRA.Message_id IN ('" + StringUtils.join(messageIdList, "','") + "') ");
+		}
+
+		sql.append(" GROUP BY MESS_COM_BRA.companyBranchList_id ");
+
+		if (latitude != null && longitude != null) {
+			switch (listingSortType) {
+				case DISTANCE:
+					sql.append("ORDER BY distance ");
+					break;
+				case CREATE_DATE:
+					sql.append("ORDER BY companyBranchCreateDate desc");
+					break;
+			}
+		} else {
+			sql.append("ORDER BY companyBranchCreateDate desc");
 		}
 
 		SQLQuery query = session.createSQLQuery(sql.toString());
@@ -155,6 +167,15 @@ public class CompanyBranchDaoImpl extends BaseDaoImpl<CompanyBranch> implements 
 		}
 
 		return companyBranchList;
+	}
+
+	@Override
+	public CompanyBranch getMainCompanyBranch(Long companyId) {
+		Session session = sessionFactory.getCurrentSession();
+		final Criteria criteria = session.createCriteria(CompanyBranch.class);
+		criteria.add(Restrictions.eq("company.id", companyId));
+		criteria.add(Restrictions.eq("isMain", true));
+		return (CompanyBranch) criteria.uniqueResult();
 	}
 
 	@Override

@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.QueryParam;
 import java.text.ParseException;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -99,7 +101,7 @@ public class MessageController extends BaseController {
 
             try {
                 Page<CompanyBranch> companyBranchPage = companyBranchService.getPage(page, pageSize,
-                        null, null,  null, latitude,
+                        Collections.singletonList(message.getId()), null,  null, latitude,
                         longitude, null, null, ListingSortType.DISTANCE);
 
                 if (!companyBranchPage.objectList.isEmpty()) {
