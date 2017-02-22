@@ -3,10 +3,7 @@ package com.tackpad.controller;
 
 import com.tackpad.converters.LongListConverter;
 import com.tackpad.converters.MessageTypeListConverter;
-import com.tackpad.models.Company;
-import com.tackpad.models.CompanyBranch;
-import com.tackpad.models.Message;
-import com.tackpad.models.Image;
+import com.tackpad.models.*;
 import com.tackpad.models.oauth2.User;
 import com.tackpad.requests.enums.ListingSortType;
 import com.tackpad.responses.CountResponse;
@@ -51,6 +48,9 @@ public class MessageController extends BaseController {
 
     @Autowired
     public UserService userService;
+
+    @Autowired
+    public MessageLocationService messageLocationService;
 
     /** Poviera strone wiadomosci.
      *
@@ -163,6 +163,7 @@ public class MessageController extends BaseController {
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User user = userService.getByEmail(userDetails.getUsername());
+        MessageLocation messageLocation = message.getLocation();
 
         for (CompanyBranch companyBranchContainId : message.getCompanyBranchList()) {
             CompanyBranch companyBranch = companyBranchService.getById(companyBranchContainId.getId());
@@ -172,7 +173,13 @@ public class MessageController extends BaseController {
         }
 
         message.setUser(user);
+
+        if (messageLocation != null) {
+            messageLocationService.save(messageLocation);
+        }
+
         messageService.save(message);
+
         return success(message);
     }
 

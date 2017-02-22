@@ -32,4 +32,12 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 		criteria.add(Restrictions.eq("login", email));
 		return (User) criteria.uniqueResult();
 	}
+
+	@Override
+	public User findByPhoneNumber(String phoneNumber) {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria criteria = session.createCriteria(User.class);
+		criteria.add(Restrictions.eq("phoneNumber", phoneNumber));
+		return (User) criteria.uniqueResult();
+	}
 }

@@ -11,16 +11,13 @@ public class MessageLocation {
     @GeneratedValue
     public Long id;
 
-    @Column(nullable = false)
-    @NotNull(groups = Message.CreateMessageValidation.class)
+    @Column
     public String city;
 
-    @Column(nullable = false)
-    @NotNull(groups = Message.CreateMessageValidation.class)
+    @Column
     public String street;
 
-    @Column(nullable = false)
-    @NotNull(groups = Message.CreateMessageValidation.class)
+    @Column
     public String streetNo;
     
     @Column(nullable = false)
@@ -30,5 +27,13 @@ public class MessageLocation {
     @Column(nullable = false)
     @NotNull(groups = Message.CreateMessageValidation.class)
     public Double longitude;
+
+    @Column(nullable = false)
+    @NotNull(groups = Message.CreateMessageValidation.class)
+    public String address;
+
+    @Column(nullable = false)
+    @NotNull(groups = Message.CreateMessageValidation.class)
+    public String name;
     
 }

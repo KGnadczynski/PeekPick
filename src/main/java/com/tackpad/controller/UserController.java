@@ -3,6 +3,8 @@ package com.tackpad.controller;
 import com.tackpad.models.Company;
 import com.tackpad.models.CompanyBranch;
 import com.tackpad.models.CompanyCategory;
+import com.tackpad.models.Token;
+import com.tackpad.models.enums.TokenType;
 import com.tackpad.models.enums.UserStatus;
 import com.tackpad.models.oauth2.User;
 import com.tackpad.requests.CreateBossinessUserForm;
@@ -20,15 +22,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.QueryParam;
 import java.io.UnsupportedEncodingException;
 
-/**
- * Created by Przemysław Żynis on 02.12.2016.
- */
 @Controller
 @RequestMapping("/users")
 public class UserController  extends BaseController {
@@ -61,10 +59,15 @@ public class UserController  extends BaseController {
 
         User user = createBossinessUserForm.getUser();
         CompanyBranch companyBranch = createBossinessUserForm.getCompanyBranch();
+        Token token = createBossinessUserForm.getToken();
         Company company = companyBranch.getCompany();
 
         if (userService.getByEmail(user.getEmail()) != null) {
             return badRequest(BadRequestResponseType.EMAIL_ADDRESS_IS_USED);
+        }
+
+        if (userService.getByPhoneNumber(user.getPhoneNumber()) != null) {
+            return badRequest(BadRequestResponseType.PHONE_NUMBER_IS_USED);
         }
 
         CompanyCategory companyCategory = companyCategoryService.getById(company.getCategory().getId());
@@ -73,7 +76,7 @@ public class UserController  extends BaseController {
         }
         company.setCategory(companyCategory);
 
-        user.setStatus(UserStatus.NON_ACTIVE);
+        user.setStatus(UserStatus.ACTIVE);
 
         companyService.save(company);
 
@@ -85,14 +88,17 @@ public class UserController  extends BaseController {
         companyBranch.setMain(true);
         companyBranchService.save(companyBranch);
 
-        try {
+        token.setTokenType(TokenType.TWITTER_AUTH);
+        tokenService.save(token);
+
+        /*try {
             String tokenValue = tokenService.createConfirmAccountToken(user);
             sendEmailService.sendRegisterEmailConfirm(user.getEmail(), company.getName(), tokenValue);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (CannotSendEmailException e) {
             e.printStackTrace();
-        }
+        }*/
 
         return success(user);
     }

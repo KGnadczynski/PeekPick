@@ -63,6 +63,8 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 				"MES_LOC.streetNo as messageLocationStreetNo, " +
 				"MES_LOC.latitude as messageLocationLatitude, " +
 				"MES_LOC.longitude as messageLocationLongitude, " +
+				"MES_LOC.address as messageLocationAddress, " +
+				"MES_LOC.name as messageLocationName, " +
 				"count(MESS_COM_BRA.Message_id) as companyBranchCount ");
 
 		if (latitude != null && longitude != null) {
@@ -206,18 +208,20 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 			if (row[16] != null) {
 				MessageLocation messageLocation = new MessageLocation();
 				messageLocation.id = Long.valueOf(row[16].toString());
-				messageLocation.city = row[17].toString();
-				messageLocation.street = row[18].toString();
-				messageLocation.streetNo = row[19].toString();
+				messageLocation.city = row[17] != null ? row[17].toString() : null;
+				messageLocation.street = row[18] != null ? row[18].toString() : null;
+				messageLocation.streetNo = row[19] != null ? row[19].toString() : null;
 				messageLocation.latitude = Double.valueOf(row[20].toString());
 				messageLocation.longitude = Double.valueOf(row[21].toString());
+				messageLocation.address = row[22] != null ? row[22].toString() : null;
+				messageLocation.name = row[23] != null ? row[23].toString() : null;
 				message.setLocation(messageLocation); ;
 			}
 
-			message.setCompanyBranchCount(Integer.parseInt(row[22].toString()));
+			message.setCompanyBranchCount(Integer.parseInt(row[24].toString()));
 
 			if (latitude != null && longitude != null) {
-				message.setDistance(Double.parseDouble(row[23].toString()));
+				message.setDistance(Double.parseDouble(row[25].toString()));
 			}
 
 		}

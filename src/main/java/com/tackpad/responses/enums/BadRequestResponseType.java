@@ -17,5 +17,7 @@ public enum  BadRequestResponseType {
 
     UPLOAD_IMAGE_FAIL,
 
-    WRONG_PASSWORD;
+    WRONG_PASSWORD,
+
+    PHONE_NUMBER_IS_USED;
 }

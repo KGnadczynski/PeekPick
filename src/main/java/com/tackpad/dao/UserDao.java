@@ -9,4 +9,6 @@ import java.util.List;
 public interface UserDao extends BaseDao<User> {
 	List<User> getPage(int page, int pageSize);
 	User findByEmail(String email);
+
+	User findByPhoneNumber(String phoneNumber);
 }

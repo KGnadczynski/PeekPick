@@ -48,4 +48,8 @@ public class UserService extends BaseService {
     public void merge(User user) {
         userDao.merge(user);
     }
+
+    public Object getByPhoneNumber(String phoneNumber) {
+        return userDao.findByPhoneNumber(phoneNumber);
+    }
 }

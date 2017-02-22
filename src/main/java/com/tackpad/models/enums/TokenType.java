@@ -7,6 +7,8 @@ public enum TokenType {
 
     COMPLETE_REGISTER,
 
-    CHANGE_EMAIL;
+    CHANGE_EMAIL,
+
+    TWITTER_AUTH;
 
 }

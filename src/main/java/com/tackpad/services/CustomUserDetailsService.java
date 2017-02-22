@@ -43,6 +43,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		User user = userDao.findByEmail(email);
 
+		if (user == null) {
+			user = userDao.findByPhoneNumber(email);
+		}
+
         if (user == null) {
 			throw new UsernameNotFoundException(String.format("User %s does not exist!", email));
 		}

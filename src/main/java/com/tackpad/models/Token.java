@@ -3,10 +3,12 @@ package com.tackpad.models;
 
 import com.tackpad.models.enums.TokenType;
 import com.tackpad.models.oauth2.User;
+import com.tackpad.requests.CreateBossinessUserForm;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table
@@ -23,6 +25,7 @@ public class Token {
     private TokenType tokenType;
 
     @Column(nullable = false)
+    @NotNull(groups = CreateBossinessUserForm.CreateBusinessUserValidation.class)
     private String value;
 
     @Column
