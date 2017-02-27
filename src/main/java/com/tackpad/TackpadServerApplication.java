@@ -3,6 +3,7 @@ package com.tackpad;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.autoconfigure.web.MultipartAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
@@ -14,6 +15,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import javax.annotation.PostConstruct;
 import java.util.TimeZone;
 
+@EntityScan
 @SpringBootApplication
 @EnableAutoConfiguration
 @ComponentScan(basePackages = {"com.tackpad", "it.ozimov.springboot"})
