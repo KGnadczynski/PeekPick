@@ -75,7 +75,7 @@ public class DatabaseConfig {
         hibernateProperties.put("hibernate.connection.charSet", HIBERNATE_CONNECTION_CHARSET);
         hibernateProperties.put("hibernate.hbm2ddl.import_files_sql_extractor", HIBERNATE_HBM2DDL_IMPORT_FILES_SQL_EXTRACTOR);
         sessionFactoryBean.setHibernateProperties(hibernateProperties);
-
+    
         return sessionFactoryBean;
     }
 
