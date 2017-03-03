@@ -100,7 +100,7 @@ public class MessageController extends BaseController {
             }
 
             try {
-                Page<CompanyBranch> companyBranchPage = companyBranchService.getPage(page, pageSize,
+                Page<CompanyBranch> companyBranchPage = companyBranchService.getPage(1, 1,
                         Collections.singletonList(message.getId()), null,  null, latitude,
                         longitude, null, null, ListingSortType.DISTANCE);
 
