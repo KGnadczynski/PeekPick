@@ -145,7 +145,9 @@ public class UserController  extends BaseController {
 
         JSONObject jsonObject = jsonResponse.getBody().getObject();
         logger.info("Diggits response: {}: " + jsonResponse.getBody());
+
         logger.info("Diggits phone {}: " +  jsonObject.getString("phone_number"));
+        logger.info("Diggits token {}: " +  jsonObject.getJSONObject("access_token").getString("token"));
 
         return success();
     }
