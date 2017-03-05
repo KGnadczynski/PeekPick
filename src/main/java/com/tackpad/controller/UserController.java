@@ -18,6 +18,7 @@ import com.tackpad.requests.UpdatePasswordForm;
 import com.tackpad.responses.enums.BadRequestResponseType;
 import com.tackpad.services.*;
 import it.ozimov.springboot.templating.mail.service.exception.CannotSendEmailException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -141,9 +142,11 @@ public class UserController  extends BaseController {
         HttpResponse<JsonNode> jsonResponse = Unirest.get(diggits.getUrl())
                 .header("Authorization", diggits.getCredentials())
                 .asJson();
-        logger.info("Diggits response: {}: " + jsonResponse.getBody());
 
-        return success(jsonResponse.getBody());
+        JSONObject jsonObject = jsonResponse.getBody().getObject();
+        logger.info("Diggits phone {}: " +  jsonObject.getString("phone_number"));
+
+        return success();
     }
 
     @PutMapping(value = "/password")
