@@ -8,6 +8,7 @@ import com.tackpad.models.enums.TokenType;
 import com.tackpad.models.enums.UserStatus;
 import com.tackpad.models.oauth2.User;
 import com.tackpad.requests.CreateBossinessUserForm;
+import com.tackpad.requests.Diggits;
 import com.tackpad.requests.UpdateEmailForm;
 import com.tackpad.requests.UpdatePasswordForm;
 import com.tackpad.responses.enums.BadRequestResponseType;
@@ -124,11 +125,14 @@ public class UserController  extends BaseController {
 
 
     @PostMapping("/diggits")
-    ResponseEntity postDigits(@QueryParam("url") String url, @QueryParam("credentials") String credentials) {
+    ResponseEntity postDigits(@Validated @RequestBody Diggits diggits, Errors errors) {
        // UserDetails userDetails = (UserDetails) authentication.getPrincipal();
        // User user = userService.getByEmail(userDetails.getUsername());
-        logger.info("Diggits url: {}: " +url);
-        logger.info("Diggits credentials: {}: " +credentials);
+        if (errors.hasErrors()) {
+            return badRequest(errors.getAllErrors());
+        }
+        logger.info("Diggits url: {}: " +diggits.getUrl());
+        logger.info("Diggits credentials: {}: " +diggits.getCredentials());
         return success();
     }
 
