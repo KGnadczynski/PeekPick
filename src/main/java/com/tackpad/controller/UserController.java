@@ -122,6 +122,16 @@ public class UserController  extends BaseController {
         return success(user);
     }
 
+
+    @PostMapping("/diggits")
+    ResponseEntity postDigits(@QueryParam("url") String url, @QueryParam("credentials") String credentials) {
+       // UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+       // User user = userService.getByEmail(userDetails.getUsername());
+        logger.info("Diggits url: {}: " +url);
+        logger.info("Diggits credentials: {}: " +credentials);
+        return success();
+    }
+
     @PutMapping(value = "/password")
     ResponseEntity updatePassword(Authentication authentication,
                                   @Validated @RequestBody UpdatePasswordForm updatePasswordForm, Errors errors) {

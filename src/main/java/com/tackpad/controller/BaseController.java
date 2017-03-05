@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 public abstract class BaseController {
 
     /** Logger.*/
-    private static final Logger logger = Logger.getLogger(BaseController.class.getName());
+    protected static final Logger logger = Logger.getLogger(BaseController.class.getName());
 
     /**
      * Zwraca prawidłową odpowiedź.
