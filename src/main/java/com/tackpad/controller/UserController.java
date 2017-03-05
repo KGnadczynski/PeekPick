@@ -141,9 +141,9 @@ public class UserController  extends BaseController {
         HttpResponse<JsonNode> jsonResponse = Unirest.get(diggits.getUrl())
                 .header("Authorization", diggits.getCredentials())
                 .asJson();
-        logger.info("Diggits response: {}: " + jsonResponse.toString());
+        logger.info("Diggits response: {}: " + jsonResponse);
 
-        return success();
+        return success(jsonResponse);
     }
 
     @PutMapping(value = "/password")
