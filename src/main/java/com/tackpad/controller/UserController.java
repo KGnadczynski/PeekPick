@@ -1,5 +1,9 @@
 package com.tackpad.controller;
 
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import com.tackpad.models.Company;
 import com.tackpad.models.CompanyBranch;
 import com.tackpad.models.CompanyCategory;
@@ -125,7 +129,7 @@ public class UserController  extends BaseController {
 
 
     @PostMapping("/diggits")
-    ResponseEntity postDigits(@Validated @RequestBody Diggits diggits, Errors errors) {
+    ResponseEntity postDigits(@Validated @RequestBody Diggits diggits, Errors errors) throws UnirestException {
        // UserDetails userDetails = (UserDetails) authentication.getPrincipal();
        // User user = userService.getByEmail(userDetails.getUsername());
         if (errors.hasErrors()) {
@@ -133,6 +137,12 @@ public class UserController  extends BaseController {
         }
         logger.info("Diggits url: {}: " +diggits.getUrl());
         logger.info("Diggits credentials: {}: " +diggits.getCredentials());
+
+        HttpResponse<JsonNode> jsonResponse = Unirest.get(diggits.getUrl())
+                .header("Authorization", diggits.getCredentials())
+                .asJson();
+        logger.info("Diggits response: {}: " + jsonResponse.toString());
+
         return success();
     }
 
