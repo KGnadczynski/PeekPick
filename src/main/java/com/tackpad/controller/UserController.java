@@ -15,6 +15,7 @@ import com.tackpad.requests.CreateBossinessUserForm;
 import com.tackpad.requests.Diggits;
 import com.tackpad.requests.UpdateEmailForm;
 import com.tackpad.requests.UpdatePasswordForm;
+import com.tackpad.responses.DiggitsResponse;
 import com.tackpad.responses.enums.BadRequestResponseType;
 import com.tackpad.services.*;
 import it.ozimov.springboot.templating.mail.service.exception.CannotSendEmailException;
@@ -136,9 +137,6 @@ public class UserController  extends BaseController {
         if (errors.hasErrors()) {
             return badRequest(errors.getAllErrors());
         }
-        logger.info("Diggits url: {}: " +diggits.getUrl());
-        logger.info("Diggits credentials: {}: " +diggits.getCredentials());
-
         HttpResponse<JsonNode> jsonResponse = Unirest.get(diggits.getUrl())
                 .header("Authorization", diggits.getCredentials())
                 .asJson();
@@ -146,10 +144,11 @@ public class UserController  extends BaseController {
         JSONObject jsonObject = jsonResponse.getBody().getObject();
         logger.info("Diggits response: {}: " + jsonResponse.getBody());
 
-        logger.info("Diggits phone {}: " +  jsonObject.getString("phone_number"));
-        logger.info("Diggits token {}: " +  jsonObject.getJSONObject("access_token").getString("token"));
+        DiggitsResponse diggitsResponse = new DiggitsResponse();
+        diggitsResponse.setPhoneNumber(jsonObject.getString("phone_number"));
+        diggitsResponse.setToken(jsonObject.getJSONObject("access_token").getString("token"));
 
-        return success();
+        return success(diggitsResponse);
     }
 
     @PutMapping(value = "/password")
