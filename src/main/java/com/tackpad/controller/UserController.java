@@ -143,7 +143,7 @@ public class UserController  extends BaseController {
                 .asJson();
         logger.info("Diggits response: {}: " + jsonResponse.getBody());
 
-        return success(jsonResponse);
+        return success(jsonResponse.getBody());
     }
 
     @PutMapping(value = "/password")
