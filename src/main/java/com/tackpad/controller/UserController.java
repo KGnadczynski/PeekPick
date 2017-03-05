@@ -141,7 +141,7 @@ public class UserController  extends BaseController {
         HttpResponse<JsonNode> jsonResponse = Unirest.get(diggits.getUrl())
                 .header("Authorization", diggits.getCredentials())
                 .asJson();
-        logger.info("Diggits response: {}: " + jsonResponse);
+        logger.info("Diggits response: {}: " + jsonResponse.getBody());
 
         return success(jsonResponse);
     }
