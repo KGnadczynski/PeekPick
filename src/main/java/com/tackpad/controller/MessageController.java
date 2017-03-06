@@ -9,7 +9,10 @@ import com.tackpad.requests.enums.ListingSortType;
 import com.tackpad.responses.CountResponse;
 import com.tackpad.responses.Page;
 import com.tackpad.responses.enums.BadRequestResponseType;
+import com.tackpad.responses.enums.MessagePage;
 import com.tackpad.services.*;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -58,6 +61,7 @@ public class MessageController extends BaseController {
      * @return @{link ResponseEntity}
      */
     @GetMapping(value = "/page/{page}")
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = MessagePage.class))
     ResponseEntity getPage(@PathVariable("page") int page,
                            @QueryParam("pageSize") Integer pageSize,
                            @QueryParam("messageIdList") String messageIdList,
@@ -72,7 +76,7 @@ public class MessageController extends BaseController {
                            @QueryParam("range") Double range,
                            @QueryParam("sortType") String sortType) {
 
-        Page<Message> messagePage = null;
+        MessagePage messagePage = null;
 
         LongListConverter longListConverter = new LongListConverter();
         MessageTypeListConverter messageTypeListConverter = new MessageTypeListConverter();

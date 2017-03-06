@@ -6,6 +6,7 @@ import com.tackpad.models.Message;
 import com.tackpad.models.enums.MessageType;
 import com.tackpad.requests.enums.ListingSortType;
 import com.tackpad.responses.Page;
+import com.tackpad.responses.enums.MessagePage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -28,11 +29,11 @@ public class MessageService extends BaseService {
      *
      * @return List of Accounts
      */
-    public Page<Message> getPage(Integer pageNum, Integer pageSize, List<Long> messageIdList, Long companyBranchId, Long companyId,
-                                 List<Long> companyCategoryMainIdList,
-                                 List<Long> companyCategoryIdList, List<MessageType> messageTypeList,
-                                 Double latitude, Double longitude, Double range, String searchTerm,
-                                 ListingSortType listingSortType) throws ParseException {
+    public MessagePage getPage(Integer pageNum, Integer pageSize, List<Long> messageIdList, Long companyBranchId, Long companyId,
+                               List<Long> companyCategoryMainIdList,
+                               List<Long> companyCategoryIdList, List<MessageType> messageTypeList,
+                               Double latitude, Double longitude, Double range, String searchTerm,
+                               ListingSortType listingSortType) throws ParseException {
 
         if (pageSize == null) {
             pageSize = DEFAULT_PAGE_SIZE;
@@ -46,7 +47,7 @@ public class MessageService extends BaseService {
             listingSortType = ListingSortType.CREATE_DATE;
         }
 
-        Page<Message> response = new Page<>();
+        MessagePage response = new MessagePage();
         response.objectList = messageDao.getPage(pageNum - 1, pageSize, messageIdList, companyBranchId, companyId, companyCategoryMainIdList,
                 companyCategoryIdList, messageTypeList, latitude, longitude, range, searchTerm, listingSortType);
 
