@@ -19,7 +19,6 @@ import java.util.Date;
  * @author Przemysław Zynis
  */
 @Entity
-@Table
 @Getter
 @Setter
 public class Company {

@@ -3,7 +3,7 @@ package com.tackpad.models;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-@Table
+@Entity
 public class MessageLocation {
 
     @Id
