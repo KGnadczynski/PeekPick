@@ -16,7 +16,6 @@ import java.util.Date;
  * Oddzial firmy
  */
 @Entity
-@Table
 @Getter
 @Setter
 public class CompanyBranch {

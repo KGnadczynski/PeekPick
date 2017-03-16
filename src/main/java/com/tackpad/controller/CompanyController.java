@@ -4,12 +4,15 @@ import com.tackpad.models.Company;
 import com.tackpad.models.CompanyBranch;
 import com.tackpad.models.CompanyCategory;
 import com.tackpad.models.oauth2.User;
+import com.tackpad.responses.CompanyPage;
 import com.tackpad.responses.Page;
 import com.tackpad.responses.enums.BadRequestResponseType;
 import com.tackpad.services.CompanyBranchService;
 import com.tackpad.services.CompanyCategoryService;
 import com.tackpad.services.CompanyService;
 import com.tackpad.services.UserService;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -51,11 +54,12 @@ public class CompanyController extends BaseController {
      * @return @{link ResponseEntity}
      */
     @GetMapping(value = "/page/{page}")
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = CompanyPage.class))
     ResponseEntity getPage(@PathVariable("page") int page,
-                           @QueryParam("pageSize") Integer pageSize) {
+                           @RequestParam(value = "pageSize", required=false) Integer pageSize) {
 
-        Page<Company> messagePage = companyService.getPage(page, pageSize);
-        return success(messagePage);
+        CompanyPage companyPage = companyService.getPage(page, pageSize);
+        return success(companyPage);
     }
 
     /**
@@ -64,6 +68,7 @@ public class CompanyController extends BaseController {
      * @return @{link ResponseEntity}
      */
     @PostMapping
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = Company.class))
     ResponseEntity create(@Validated(Company.CreateComapanyValidation.class)  @RequestBody Company company, Errors errors) {
 
         if (errors.hasErrors()) {
@@ -76,10 +81,11 @@ public class CompanyController extends BaseController {
         }
 
         companyService.save(company);
-        return success();
+        return success(company);
     }
 
     @PutMapping(value = "/{companyId}")
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = Company.class))
     ResponseEntity update(Authentication authentication, @PathVariable("companyId") Long companyId,
                           @Validated(Company.UpdateComapanyValidation.class) @RequestBody Company company, Errors errors) {
 
@@ -101,7 +107,7 @@ public class CompanyController extends BaseController {
 
         companyService.save(company);
         
-        return success();
+        return success(company);
     }
 
     /**
@@ -110,6 +116,7 @@ public class CompanyController extends BaseController {
      * @return @{link ResponseEntity}
      */
     @GetMapping(value = "/{companyId}")
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = Company.class))
     ResponseEntity getCompany(@PathVariable("companyId") Long companyId) {
 
         Company company = companyService.getById(companyId);

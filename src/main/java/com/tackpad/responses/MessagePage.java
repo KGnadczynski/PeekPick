@@ -1,4 +1,4 @@
-package com.tackpad.responses.enums;
+package com.tackpad.responses;
 
 import com.tackpad.models.Message;
 import com.tackpad.responses.Page;

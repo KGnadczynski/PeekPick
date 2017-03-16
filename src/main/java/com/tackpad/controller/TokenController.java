@@ -1,10 +1,13 @@
 package com.tackpad.controller;
 
+import com.tackpad.models.Image;
 import com.tackpad.models.Token;
 import com.tackpad.models.enums.TokenType;
 import com.tackpad.models.enums.UserStatus;
 import com.tackpad.responses.enums.BadRequestResponseType;
 import com.tackpad.services.*;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -25,6 +28,7 @@ public class TokenController extends BaseController {
     public UserService userService;
 
     @GetMapping("/value/{value}")
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = Token.class))
     ResponseEntity token(@PathVariable("value") String value) {
 
         Token token = tokenService.getByValue(value);
@@ -49,7 +53,7 @@ public class TokenController extends BaseController {
         }
 
         tokenService.delete(token);
-        return success("Aktywowano");
+        return success(token);
     }
 
 

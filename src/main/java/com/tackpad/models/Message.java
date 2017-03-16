@@ -16,7 +16,6 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
-@Entity
 @Table
 @Getter
 @Setter

@@ -7,6 +7,8 @@ import com.tackpad.models.oauth2.User;
 import com.tackpad.responses.Page;
 import com.tackpad.responses.enums.BadRequestResponseType;
 import com.tackpad.services.*;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -39,6 +41,7 @@ public class CompanyImageController extends BaseController {
     public MessageImageService messageImageService;
 
     @RequestMapping(value = "/companyId/{companyId}", method = RequestMethod.POST)
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = Image.class))
     @ResponseBody
     public ResponseEntity<?> uploadFile(
             Authentication authentication,
@@ -72,6 +75,7 @@ public class CompanyImageController extends BaseController {
     }
 
     @GetMapping(value = "/companyId/{companyId}")
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = Image.class))
     ResponseEntity getCompanyLogo(@PathVariable("companyId") Long companyId) {
 
         Image image = messageImageService.getByCompanyId(companyId);

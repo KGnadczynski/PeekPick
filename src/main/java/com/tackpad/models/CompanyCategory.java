@@ -14,7 +14,6 @@ import javax.validation.constraints.NotNull;
  * @author Przemysław Zynis
  */
 @Entity
-@Table
 @Getter
 @Setter
 public class CompanyCategory {

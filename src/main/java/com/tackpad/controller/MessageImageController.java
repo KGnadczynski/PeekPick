@@ -1,11 +1,14 @@
 package com.tackpad.controller;
 
 
+import com.tackpad.models.Company;
 import com.tackpad.models.Message;
 import com.tackpad.models.Image;
 import com.tackpad.models.oauth2.User;
 import com.tackpad.responses.enums.BadRequestResponseType;
 import com.tackpad.services.*;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -36,6 +39,7 @@ public class MessageImageController extends BaseController {
     public MessageImageService messageImageService;
 
     @RequestMapping(value = "/messageId/{messageId}", method = RequestMethod.POST)
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = Image.class))
     @ResponseBody
     public ResponseEntity<?> uploadFile(
             Authentication authentication,

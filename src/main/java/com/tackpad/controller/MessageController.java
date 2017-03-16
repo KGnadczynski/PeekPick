@@ -9,7 +9,7 @@ import com.tackpad.requests.enums.ListingSortType;
 import com.tackpad.responses.CountResponse;
 import com.tackpad.responses.Page;
 import com.tackpad.responses.enums.BadRequestResponseType;
-import com.tackpad.responses.enums.MessagePage;
+import com.tackpad.responses.MessagePage;
 import com.tackpad.services.*;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -21,11 +21,8 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.QueryParam;
 import java.text.ParseException;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 /**
  * 
@@ -63,18 +60,18 @@ public class MessageController extends BaseController {
     @GetMapping(value = "/page/{page}")
     @ApiResponses(@ApiResponse(code = 200, message = "OK", response = MessagePage.class))
     ResponseEntity getPage(@PathVariable("page") int page,
-                           @QueryParam("pageSize") Integer pageSize,
-                           @QueryParam("messageIdList") String messageIdList,
-                           @QueryParam("companyBranchId") Long companyBranchId,
-                           @QueryParam("companyId") Long companyId,
-                           @QueryParam("companyCategoryIdList") String companyCategoryIdList,
-                           @QueryParam("companyCategoryMainIdList") String companyCategoryMainIdList,
-                           @QueryParam("messageTypeList") String messageTypeList,
-                           @QueryParam("searchTerm") String searchTerm,
-                           @QueryParam("latitude") Double latitude,
-                           @QueryParam("longitude") Double longitude,
-                           @QueryParam("range") Double range,
-                           @QueryParam("sortType") String sortType) {
+                           @RequestParam(value = "pageSize", required=false) Integer pageSize,
+                           @RequestParam(value = "messageIdList", required=false) String messageIdList,
+                           @RequestParam(value = "companyBranchId", required=false) Long companyBranchId,
+                           @RequestParam(value = "companyId", required=false) Long companyId,
+                           @RequestParam(value = "companyCategoryIdList", required=false) String companyCategoryIdList,
+                           @RequestParam(value = "companyCategoryMainIdList", required=false) String companyCategoryMainIdList,
+                           @RequestParam(value = "messageTypeList", required=false) String messageTypeList,
+                           @RequestParam(value = "searchTerm", required=false) String searchTerm,
+                           @RequestParam(value = "latitude", required=false) Double latitude,
+                           @RequestParam(value = "longitude", required=false) Double longitude,
+                           @RequestParam(value = "range", required=false) Double range,
+                           @RequestParam(value = "sortType", required=false) String sortType) {
 
         MessagePage messagePage = null;
 
@@ -121,6 +118,7 @@ public class MessageController extends BaseController {
     }
 
     @GetMapping(value = "/{messageId}")
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = Message.class))
     ResponseEntity getMessage(@PathVariable("messageId") Long messageId) {
 
         Message message = messageService.getById(messageId);
@@ -139,6 +137,7 @@ public class MessageController extends BaseController {
     }
 
     @GetMapping(value = "/companyId/{companyId}/count")
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = CountResponse.class))
     ResponseEntity getCount(@PathVariable("companyId") Long companyId) {
 
         Company company = companyService.getById(companyId);
@@ -157,6 +156,7 @@ public class MessageController extends BaseController {
      * @return @{link ResponseEntity}
      */
     @PostMapping
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = Message.class))
     ResponseEntity create(Authentication authentication,
                           @Validated(Message.CreateMessageValidation.class)
                           @RequestBody Message message, Errors errors) {

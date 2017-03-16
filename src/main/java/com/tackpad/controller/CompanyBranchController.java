@@ -5,12 +5,15 @@ import com.tackpad.converters.MessageTypeListConverter;
 import com.tackpad.models.*;
 import com.tackpad.models.oauth2.User;
 import com.tackpad.requests.enums.ListingSortType;
+import com.tackpad.responses.CompanyBranchPage;
 import com.tackpad.responses.Page;
 import com.tackpad.responses.enums.BadRequestResponseType;
 import com.tackpad.services.CompanyBranchService;
 import com.tackpad.services.CompanyCategoryService;
 import com.tackpad.services.CompanyService;
 import com.tackpad.services.UserService;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -43,33 +46,35 @@ public class CompanyBranchController extends BaseController {
     public UserService userService;
 
     @GetMapping(value = "/companyId/{companyId}")
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = CompanyBranch.class, responseContainer="List"))
     ResponseEntity getListByCompanyId(@PathVariable("companyId") Long companyId) {
         List<CompanyBranch> companyBranchList = companyBranchService.getListByCompanyId(companyId);
         return success(companyBranchList);
     }
 
     @GetMapping(value = "/page/{page}")
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = CompanyBranchPage.class))
     ResponseEntity getPage(@PathVariable("page") int page,
-                           @QueryParam("pageSize") Integer pageSize,
-                           @QueryParam("messageIdList") String messageIdList,
-                           @QueryParam("companyBranchId") Long companyBranchId,
-                           @QueryParam("companyId") Long companyId,
-                           @QueryParam("searchTerm") String searchTerm,
-                           @QueryParam("latitude") Double latitude,
-                           @QueryParam("longitude") Double longitude,
-                           @QueryParam("range") Double range,
-                           @QueryParam("sortType") String sortType) {
+                           @RequestParam(value="pageSize", required=false) Integer pageSize,
+                           @RequestParam(value="messageIdList", required=false) String messageIdList,
+                           @RequestParam(value="companyBranchId", required=false) Long companyBranchId,
+                           @RequestParam(value="companyId", required=false) Long companyId,
+                           @RequestParam(value="searchTerm", required=false) String searchTerm,
+                           @RequestParam(value="latitude", required=false) Double latitude,
+                           @RequestParam(value="longitude", required=false) Double longitude,
+                           @RequestParam(value="range", required=false) Double range,
+                           @RequestParam(value="sortType", required=false) String sortType) {
 
         LongListConverter longListConverter = new LongListConverter();
         ListingSortType listingSortType = ListingSortType.convertFromString(sortType);
 
-        Page<CompanyBranch> messagePage = null;
+        Page<CompanyBranch> companyBranchPage = null;
         try {
-            messagePage = companyBranchService.getPage(page, pageSize,
+            companyBranchPage = companyBranchService.getPage(page, pageSize,
                     longListConverter.convert(messageIdList),companyBranchId,  companyId, latitude,
                     longitude, range, searchTerm, listingSortType);
 
-            return success(messagePage);
+            return success(companyBranchPage);
         } catch (ParseException e) {
             return null;
         }
@@ -77,6 +82,7 @@ public class CompanyBranchController extends BaseController {
     }
 
     @GetMapping(value = "/companyId/{companyId}/main")
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = CompanyBranch.class))
     ResponseEntity getMainCompanyBranch(@PathVariable("companyId") Long companyId) {
 
         Company company = companyService.getById(companyId);
@@ -90,6 +96,7 @@ public class CompanyBranchController extends BaseController {
     }
 
     @PutMapping(value = "/{companyBranchId}")
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = CompanyBranch.class))
     ResponseEntity update(Authentication authentication, @PathVariable("companyBranchId") Long companyBranchId,
                           @Validated(CompanyBranch.UpdateCompanyBranchValidation.class) @RequestBody CompanyBranch companyBranch, Errors errors) {
 
@@ -108,7 +115,7 @@ public class CompanyBranchController extends BaseController {
         companyBranch.setCompany(user.getCompany());
         companyBranchService.save(companyBranch);
 
-        return success();
+        return success(companyBranch);
     }
 
 }

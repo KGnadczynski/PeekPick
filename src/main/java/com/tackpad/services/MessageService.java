@@ -5,8 +5,7 @@ import com.tackpad.dao.MessageDao;
 import com.tackpad.models.Message;
 import com.tackpad.models.enums.MessageType;
 import com.tackpad.requests.enums.ListingSortType;
-import com.tackpad.responses.Page;
-import com.tackpad.responses.enums.MessagePage;
+import com.tackpad.responses.MessagePage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

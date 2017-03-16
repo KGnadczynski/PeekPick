@@ -18,6 +18,8 @@ import com.tackpad.requests.UpdatePasswordForm;
 import com.tackpad.responses.DiggitsResponse;
 import com.tackpad.responses.enums.BadRequestResponseType;
 import com.tackpad.services.*;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import it.ozimov.springboot.templating.mail.service.exception.CannotSendEmailException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +59,7 @@ public class UserController  extends BaseController {
     public TokenService tokenService;
 
     @PostMapping("/business")
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = User.class))
     ResponseEntity create(@Validated(CreateBossinessUserForm.CreateBusinessUserValidation.class)
                           @RequestBody CreateBossinessUserForm createBossinessUserForm, Errors errors) {
 
@@ -111,7 +114,8 @@ public class UserController  extends BaseController {
     }
 
     @GetMapping("/email")
-    ResponseEntity checkEmailIsUsed(@QueryParam("email") String email) {
+    @ApiResponses(@ApiResponse(code = 200, message = "OK"))
+    ResponseEntity checkEmailIsUsed(@RequestParam(value="email") String email) {
 
         //Unikalnosc meila
         if (userService.getByEmail(email) != null) {
@@ -122,6 +126,7 @@ public class UserController  extends BaseController {
     }
 
     @GetMapping("/business/me")
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = User.class))
     ResponseEntity getMy(Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User user = userService.getByEmail(userDetails.getUsername());
@@ -152,6 +157,7 @@ public class UserController  extends BaseController {
     }
 
     @PutMapping(value = "/password")
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = User.class))
     ResponseEntity updatePassword(Authentication authentication,
                                   @Validated @RequestBody UpdatePasswordForm updatePasswordForm, Errors errors) {
 
@@ -174,6 +180,7 @@ public class UserController  extends BaseController {
     }
 
     @PutMapping(value = "/email")
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = User.class))
     ResponseEntity updateEmail(Authentication authentication,
                                   @Validated @RequestBody UpdateEmailForm updateEmailForm, Errors errors) {
 
