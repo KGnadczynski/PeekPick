@@ -4,6 +4,7 @@ package com.tackpad.controller;
 import com.tackpad.converters.LongListConverter;
 import com.tackpad.converters.MessageTypeListConverter;
 import com.tackpad.models.*;
+import com.tackpad.models.enums.MessageStatus;
 import com.tackpad.models.oauth2.User;
 import com.tackpad.requests.enums.ListingSortType;
 import com.tackpad.responses.CountResponse;
@@ -204,7 +205,9 @@ public class MessageController extends BaseController {
             return forbidden(BadRequestResponseType.INVALID_ID);
         }
 
-        messageService.delete(message);
+        message.setStatus(MessageStatus.DELETE);
+        messageService.save(message);
+
         return success(message);
     }
 }
