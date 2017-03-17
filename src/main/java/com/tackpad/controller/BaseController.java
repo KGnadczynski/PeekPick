@@ -64,4 +64,8 @@ public abstract class BaseController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(badRequestResponse);
     }
 
+    public ResponseEntity forbidden(Object obj) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(obj);
+    }
+
 }

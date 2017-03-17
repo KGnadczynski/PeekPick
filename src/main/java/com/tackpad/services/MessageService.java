@@ -69,4 +69,8 @@ public class MessageService extends BaseService {
         messageDao.save(message);
     }
 
+    public void delete(Message message) {
+        messageDao.delete(message);
+    }
+
 }

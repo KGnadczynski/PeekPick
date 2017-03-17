@@ -187,4 +187,24 @@ public class MessageController extends BaseController {
         return success(message);
     }
 
+    @DeleteMapping(value = "/{messageId}")
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = Message.class))
+    ResponseEntity deleteMessage(Authentication authentication, @PathVariable("messageId") Long messageId) {
+
+        Message message = messageService.getById(messageId);
+
+        if (message == null) {
+            return badRequest(BadRequestResponseType.INVALID_ID);
+        }
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User user = userService.getByEmail(userDetails.getUsername());
+
+        if (!message.getUser().getId().equals(user.getId())) {
+            return forbidden(BadRequestResponseType.INVALID_ID);
+        }
+
+        messageService.delete(message);
+        return success(message);
+    }
 }
