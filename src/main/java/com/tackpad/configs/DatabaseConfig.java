@@ -81,7 +81,6 @@ public class DatabaseConfig {
         hibernateProperties.put("hibernate.hbm2ddl.import_files_sql_extractor", HIBERNATE_HBM2DDL_IMPORT_FILES_SQL_EXTRACTOR);
         hibernateProperties.put("hibernate.temp.use_jdbc_metadata_defaults", HIBERNATE_TEMP_USE_JDBC_METADATA_DEFAULTS);
         sessionFactoryBean.setHibernateProperties(hibernateProperties);
-
         return sessionFactoryBean;
     }
 
