@@ -127,7 +127,8 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 			sql.append(" and COM.name LIKE :searchTerm OR COM_BRA.name LIKE :searchTerm OR MES.content LIKE :searchTerm ");
 		}
 
-		sql.append(" and NOT (MES.status <=> 'DELETED') ");
+		sql.append(" and NOT (MES.status = 'DELETED') ");
+
 		sql.append(" GROUP BY MESS_COM_BRA.Message_id ");
 
 		if (range != null) {
