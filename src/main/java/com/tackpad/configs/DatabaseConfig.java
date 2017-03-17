@@ -47,6 +47,9 @@ public class DatabaseConfig {
     @Value("${hibernate.hbm2ddl.import_files_sql_extractor}")
     private String HIBERNATE_HBM2DDL_IMPORT_FILES_SQL_EXTRACTOR;
 
+    @Value("${hibernate.temp.use_jdbc_metadata_defaults}")
+    private String HIBERNATE_TEMP_USE_JDBC_METADATA_DEFAULTS;
+
     @Value("${hibernate.hbm2ddl.auto}")
     private String HIBERNATE_HBM2DDL_AUTO;
 
@@ -76,6 +79,7 @@ public class DatabaseConfig {
         hibernateProperties.put("hibernate.connection.characterEncoding", HIBERNATE_CONNECTION_CHARACTERENCODING);
         hibernateProperties.put("hibernate.connection.charSet", HIBERNATE_CONNECTION_CHARSET);
         hibernateProperties.put("hibernate.hbm2ddl.import_files_sql_extractor", HIBERNATE_HBM2DDL_IMPORT_FILES_SQL_EXTRACTOR);
+        hibernateProperties.put("hibernate.temp.use_jdbc_metadata_defaults", HIBERNATE_TEMP_USE_JDBC_METADATA_DEFAULTS);
         sessionFactoryBean.setHibernateProperties(hibernateProperties);
 
         return sessionFactoryBean;
