@@ -4,6 +4,7 @@ package com.tackpad.services;
 import com.tackpad.dao.MessageDao;
 import com.tackpad.models.Message;
 import com.tackpad.models.enums.MessageType;
+import com.tackpad.models.oauth2.User;
 import com.tackpad.requests.enums.ListingSortType;
 import com.tackpad.responses.MessagePage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,4 +74,7 @@ public class MessageService extends BaseService {
         messageDao.delete(message);
     }
 
+    public void merge(Message message) {
+        messageDao.merge(message);
+    }
 }

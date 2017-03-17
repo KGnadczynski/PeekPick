@@ -206,7 +206,7 @@ public class MessageController extends BaseController {
         }
 
         message.setStatus(MessageStatus.DELETE);
-        messageService.save(message);
+        messageService.merge(message);
 
         return success(message);
     }
