@@ -39,6 +39,7 @@ public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@NotNull(groups = CreateBossinessUserForm.CreateBusinessUserValidation.class)
 	private Long id;
 
 	@NotEmpty

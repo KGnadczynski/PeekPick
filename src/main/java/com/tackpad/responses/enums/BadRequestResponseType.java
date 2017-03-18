@@ -19,5 +19,7 @@ public enum  BadRequestResponseType {
 
     WRONG_PASSWORD,
 
-    PHONE_NUMBER_IS_USED;
+    PHONE_NUMBER_IS_USED,
+
+    INVALID_USER_ID;
 }

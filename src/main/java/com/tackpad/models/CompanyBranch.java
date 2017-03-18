@@ -22,7 +22,7 @@ public class CompanyBranch {
 
     @Id
     @GeneratedValue
-    @NotNull(groups = {UpdateCompanyBranchValidation.class})
+    @NotNull(groups = {Message.UpdateMessageValidation.class})
     private Long id;
 
     /** Nazwa.*/

@@ -210,4 +210,44 @@ public class MessageController extends BaseController {
 
         return success(message);
     }
+
+    @PutMapping
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = Message.class))
+    ResponseEntity update(Authentication authentication,
+                          @Validated(Message.UpdateMessageValidation.class)
+                          @RequestBody Message message, Errors errors) {
+
+        if (errors.hasErrors()) {
+            return badRequest(errors.getAllErrors());
+        }
+
+        if (messageService.getById(message.getId()) == null) {
+            return badRequest(BadRequestResponseType.INVALID_ID);
+        }
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User user = userService.getByEmail(userDetails.getUsername());
+        MessageLocation messageLocation = message.getLocation();
+
+        if (!message.getUser().getId().equals(user.getId())) {
+            forbidden(BadRequestResponseType.INVALID_USER_ID);
+        }
+
+        for (CompanyBranch companyBranchContainId : message.getCompanyBranchList()) {
+            CompanyBranch companyBranch = companyBranchService.getById(companyBranchContainId.getId());
+            if (companyBranch == null || !user.getCompany().getId().equals(companyBranch.getCompany().getId())) {
+                return forbidden(BadRequestResponseType.INVALID_COMPANY_BRUNCH_ID);
+            }
+        }
+
+        message.setUser(user);
+
+        if (messageLocation != null) {
+            messageLocationService.save(messageLocation);
+        }
+
+        messageService.merge(message);
+
+        return success(message);
+    }
 }

@@ -23,24 +23,25 @@ public class Message {
 
     @Id
     @GeneratedValue
+    @NotNull(groups = UpdateMessageValidation.class)
     private Long id;
 
     /** Nazwa.*/
     @Column(nullable = false, length = 100000)
-    @NotNull(groups = CreateMessageValidation.class)
+    @NotNull(groups = {CreateMessageValidation.class, UpdateMessageValidation.class})
     private String content;
 
     /** Typ.*/
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    @NotNull(groups = CreateMessageValidation.class)
+    @NotNull(groups = {CreateMessageValidation.class, UpdateMessageValidation.class})
     private MessageType type;
 
     /** Start promocji.*/
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "DEFAULT_TIMEZONE")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
     @Column(nullable = false)
-    @NotNull(groups = CreateMessageValidation.class)
+    @NotNull(groups = {CreateMessageValidation.class, UpdateMessageValidation.class})
     private Date startDate;
 
     /** Koniec promocji.*/
@@ -58,15 +59,16 @@ public class Message {
     /** Status.*/
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    @NotNull(groups = CreateMessageValidation.class)
+    @NotNull(groups = {CreateMessageValidation.class, UpdateMessageValidation.class})
     private MessageStatus status = MessageStatus.NEW;
 
     @ManyToMany
     @Valid
-    @NotNull(groups = CreateMessageValidation.class)
+    @NotNull(groups = {CreateMessageValidation.class, UpdateMessageValidation.class})
     private List<CompanyBranch> companyBranchList;
 
     @ManyToOne(optional = false)
+    @Valid
     private User user;
 
     @OneToOne
@@ -86,5 +88,7 @@ public class Message {
 
     /** Do walidacji formularza tworzenia widomosci.*/
     public interface CreateMessageValidation {}
+
+    public interface UpdateMessageValidation {}
 
 }
