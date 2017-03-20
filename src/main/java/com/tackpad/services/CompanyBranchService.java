@@ -61,7 +61,7 @@ public class CompanyBranchService extends BaseService {
      *
      * @return lista głównych kategorii
      */
-    @Cacheable("companyBranches")
+    @Cacheable(value = "companyBranchPages", cacheManager="timeoutCacheManager")
     public List<CompanyBranch> getListByCompanyId(Long id) {
 
         return companyBranchDao.findListByCompanyId(id);
@@ -73,7 +73,7 @@ public class CompanyBranchService extends BaseService {
         companyBranchDao.save(companyBranch);
     }
 
-    @Cacheable("companyBranchPages")
+    @Cacheable(value = "companyBranchPages", cacheManager="timeoutCacheManager")
     public Page<CompanyBranch> getPage(Integer page, Integer pageSize, List<Long> messageIdList, Long companyBranchId, Long companyId, Double latitude,
                                  Double longitude, Double range, String searchTerm, ListingSortType listingSortType) throws ParseException {
 
@@ -100,7 +100,7 @@ public class CompanyBranchService extends BaseService {
         return response;
     }
 
-    @Cacheable("companyBranches")
+    @Cacheable(value = "companyBranchPages", cacheManager="timeoutCacheManager")
     public CompanyBranch getMainCompanyBranch(Long companyId) {
         return companyBranchDao.getMainCompanyBranch(companyId);
     }

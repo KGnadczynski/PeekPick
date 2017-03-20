@@ -17,12 +17,12 @@ public class MessageImageService extends BaseService {
     @Autowired
     public MessageImageDao messageImageDao;
 
-    @Cacheable("images")
+    @Cacheable(value = "images", cacheManager="timeoutCacheManager")
     public Image getByMessageId(Long messageId) {
         return messageImageDao.findByMessageId(messageId);
     }
 
-    @Cacheable("images")
+    @Cacheable(value = "images", cacheManager="timeoutCacheManager")
     public Image getByCompanyId(Long companyId) {
         return messageImageDao.findByCompanyId(companyId);
     }

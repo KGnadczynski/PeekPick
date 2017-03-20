@@ -24,7 +24,7 @@ public class MessageService extends BaseService {
     @Autowired
     public MessageDao messageDao;
 
-    @Cacheable("messagePages")
+    @Cacheable(value="messagePages", cacheManager="timeoutCacheManager")
     public MessagePage getPage(Integer pageNum, Integer pageSize, List<Long> messageIdList, Long companyBranchId, Long companyId,
                                List<Long> companyCategoryMainIdList,
                                List<Long> companyCategoryIdList, List<MessageType> messageTypeList,
