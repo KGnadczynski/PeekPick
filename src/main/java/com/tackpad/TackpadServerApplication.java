@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.autoconfigure.web.MultipartAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.multipart.MultipartResolver;
@@ -18,6 +19,7 @@ import java.util.TimeZone;
 @EntityScan
 @SpringBootApplication
 @EnableAutoConfiguration
+@EnableCaching
 @ComponentScan(basePackages = {"com.tackpad", "it.ozimov.springboot"})
 public class TackpadServerApplication extends SpringBootServletInitializer {
 

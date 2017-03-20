@@ -8,6 +8,7 @@ import com.tackpad.models.oauth2.User;
 import com.tackpad.requests.enums.ListingSortType;
 import com.tackpad.responses.MessagePage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
@@ -23,12 +24,7 @@ public class MessageService extends BaseService {
     @Autowired
     public MessageDao messageDao;
 
-    /**
-     *
-     * retrieve a window of accounts
-     *
-     * @return List of Accounts
-     */
+    @Cacheable("messagePages")
     public MessagePage getPage(Integer pageNum, Integer pageSize, List<Long> messageIdList, Long companyBranchId, Long companyId,
                                List<Long> companyCategoryMainIdList,
                                List<Long> companyCategoryIdList, List<MessageType> messageTypeList,

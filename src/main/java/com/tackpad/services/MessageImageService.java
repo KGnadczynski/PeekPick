@@ -4,6 +4,7 @@ package com.tackpad.services;
 import com.tackpad.dao.MessageImageDao;
 import com.tackpad.models.Image;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 /**
@@ -16,10 +17,12 @@ public class MessageImageService extends BaseService {
     @Autowired
     public MessageImageDao messageImageDao;
 
+    @Cacheable("images")
     public Image getByMessageId(Long messageId) {
         return messageImageDao.findByMessageId(messageId);
     }
 
+    @Cacheable("images")
     public Image getByCompanyId(Long companyId) {
         return messageImageDao.findByCompanyId(companyId);
     }
