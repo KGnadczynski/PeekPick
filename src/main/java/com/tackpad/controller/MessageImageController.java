@@ -4,6 +4,7 @@ package com.tackpad.controller;
 import com.tackpad.models.Company;
 import com.tackpad.models.Message;
 import com.tackpad.models.Image;
+import com.tackpad.models.enums.MessageStatus;
 import com.tackpad.models.oauth2.User;
 import com.tackpad.responses.enums.BadRequestResponseType;
 import com.tackpad.services.*;
@@ -55,6 +56,8 @@ public class MessageImageController extends BaseController {
             return badRequest(BadRequestResponseType.INVALID_ID);
         }
 
+        deleteMessageImage(authentication, message.getId());
+
         try {
             Image image = imageStoreService.uploadMessagePhoto(multipartFile.getBytes());
             image.setMessage(message);
@@ -66,6 +69,33 @@ public class MessageImageController extends BaseController {
             return badRequest(BadRequestResponseType.UPLOAD_IMAGE_FAIL);
         }
 
+    }
+
+    @DeleteMapping(value = "/messageId/{messageId}")
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = Message.class))
+    ResponseEntity deleteMessageImage(Authentication authentication, @PathVariable("messageId") Long messageId) {
+
+        Message message = messageService.getById(messageId);
+
+        if (message == null) {
+            return badRequest(BadRequestResponseType.INVALID_ID);
+        }
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User user = userService.getByEmail(userDetails.getUsername());
+
+        if (!message.getUser().getId().equals(user.getId())) {
+            return forbidden(BadRequestResponseType.INVALID_ID);
+        }
+
+        Image image = messageImageService.getByMessageId(message.getId());
+        if (image == null) {
+            return badRequest(BadRequestResponseType.INVALID_ID);
+        }
+
+        messageImageService.delete(image);
+
+        return success(message);
     }
 
 
