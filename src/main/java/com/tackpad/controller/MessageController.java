@@ -227,7 +227,6 @@ public class MessageController extends BaseController {
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User user = userService.getByEmail(userDetails.getUsername());
-        MessageLocation messageLocation = message.getLocation();
 
         if (!message.getUser().getId().equals(user.getId())) {
             forbidden(BadRequestResponseType.INVALID_USER_ID);
@@ -241,10 +240,6 @@ public class MessageController extends BaseController {
         }
 
         message.setUser(user);
-
-        if (messageLocation != null) {
-            messageLocationService.save(messageLocation);
-        }
 
         messageService.merge(message);
 

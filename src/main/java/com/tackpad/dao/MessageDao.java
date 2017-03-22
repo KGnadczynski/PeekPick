@@ -7,6 +7,7 @@ import com.tackpad.models.enums.MessageType;
 import com.tackpad.requests.enums.ListingSortType;
 
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 public interface MessageDao extends BaseDao<Message> {
@@ -15,4 +16,6 @@ public interface MessageDao extends BaseDao<Message> {
 						  Double longitude, Double range, String searchTerm, ListingSortType listingSortType) throws ParseException;
 
     Long findCount(Long companyId);
+
+	List<Message> findWhereEndDateIsAfter(Date date);
 }

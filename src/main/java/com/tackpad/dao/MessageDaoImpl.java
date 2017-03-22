@@ -21,6 +21,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -239,6 +240,14 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 		criteria.createAlias("USR.company", "COM");
 		criteria.add(Restrictions.eq("COM.id", companyId));
 		return (Long) criteria.setProjection(Projections.rowCount()).uniqueResult();
+	}
+
+	@Override
+	public List<Message> findWhereEndDateIsAfter(Date date) {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria criteria = session.createCriteria(Message.class, "m");
+		criteria.add(Restrictions.lt("endDate", date));
+		return (List<Message>) criteria.list();
 	}
 
 	@Override

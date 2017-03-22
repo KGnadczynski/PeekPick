@@ -71,7 +71,7 @@ public class Message {
     @Valid
     private User user;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY , cascade=CascadeType.ALL, orphanRemoval = true)
     private MessageLocation location;
 
     @Transient

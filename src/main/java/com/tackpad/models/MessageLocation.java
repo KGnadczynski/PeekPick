@@ -20,19 +20,19 @@ public class MessageLocation {
     public String streetNo;
     
     @Column(nullable = false)
-    @NotNull(groups = Message.CreateMessageValidation.class)
+    @NotNull(groups = {Message.CreateMessageValidation.class, Message.UpdateMessageValidation.class})
     public Double latitude;
 
     @Column(nullable = false)
-    @NotNull(groups = Message.CreateMessageValidation.class)
+    @NotNull(groups = {Message.CreateMessageValidation.class, Message.UpdateMessageValidation.class})
     public Double longitude;
 
     @Column(nullable = false)
-    @NotNull(groups = Message.CreateMessageValidation.class)
+    @NotNull(groups = {Message.CreateMessageValidation.class, Message.UpdateMessageValidation.class})
     public String address;
 
     @Column(nullable = false)
-    @NotNull(groups = Message.CreateMessageValidation.class)
+    @NotNull(groups = {Message.CreateMessageValidation.class, Message.UpdateMessageValidation.class})
     public String name;
     
 }

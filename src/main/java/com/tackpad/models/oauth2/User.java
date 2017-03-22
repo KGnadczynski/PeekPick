@@ -19,6 +19,7 @@ package com.tackpad.models.oauth2;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tackpad.models.Company;
+import com.tackpad.models.Message;
 import com.tackpad.models.enums.UserStatus;
 import com.tackpad.requests.CreateBossinessUserForm;
 import lombok.Getter;
@@ -39,7 +40,7 @@ public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@NotNull(groups = CreateBossinessUserForm.CreateBusinessUserValidation.class)
+	@NotNull(groups = Message.UpdateMessageValidation.class)
 	private Long id;
 
 	@NotEmpty
