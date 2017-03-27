@@ -210,14 +210,14 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 
 			if (row[16] != null) {
 				MessageLocation messageLocation = new MessageLocation();
-				messageLocation.id = Long.valueOf(row[16].toString());
-				messageLocation.city = row[17] != null ? row[17].toString() : null;
-				messageLocation.street = row[18] != null ? row[18].toString() : null;
-				messageLocation.streetNo = row[19] != null ? row[19].toString() : null;
-				messageLocation.latitude = Double.valueOf(row[20].toString());
-				messageLocation.longitude = Double.valueOf(row[21].toString());
-				messageLocation.address = row[22] != null ? row[22].toString() : null;
-				messageLocation.name = row[23] != null ? row[23].toString() : null;
+				messageLocation.setId(Long.valueOf(row[16].toString()));
+				messageLocation.setCity(row[17] != null ? row[17].toString() : null);
+				messageLocation.setStreet(row[18] != null ? row[18].toString() : null);
+				messageLocation.setStreetNo(row[19] != null ? row[19].toString() : null);
+				messageLocation.setLatitude(Double.valueOf(row[20].toString()));
+				messageLocation.setLongitude(Double.valueOf(row[21].toString()));
+				messageLocation.setAddress(row[22] != null ? row[22].toString() : null);
+				messageLocation.setName(row[23] != null ? row[23].toString() : null);
 				message.setLocation(messageLocation); ;
 			}
 

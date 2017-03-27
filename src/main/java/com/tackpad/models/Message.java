@@ -3,11 +3,14 @@ package com.tackpad.models;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tackpad.models.enums.MessageStatus;
 import com.tackpad.models.enums.MessageType;
 import com.tackpad.models.oauth2.User;
 import lombok.Getter;
 import lombok.Setter;
+import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -71,7 +74,7 @@ public class Message {
     @Valid
     private User user;
 
-    @OneToOne(fetch = FetchType.LAZY , cascade=CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.EAGER , cascade=CascadeType.ALL, orphanRemoval = true)
     private MessageLocation location;
 
     @Transient

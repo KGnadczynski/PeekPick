@@ -1,38 +1,43 @@
 package com.tackpad.models;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
+@Getter
+@Setter
 public class MessageLocation {
 
     @Id
     @GeneratedValue
-    public Long id;
+    private Long id;
 
     @Column
-    public String city;
+    private String city;
 
     @Column
-    public String street;
+    private String street;
 
     @Column
-    public String streetNo;
+    private String streetNo;
     
     @Column(nullable = false)
     @NotNull(groups = {Message.CreateMessageValidation.class, Message.UpdateMessageValidation.class})
-    public Double latitude;
+    private Double latitude;
 
     @Column(nullable = false)
     @NotNull(groups = {Message.CreateMessageValidation.class, Message.UpdateMessageValidation.class})
-    public Double longitude;
+    private Double longitude;
 
     @Column(nullable = false)
     @NotNull(groups = {Message.CreateMessageValidation.class, Message.UpdateMessageValidation.class})
-    public String address;
+    private String address;
 
     @Column(nullable = false)
     @NotNull(groups = {Message.CreateMessageValidation.class, Message.UpdateMessageValidation.class})
-    public String name;
+    private String name;
     
 }
