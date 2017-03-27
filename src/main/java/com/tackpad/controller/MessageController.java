@@ -221,7 +221,9 @@ public class MessageController extends BaseController {
             return badRequest(errors.getAllErrors());
         }
 
-        if (messageService.getById(message.getId()) == null) {
+        Message currentMessage = messageService.getById(message.getId());
+
+        if (currentMessage == null) {
             return badRequest(BadRequestResponseType.INVALID_ID);
         }
 
@@ -240,6 +242,7 @@ public class MessageController extends BaseController {
         }
 
         message.setUser(user);
+        message.setCreateDate(currentMessage.getCreateDate());
 
         messageService.merge(message);
 
