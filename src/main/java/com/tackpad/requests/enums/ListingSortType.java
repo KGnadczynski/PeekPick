@@ -10,11 +10,13 @@ import java.util.logging.Logger;
  */
 public enum ListingSortType {
 
-    /** Distance. */
     DISTANCE,
 
-    /** Alphabetical. */
-    CREATE_DATE;
+    CREATE_DATE,
+
+    START_DATE,
+
+    END_DATE;
 
     public static ListingSortType  convertFromString(String name) {
 

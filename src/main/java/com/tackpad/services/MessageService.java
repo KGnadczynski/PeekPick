@@ -3,6 +3,7 @@ package com.tackpad.services;
 
 import com.tackpad.dao.MessageDao;
 import com.tackpad.models.Message;
+import com.tackpad.models.enums.MessageStatus;
 import com.tackpad.models.enums.MessageType;
 import com.tackpad.requests.enums.ListingSortType;
 import com.tackpad.responses.MessagePage;
@@ -11,6 +12,8 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -28,6 +31,7 @@ public class MessageService extends BaseService {
     public MessagePage getPage(Integer pageNum, Integer pageSize, List<Long> messageIdList, Long companyBranchId, Long companyId,
                                List<Long> companyCategoryMainIdList,
                                List<Long> companyCategoryIdList, List<MessageType> messageTypeList,
+                               List<MessageStatus> statusList,
                                Double latitude, Double longitude, Double range, String searchTerm,
                                ListingSortType listingSortType) throws ParseException {
 
@@ -43,9 +47,13 @@ public class MessageService extends BaseService {
             listingSortType = ListingSortType.CREATE_DATE;
         }
 
+        if (statusList == null) {
+            statusList = Collections.singletonList(MessageStatus.NEW);
+        }
+
         MessagePage response = new MessagePage();
         response.objectList = messageDao.getPage(pageNum - 1, pageSize, messageIdList, companyBranchId, companyId, companyCategoryMainIdList,
-                companyCategoryIdList, messageTypeList, latitude, longitude, range, searchTerm, listingSortType);
+                companyCategoryIdList, messageTypeList, statusList, latitude, longitude, range, searchTerm, listingSortType);
 
         if (response.objectList.size() < pageSize) {
             response.isLastPage = true;

@@ -2,9 +2,10 @@ package com.tackpad.controller;
 
 
 import com.tackpad.converters.LongListConverter;
-import com.tackpad.converters.MessageTypeListConverter;
+import com.tackpad.converters.EnumStringListConverter;
 import com.tackpad.models.*;
 import com.tackpad.models.enums.MessageStatus;
+import com.tackpad.models.enums.MessageType;
 import com.tackpad.models.oauth2.User;
 import com.tackpad.requests.enums.ListingSortType;
 import com.tackpad.responses.CountResponse;
@@ -72,17 +73,20 @@ public class MessageController extends BaseController {
                            @RequestParam(value = "latitude", required=false) Double latitude,
                            @RequestParam(value = "longitude", required=false) Double longitude,
                            @RequestParam(value = "range", required=false) Double range,
+                           @RequestParam(value = "statusList", required=false) String statusList,
                            @RequestParam(value = "sortType", required=false) String sortType) {
 
         MessagePage messagePage = null;
 
         LongListConverter longListConverter = new LongListConverter();
-        MessageTypeListConverter messageTypeListConverter = new MessageTypeListConverter();
+        EnumStringListConverter enumStringListConverter = new EnumStringListConverter();
         ListingSortType listingSortType = ListingSortType.convertFromString(sortType);
 
         try {
             messagePage = messageService.getPage(page, pageSize, longListConverter.convert(messageIdList), companyBranchId, companyId, longListConverter.convert(companyCategoryMainIdList),
-                    longListConverter.convert(companyCategoryIdList), messageTypeListConverter.convert(messageTypeList),
+                    longListConverter.convert(companyCategoryIdList),
+                    enumStringListConverter.convert(MessageType.class, messageTypeList),
+                    enumStringListConverter.convert(MessageStatus.class, statusList),
                     latitude, longitude, range, searchTerm, listingSortType);
         } catch (ParseException e) {
             e.printStackTrace();

@@ -36,6 +36,7 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 	public List<Message> getPage(int page, int pageSize, List<Long> messageIdList, Long companyBranchId,  Long companyId,
 								 List<Long> companyCategoryMainIdList, List<Long> companyCategoryIdList,
 								 List<MessageType> messageTypeList,
+								 List<MessageStatus> statusList,
 								 Double latitude, Double longitude, Double range, String searchTerm,
 								 ListingSortType listingSortType) throws ParseException {
 
@@ -124,6 +125,10 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 			sql.append(" and MES.type IN ('" + StringUtils.join(messageTypeList, "','") + "') ");
 		}
 
+		if (statusList != null) {
+			sql.append(" and MES.status IN ('" + StringUtils.join(statusList, "','") + "') ");
+		}
+
 		if (searchTerm != null) {
 			sql.append(" and COM.name LIKE :searchTerm OR COM_BRA.name LIKE :searchTerm OR MES.content LIKE :searchTerm ");
 		}
@@ -142,6 +147,12 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 				break;
 			case CREATE_DATE:
 				sql.append("ORDER BY messageCreateDate desc");
+				break;
+			case END_DATE:
+				sql.append("ORDER BY messageEndDate desc");
+				break;
+			case START_DATE:
+				sql.append("ORDER BY messageStartDate desc");
 				break;
 		}
 

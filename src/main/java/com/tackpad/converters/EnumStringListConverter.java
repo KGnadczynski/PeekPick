@@ -12,10 +12,10 @@ import java.util.List;
 /**
  * Created by Przemek on 2016-10-08.
  */
-public class MessageTypeListConverter {
+public class EnumStringListConverter<E extends Enum<E>> {
 
     /** */
-    public List<MessageType> convert(String text) {
+    public List<E> convert(final Class<E> enumType, String text) {
 
         List<String> stringList = Arrays.asList(StringUtils.delimitedListToStringArray(text, ";"));
 
@@ -23,11 +23,16 @@ public class MessageTypeListConverter {
             return null;
         }
 
-        return Lists.transform(stringList, new Function<String, MessageType>() {
-            public MessageType apply(String s) {
-                return MessageType.valueOf(s);
+        return Lists.transform(stringList, new Function<String, E>() {
+            public E apply(String s) {
+                return of(enumType, s);
             }
         });
+    }
+
+    private static <E extends Enum<E>> E of(Class<E> clazz, String name) {
+        E value = Enum.valueOf(clazz, name);
+        return value;
     }
 
 }

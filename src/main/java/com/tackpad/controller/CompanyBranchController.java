@@ -1,7 +1,6 @@
 package com.tackpad.controller;
 
 import com.tackpad.converters.LongListConverter;
-import com.tackpad.converters.MessageTypeListConverter;
 import com.tackpad.models.*;
 import com.tackpad.models.oauth2.User;
 import com.tackpad.requests.enums.ListingSortType;
@@ -9,7 +8,6 @@ import com.tackpad.responses.CompanyBranchPage;
 import com.tackpad.responses.Page;
 import com.tackpad.responses.enums.BadRequestResponseType;
 import com.tackpad.services.CompanyBranchService;
-import com.tackpad.services.CompanyCategoryService;
 import com.tackpad.services.CompanyService;
 import com.tackpad.services.UserService;
 import io.swagger.annotations.ApiResponse;
@@ -20,10 +18,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.QueryParam;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Objects;
