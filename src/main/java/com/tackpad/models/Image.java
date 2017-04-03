@@ -33,7 +33,8 @@ public class Image {
     private String imageId;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
-    @Column(nullable = false, columnDefinition = "TIMESTAMPTZ(3)")
+    @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     private ZonedDateTime date = ZonedDateTime.now();
 
     /** Typ.*/

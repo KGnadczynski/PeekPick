@@ -44,18 +44,21 @@ public class Message {
 
     /** Start promocji.*/
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
-    @Column(nullable = false, columnDefinition = "TIMESTAMPTZ(3)")
+    @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     @NotNull(groups = {CreateMessageValidation.class, UpdateMessageValidation.class})
     private ZonedDateTime startDate;
 
     /** Koniec promocji.*/
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
-    @Column(nullable = false, columnDefinition = "TIMESTAMPTZ(3)")
+    @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     private ZonedDateTime endDate;
 
     /** Data dodania.*/
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
-    @Column(nullable = false, columnDefinition = "TIMESTAMPTZ(3)")
+    @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     private ZonedDateTime createDate = ZonedDateTime.now();
 
     /** Status.*/
