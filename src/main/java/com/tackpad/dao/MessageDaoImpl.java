@@ -187,7 +187,7 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 
 		List<Object[]> rows = query.list();
 		List<Message> messageList = new ArrayList<>();
-		DateTimeFormatter format = DateTimeFormatter.ofPattern("Hyyyy-MM-dd HH:mm:ss");
+		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
 		for(Object[] row : rows){
 			Message message = new Message();
