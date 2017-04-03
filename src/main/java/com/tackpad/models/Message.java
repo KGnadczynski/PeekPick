@@ -11,6 +11,7 @@ import com.tackpad.models.oauth2.User;
 import lombok.Getter;
 import lombok.Setter;
 import org.codehaus.jackson.annotate.JsonAutoDetect;
+import org.hibernate.annotations.Type;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -50,6 +51,7 @@ public class Message {
     /** Koniec promocji.*/
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
     @Column(nullable = false, columnDefinition = "TIMESTAMPTZ(3)")
+    @Type(type="org.jadira.usertype.dateandtime.legacyjdk.PersistentDate")
     private Date endDate;
 
     /** Data dodania.*/
