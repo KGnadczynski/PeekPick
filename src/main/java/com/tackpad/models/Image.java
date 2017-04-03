@@ -34,7 +34,8 @@ public class Image {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
     @Column(nullable = false)
-    private ZonedDateTime date = ZonedDateTime.now();
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date date = new Date();
 
     /** Typ.*/
     @Column(nullable = false)

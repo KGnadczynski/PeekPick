@@ -83,7 +83,8 @@ public class CompanyBranch {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
     @Column(nullable = false)
-    private ZonedDateTime createDate = ZonedDateTime.now();
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createDate = new Date();
 
     @Column(nullable = false)
     private boolean isMain;
