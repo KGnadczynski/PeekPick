@@ -80,9 +80,8 @@ public class CompanyBranch {
     @ManyToOne
     private Company company;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "DEFAULT_TIMEZONE")
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
-    @Column(nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
+    @Column(nullable = false, columnDefinition = "TIMESTAMPTZ(3)")
     private Date createDate = new Date();
 
     @Column(nullable = false)
