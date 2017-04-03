@@ -10,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 /**
@@ -82,7 +83,7 @@ public class CompanyBranch {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
     @Column(nullable = false, columnDefinition = "TIMESTAMPTZ(3)")
-    private Date createDate = new Date();
+    private ZonedDateTime createDate = ZonedDateTime.now();
 
     @Column(nullable = false)
     private boolean isMain;

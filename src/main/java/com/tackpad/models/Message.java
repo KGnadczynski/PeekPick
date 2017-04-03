@@ -46,18 +46,17 @@ public class Message {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
     @Column(nullable = false, columnDefinition = "TIMESTAMPTZ(3)")
     @NotNull(groups = {CreateMessageValidation.class, UpdateMessageValidation.class})
-    private Date startDate;
+    private ZonedDateTime startDate;
 
     /** Koniec promocji.*/
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
     @Column(nullable = false, columnDefinition = "TIMESTAMPTZ(3)")
-    @Type(type="org.jadira.usertype.dateandtime.legacyjdk.PersistentDate")
-    private Date endDate;
+    private ZonedDateTime endDate;
 
     /** Data dodania.*/
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
     @Column(nullable = false, columnDefinition = "TIMESTAMPTZ(3)")
-    private Date createDate = new Date();
+    private ZonedDateTime createDate = ZonedDateTime.now();
 
     /** Status.*/
     @Column(nullable = false)

@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 @Entity
@@ -33,7 +34,7 @@ public class Image {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
     @Column(nullable = false, columnDefinition = "TIMESTAMPTZ(3)")
-    private Date date = new Date();
+    private ZonedDateTime date = ZonedDateTime.now();
 
     /** Typ.*/
     @Column(nullable = false)
