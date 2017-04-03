@@ -26,7 +26,7 @@ public class RemoveEndedPosts {
     @Scheduled(fixedRate = 60*60*1000 )
     public void removeEndedPost() {
         log.info(" START REMOVE ENDED MESSAGES TASK");
-        List<Message> messageList = messageService.getWhereEndDateIsAfter(new Date());
+        List<Message> messageList = messageService.findByStatusAndWhereEndDateIsAfter(MessageStatus.NEW, new Date());
         for (Message message : messageList) {
             message.setStatus(MessageStatus.ENDED);
             messageService.merge(message);

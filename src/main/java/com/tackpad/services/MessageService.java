@@ -82,7 +82,7 @@ public class MessageService extends BaseService {
         messageDao.merge(message);
     }
 
-    public List<Message> getWhereEndDateIsAfter(Date date) {
-        return messageDao.findWhereEndDateIsAfter(date);
+    public List<Message> findByStatusAndWhereEndDateIsAfter(MessageStatus status, Date date) {
+        return messageDao.findByStatusAndWhereEndDateIsAfter(status, date);
     }
 }

@@ -254,10 +254,11 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 	}
 
 	@Override
-	public List<Message> findWhereEndDateIsAfter(Date date) {
+	public List<Message> findByStatusAndWhereEndDateIsAfter(MessageStatus status, Date date) {
 		Session session = sessionFactory.getCurrentSession();
 		Criteria criteria = session.createCriteria(Message.class, "m");
 		criteria.add(Restrictions.lt("endDate", date));
+		criteria.add(Restrictions.lt("status", date));
 		return (List<Message>) criteria.list();
 	}
 
