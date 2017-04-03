@@ -20,8 +20,6 @@ import javax.transaction.Transactional;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -137,7 +135,7 @@ public class CompanyBranchDaoImpl extends BaseDaoImpl<CompanyBranch> implements 
 
 		List<Object[]> rows = query.list();
 		List<CompanyBranch> companyBranchList = new ArrayList<>();
-		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
 
 		for(Object[] row : rows){
 			CompanyBranch companyBranch = new CompanyBranch();
@@ -153,14 +151,14 @@ public class CompanyBranchDaoImpl extends BaseDaoImpl<CompanyBranch> implements 
 			companyBranch.setPhoneNumber(String.valueOf(row[9]));
 			companyBranch.setEmail(String.valueOf(row[10]));
 			companyBranch.setOpeningHours(String.valueOf(row[11]));
-			companyBranch.setCreateDate(ZonedDateTime.parse(row[12].toString(), format));
+			companyBranch.setCreateDate(format.parse(row[12].toString()));
 			companyBranch.setMain(Boolean.parseBoolean(row[13].toString()));
 			companyBranchList.add(companyBranch);
 
 			Company company = new Company();
 			company.setId(Long.parseLong(row[14].toString()));
 			company.setName(String.valueOf(row[15]));
-			company.setCreateDate(ZonedDateTime.parse(String.valueOf(row[16]), format));
+			company.setCreateDate(format.parse(String.valueOf(row[16])));
 			companyBranch.setCompany(company);
 
 			if (latitude != null && longitude != null) {

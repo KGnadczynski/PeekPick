@@ -20,8 +20,6 @@ import javax.transaction.Transactional;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -187,15 +185,15 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 
 		List<Object[]> rows = query.list();
 		List<Message> messageList = new ArrayList<>();
-		DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
 
 		for(Object[] row : rows){
 			Message message = new Message();
 			message.setId(Long.parseLong(row[0].toString()));
 			message.setType(MessageType.valueOf(row[1].toString()));
-			message.setStartDate(ZonedDateTime.parse(row[2].toString(), format));
-			message.setEndDate((row[3] != null) ? ZonedDateTime.parse(row[3].toString(), format) : null);
-			message.setCreateDate(ZonedDateTime.parse(row[4].toString(), format));
+			message.setStartDate(format.parse(row[2].toString()));
+			message.setEndDate((row[3] != null) ? format.parse(row[3].toString()) : null);
+			message.setCreateDate(format.parse(row[4].toString()));
 			message.setContent(row[5].toString());
 			message.setStatus(MessageStatus.valueOf(row[6].toString()));
 			messageList.add(message);
