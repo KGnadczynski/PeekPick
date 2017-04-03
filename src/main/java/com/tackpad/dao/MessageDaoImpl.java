@@ -258,7 +258,7 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 		Session session = sessionFactory.getCurrentSession();
 		Criteria criteria = session.createCriteria(Message.class, "m");
 		criteria.add(Restrictions.lt("endDate", date));
-		criteria.add(Restrictions.lt("status", date));
+		criteria.add(Restrictions.eq("status", status));
 		return (List<Message>) criteria.list();
 	}
 
