@@ -16,6 +16,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -41,22 +42,19 @@ public class Message {
     private MessageType type;
 
     /** Start promocji.*/
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "DEFAULT_TIMEZONE")
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
-    @Column(nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
+    @Column(nullable = false, columnDefinition = "TIMESTAMPTZ(3)")
     @NotNull(groups = {CreateMessageValidation.class, UpdateMessageValidation.class})
     private Date startDate;
 
     /** Koniec promocji.*/
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "DEFAULT_TIMEZONE")
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
-    @Column
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
+    @Column(nullable = false, columnDefinition = "TIMESTAMPTZ(3)")
     private Date endDate;
 
     /** Data dodania.*/
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "DEFAULT_TIMEZONE")
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
-    @Column(nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
+    @Column(nullable = false, columnDefinition = "TIMESTAMPTZ(3)")
     private Date createDate = new Date();
 
     /** Status.*/
