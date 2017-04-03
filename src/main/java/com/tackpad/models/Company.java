@@ -39,7 +39,6 @@ public class Company {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
     @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
     private ZonedDateTime createDate = ZonedDateTime.now();
 
     @Transient
