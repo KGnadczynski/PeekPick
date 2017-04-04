@@ -114,7 +114,7 @@ public class CompanyBranchController extends BaseController {
             companyBranchMain.setMain(false);
             companyBranchService.save(companyBranchMain);
         }
-        
+
         companyBranch.setCompany(user.getCompany());
         companyBranchService.save(companyBranch);
 

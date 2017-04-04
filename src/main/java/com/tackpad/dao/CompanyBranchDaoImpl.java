@@ -12,6 +12,7 @@ import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -48,6 +49,7 @@ public class CompanyBranchDaoImpl extends BaseDaoImpl<CompanyBranch> implements 
 		Criteria criteria = session.createCriteria(CompanyBranch.class);
 		criteria.add(Restrictions.eq("company.id", companyId));
 		criteria.add(Restrictions.not(Restrictions.eq("status", CompanyBranchStatus.DELETE)));
+		criteria.addOrder(Order.desc("isMain"));
 		return criteria.list();
 	}
 
