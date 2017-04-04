@@ -1,6 +1,9 @@
 package com.tackpad.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tackpad.models.enums.CompanyBranchStatus;
+import com.tackpad.models.enums.MessageStatus;
 import com.tackpad.requests.CreateBossinessUserForm;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,32 +31,32 @@ public class CompanyBranch {
 
     /** Nazwa.*/
     @Column(nullable = false)
-    @NotNull(groups = {CreateBossinessUserForm.CreateBusinessUserValidation.class, UpdateCompanyBranchValidation.class})
+    @NotNull(groups = {CreateBossinessUserForm.CreateBusinessUserValidation.class, UpdateCompanyBranchValidation.class, CreateCompanyBranchValidation.class})
     private String name;
 
     /** Miasto.*/
     @Column(nullable = false)
-     @NotNull(groups = {CreateBossinessUserForm.CreateBusinessUserValidation.class, UpdateCompanyBranchValidation.class})
+     @NotNull(groups = {CreateBossinessUserForm.CreateBusinessUserValidation.class, UpdateCompanyBranchValidation.class, CreateCompanyBranchValidation.class})
     private String city;
 
     /** Ulica.*/
     @Column(nullable = false)
-     @NotNull(groups = {CreateBossinessUserForm.CreateBusinessUserValidation.class, UpdateCompanyBranchValidation.class})
+     @NotNull(groups = {CreateBossinessUserForm.CreateBusinessUserValidation.class, UpdateCompanyBranchValidation.class, CreateCompanyBranchValidation.class})
     private String street;
 
     /** Numer lokalu.*/
     @Column(nullable = false)
-     @NotNull(groups = {CreateBossinessUserForm.CreateBusinessUserValidation.class, UpdateCompanyBranchValidation.class})
+     @NotNull(groups = {CreateBossinessUserForm.CreateBusinessUserValidation.class, UpdateCompanyBranchValidation.class, CreateCompanyBranchValidation.class})
     private String streetNo;
 
     /** Długość geograficzna.*/
     @Column
-     @NotNull(groups = {CreateBossinessUserForm.CreateBusinessUserValidation.class, UpdateCompanyBranchValidation.class})
+     @NotNull(groups = {CreateBossinessUserForm.CreateBusinessUserValidation.class, UpdateCompanyBranchValidation.class, CreateCompanyBranchValidation.class})
     private Double latitude;
 
     /** Szerokość geograficzna.*/
     @Column
-     @NotNull(groups = {CreateBossinessUserForm.CreateBusinessUserValidation.class, UpdateCompanyBranchValidation.class})
+     @NotNull(groups = {CreateBossinessUserForm.CreateBusinessUserValidation.class, UpdateCompanyBranchValidation.class, CreateCompanyBranchValidation.class})
     private Double longitude;
 
     @Column(length = 1000)
@@ -81,6 +84,12 @@ public class CompanyBranch {
     @ManyToOne
     private Company company;
 
+    /** Status.*/
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    @JsonIgnore
+    private CompanyBranchStatus status = CompanyBranchStatus.NEW;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -93,4 +102,5 @@ public class CompanyBranch {
     private double distance;
 
     public interface UpdateCompanyBranchValidation {}
+    public interface CreateCompanyBranchValidation {}
 }

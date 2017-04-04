@@ -2,6 +2,7 @@ package com.tackpad.dao;
 
 
 import com.tackpad.models.*;
+import com.tackpad.models.enums.CompanyBranchStatus;
 import com.tackpad.models.enums.MessageStatus;
 import com.tackpad.models.enums.MessageType;
 import com.tackpad.models.oauth2.User;
@@ -37,6 +38,7 @@ public class CompanyBranchDaoImpl extends BaseDaoImpl<CompanyBranch> implements 
 		final Criteria criteria = session.createCriteria(CompanyBranch.class);
 		criteria.setMaxResults(pageSize);
 		criteria.setFirstResult(pageSize * page);
+		criteria.add(Restrictions.not(Restrictions.eq("status", CompanyBranchStatus.DELETE)));
 		return criteria.list();
 	}
 
@@ -45,6 +47,7 @@ public class CompanyBranchDaoImpl extends BaseDaoImpl<CompanyBranch> implements 
 		Session session = sessionFactory.getCurrentSession();
 		Criteria criteria = session.createCriteria(CompanyBranch.class);
 		criteria.add(Restrictions.eq("company.id", companyId));
+		criteria.add(Restrictions.not(Restrictions.eq("status", CompanyBranchStatus.DELETE)));
 		return criteria.list();
 	}
 
@@ -86,7 +89,9 @@ public class CompanyBranchDaoImpl extends BaseDaoImpl<CompanyBranch> implements 
 
 		sql.append("FROM companybranch as COM_BRA ");
 		sql.append("LEFT JOIN company as COM ON COM.id = COM_BRA.company_id ");
-		sql.append("INNER JOIN message_companybranch MESS_COM_BRA On MESS_COM_BRA.companyBranchList_id = COM_BRA.id ");
+		sql.append("INNER JOIN message_companybranch MESS_COM_BRA On MESS_COM_BRA.companyBranchList_id = COM_BRA.id where");
+
+		sql.append(" COM_BRA.status != " + CompanyBranchStatus.DELETE);
 
 		if (companyBranchId != null) {
 			sql.append(" and COM_BRA.id = :companyBranchId ");

@@ -2,6 +2,7 @@ package com.tackpad.controller;
 
 import com.tackpad.converters.LongListConverter;
 import com.tackpad.models.*;
+import com.tackpad.models.enums.CompanyBranchStatus;
 import com.tackpad.models.oauth2.User;
 import com.tackpad.requests.enums.ListingSortType;
 import com.tackpad.responses.CompanyBranchPage;
@@ -115,4 +116,41 @@ public class CompanyBranchController extends BaseController {
         return success(companyBranch);
     }
 
+    @PostMapping
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = CompanyBranch.class))
+    ResponseEntity create(Authentication authentication,
+                          @Validated(CompanyBranch.CreateCompanyBranchValidation.class) @RequestBody CompanyBranch companyBranch, Errors errors) {
+
+        if (errors.hasErrors()) {
+            return badRequest(errors.getAllErrors());
+        }
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User user = userService.getByEmail(userDetails.getUsername());
+
+        companyBranch.setCompany(user.getCompany());
+        companyBranchService.save(companyBranch);
+
+
+        return success(companyBranch);
+    }
+
+    @DeleteMapping(value = "/{companyBranchId}")
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = CompanyBranch.class))
+    ResponseEntity delete(Authentication authentication, @PathVariable("companyBranchId") Long companyBranchId) {
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User user = userService.getByEmail(userDetails.getUsername());
+        CompanyBranch companyBranch = companyBranchService.getById(companyBranchId);
+
+        if (companyBranch == null || !Objects.equals(user.getCompany().getId(), companyBranch.getCompany().getId())) {
+            return badRequest(BadRequestResponseType.INVALID_ID);
+        }
+
+        companyBranch.setStatus(CompanyBranchStatus.DELETE);
+        companyBranchService.save(companyBranch);
+
+
+        return success(companyBranch);
+    }
 }
