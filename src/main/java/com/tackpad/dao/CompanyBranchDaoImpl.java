@@ -93,7 +93,9 @@ public class CompanyBranchDaoImpl extends BaseDaoImpl<CompanyBranch> implements 
 		sql.append("LEFT JOIN company as COM ON COM.id = COM_BRA.company_id ");
 		sql.append("INNER JOIN message_companybranch MESS_COM_BRA On MESS_COM_BRA.companyBranchList_id = COM_BRA.id ");
 
-		sql.append(" and COM_BRA.status != '" + CompanyBranchStatus.DELETE +"' ");
+		if (messageIdList == null) {
+			sql.append(" and COM_BRA.status != '" + CompanyBranchStatus.DELETE + "' ");
+		}
 
 		if (companyBranchId != null) {
 			sql.append(" and COM_BRA.id = :companyBranchId ");
