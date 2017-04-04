@@ -21,5 +21,7 @@ public enum  BadRequestResponseType {
 
     PHONE_NUMBER_IS_USED,
 
-    INVALID_USER_ID;
+    INVALID_USER_ID,
+
+    CANNOT_DELETE_MAIN_COMPANY_BRANCH;
 }

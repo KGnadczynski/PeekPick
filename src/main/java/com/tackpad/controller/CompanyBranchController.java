@@ -109,6 +109,12 @@ public class CompanyBranchController extends BaseController {
             return badRequest(BadRequestResponseType.INVALID_ID);
         }
 
+        if (companyBranch.isMain()) {
+            CompanyBranch companyBranchMain = companyBranchService.getMainCompanyBranch(user.getCompany().getId());
+            companyBranchMain.setMain(false);
+            companyBranchService.save(companyBranchMain);
+        }
+        
         companyBranch.setCompany(user.getCompany());
         companyBranchService.save(companyBranch);
 
@@ -129,8 +135,14 @@ public class CompanyBranchController extends BaseController {
         User user = userService.getByEmail(userDetails.getUsername());
 
         companyBranch.setCompany(user.getCompany());
-        companyBranchService.save(companyBranch);
 
+        if (companyBranch.isMain()) {
+            CompanyBranch companyBranchMain = companyBranchService.getMainCompanyBranch(user.getCompany().getId());
+            companyBranchMain.setMain(false);
+            companyBranchService.save(companyBranchMain);
+        }
+
+        companyBranchService.save(companyBranch);
 
         return success(companyBranch);
     }
@@ -145,6 +157,10 @@ public class CompanyBranchController extends BaseController {
 
         if (companyBranch == null || !Objects.equals(user.getCompany().getId(), companyBranch.getCompany().getId())) {
             return badRequest(BadRequestResponseType.INVALID_ID);
+        }
+
+        if (companyBranch.isMain()) {
+            return badRequest(BadRequestResponseType.CANNOT_DELETE_MAIN_COMPANY_BRANCH);
         }
 
         companyBranch.setStatus(CompanyBranchStatus.DELETE);
