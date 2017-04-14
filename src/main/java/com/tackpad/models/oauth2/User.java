@@ -20,6 +20,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tackpad.models.Company;
 import com.tackpad.models.Message;
+import com.tackpad.models.UserDeviceFCMToken;
+import com.tackpad.models.UserNotification;
 import com.tackpad.models.enums.UserStatus;
 import com.tackpad.requests.CreateBossinessUserForm;
 import lombok.Getter;
@@ -40,7 +42,9 @@ public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@NotNull(groups = Message.UpdateMessageValidation.class)
+	@NotNull(groups = {Message.UpdateMessageValidation.class,
+			UserNotification.CreateUserNotificationValidation.class,
+			UserDeviceFCMToken.UserDeviceFCMTokenValidation.class})
 	private Long id;
 
 	@NotEmpty
@@ -71,10 +75,9 @@ public class User {
 	@NotNull(groups = CreateBossinessUserForm.CreateBusinessUserValidation.class)
 	private String phoneNumber;
 
-	@JsonIgnore
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "user_role", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "role_id") })
-	private Set<Role> roles = new HashSet<Role>();
+	@JoinTable(name = "user_user_role", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "role_id") })
+	private Set<UserRole> userRoles = new HashSet<UserRole>();
 
 	public User() {
 	}
@@ -85,7 +88,7 @@ public class User {
 		this.name = user.name;
 		this.login = user.login;
 		this.password = user.getPassword();
-		this.roles = user.roles;
+		this.userRoles = user.userRoles;
 	}
 
 	@JsonIgnore

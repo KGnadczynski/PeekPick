@@ -17,6 +17,7 @@
 package com.tackpad.models.oauth2;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tackpad.models.enums.UserRoleType;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -25,7 +26,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class Role implements GrantedAuthority {
+public class UserRole implements GrantedAuthority {
 
 	private static final long serialVersionUID = 1L;
 
@@ -34,15 +35,16 @@ public class Role implements GrantedAuthority {
 	private Integer id;
 
 	@NotEmpty
-	private String name;
+	@Enumerated(EnumType.STRING)
+	private UserRoleType name;
 
 	@JsonIgnore
-	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles")
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "userRoles")
 	private Set<User> users = new HashSet<User>();
 
 	@Override
 	public String getAuthority() {
-		return name;
+		return name.name();
 	}
 
 	public Integer getId() {
@@ -54,10 +56,10 @@ public class Role implements GrantedAuthority {
 	}
 
 	public String getName() {
-		return name;
+		return name.name();
 	}
 
-	public void setName(String name) {
+	public void setName(UserRoleType name) {
 		this.name = name;
 	}
 

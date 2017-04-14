@@ -4,7 +4,9 @@ import com.tackpad.dao.CompanyDao;
 import com.tackpad.dao.UserDao;
 import com.tackpad.models.Company;
 import com.tackpad.models.oauth2.User;
+import com.tackpad.responses.CompanyPage;
 import com.tackpad.responses.Page;
+import com.tackpad.responses.USerPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +24,10 @@ public class UserService extends BaseService {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    public User findById(Long id) {
+        return userDao.findById(id);
+    }
 
     public User getByEmail(String email) {
         return userDao.findByEmail(email);
@@ -51,5 +57,21 @@ public class UserService extends BaseService {
 
     public Object getByPhoneNumber(String phoneNumber) {
         return userDao.findByPhoneNumber(phoneNumber);
+    }
+
+    public USerPage getPage(Integer pageNum, Integer pageSize) {
+
+        if (pageSize == null) {
+            pageSize = DEFAULT_PAGE_SIZE;
+        }
+
+        if (pageSize > MAX_PAGE_SIZE) {
+            pageSize = MAX_PAGE_SIZE;
+        }
+
+        USerPage response = new USerPage();
+        response.objectList = userDao.getPage(pageNum - 1, pageSize);
+        response.isLastPage = response.objectList.size() != pageSize;
+        return response;
     }
 }

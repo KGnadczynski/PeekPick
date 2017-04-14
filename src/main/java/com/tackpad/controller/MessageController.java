@@ -6,6 +6,7 @@ import com.tackpad.converters.EnumStringListConverter;
 import com.tackpad.models.*;
 import com.tackpad.models.enums.MessageStatus;
 import com.tackpad.models.enums.MessageType;
+import com.tackpad.models.enums.UserRoleType;
 import com.tackpad.models.oauth2.User;
 import com.tackpad.requests.enums.ListingSortType;
 import com.tackpad.responses.CountResponse;
@@ -205,7 +206,7 @@ public class MessageController extends BaseController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User user = userService.getByEmail(userDetails.getUsername());
 
-        if (!message.getUser().getId().equals(user.getId())) {
+        if (!hasRole(UserRoleType.ROLE_ADMIN) || !message.getUser().getId().equals(user.getId())) {
             return forbidden(BadRequestResponseType.INVALID_ID);
         }
 

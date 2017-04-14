@@ -1,11 +1,15 @@
 package com.tackpad.dao;
 
+import com.tackpad.models.CompanyBranch;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.lang.reflect.ParameterizedType;
 
 
 @Repository
@@ -35,6 +39,8 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 
 	@Override
 	public T findById(Long id) {
-		return null;
+		Session session = sessionFactory.getCurrentSession();
+		return session.get((Class<T>) ((ParameterizedType) getClass()
+				.getGenericSuperclass()).getActualTypeArguments()[0], id);
 	}
 }

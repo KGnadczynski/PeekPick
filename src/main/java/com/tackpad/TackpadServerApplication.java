@@ -1,5 +1,8 @@
 package com.tackpad;
 
+import com.tackpad.configs.FcmSettings;
+import de.bytefish.fcmjava.client.FcmClient;
+import de.bytefish.fcmjava.http.client.IFcmClient;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -33,6 +36,11 @@ public class TackpadServerApplication extends SpringBootServletInitializer {
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
 		return application.sources(TackpadServerApplication.class);
+	}
+
+	@Bean
+	public IFcmClient fcmClient(FcmSettings settings) {
+		return new FcmClient(settings);
 	}
 
 	public static void main(String[] args) {

@@ -19,12 +19,6 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 	@Autowired
 	SessionFactory sessionFactory;
 
-
-	@Override
-	public List<User> getPage(int page, int pageSize) {
-		return null;
-	}
-
 	@Override
 	public User findByEmail(String email) {
 		Session session = sessionFactory.getCurrentSession();
@@ -39,5 +33,14 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 		Criteria criteria = session.createCriteria(User.class);
 		criteria.add(Restrictions.eq("phoneNumber", phoneNumber));
 		return (User) criteria.uniqueResult();
+	}
+
+	@Override
+	public List<User> getPage(int page, int pageSize) {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria criteria = session.createCriteria(User.class);
+		criteria.setMaxResults(pageSize);
+		criteria.setFirstResult(pageSize * page);
+		return criteria.list();
 	}
 }

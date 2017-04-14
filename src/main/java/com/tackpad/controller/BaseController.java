@@ -1,10 +1,15 @@
 package com.tackpad.controller;
 
+import com.tackpad.models.enums.UserRoleType;
+import com.tackpad.models.oauth2.UserRole;
 import com.tackpad.responses.BadRequestResponse;
 import com.tackpad.responses.enums.BadRequestResponseType;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import java.util.Collection;
 
 
 /**
@@ -68,4 +73,16 @@ public abstract class BaseController {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(obj);
     }
 
+    public boolean hasRole(UserRoleType role) {
+        Collection<UserRole> authorities = (Collection<UserRole>)
+                SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+        boolean hasRole = false;
+        for (UserRole authority : authorities) {
+            hasRole = authority.getAuthority().equals(role.name());
+            if (hasRole) {
+                break;
+            }
+        }
+        return hasRole;
+    }
 }

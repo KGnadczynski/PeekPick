@@ -9,13 +9,17 @@ import com.tackpad.models.CompanyBranch;
 import com.tackpad.models.CompanyCategory;
 import com.tackpad.models.Token;
 import com.tackpad.models.enums.TokenType;
+import com.tackpad.models.enums.UserRoleType;
 import com.tackpad.models.enums.UserStatus;
 import com.tackpad.models.oauth2.User;
+import com.tackpad.models.oauth2.UserRole;
 import com.tackpad.requests.CreateBossinessUserForm;
 import com.tackpad.requests.Diggits;
 import com.tackpad.requests.UpdateEmailForm;
 import com.tackpad.requests.UpdatePasswordForm;
+import com.tackpad.responses.CompanyPage;
 import com.tackpad.responses.DiggitsResponse;
+import com.tackpad.responses.USerPage;
 import com.tackpad.responses.enums.BadRequestResponseType;
 import com.tackpad.services.*;
 import io.swagger.annotations.ApiResponse;
@@ -58,6 +62,9 @@ public class UserController  extends BaseController {
     @Autowired
     public TokenService tokenService;
 
+    @Autowired
+    UserRoleService userRoleService;
+
     @PostMapping("/business")
     @ApiResponses(@ApiResponse(code = 200, message = "OK", response = User.class))
     ResponseEntity create(@Validated(CreateBossinessUserForm.CreateBusinessUserValidation.class)
@@ -90,7 +97,10 @@ public class UserController  extends BaseController {
 
         companyService.save(company);
 
-        user.setCompany(company);;
+        user.setCompany(company);
+
+        UserRole userRole = userRoleService.getByUserRole(UserRoleType.ROLE_BUSINESS_USER);
+        user.getUserRoles().add(userRole);
 
         userService.create(user);
 
@@ -213,9 +223,13 @@ public class UserController  extends BaseController {
         return success(user);
     }
 
-    /*@InitBinder("createBusinessUserForm")
-    void initBinder(WebDataBinder binder) {
-        binder.initDirectFieldAccess();
-    }*/
+    @GetMapping(value = "/page/{page}")
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = CompanyPage.class))
+    ResponseEntity getPage(@PathVariable("page") int page,
+                           @RequestParam(value = "pageSize", required=false) Integer pageSize) {
+
+        USerPage uSerPage = userService.getPage(page, pageSize);
+        return success(uSerPage);
+    }
 
 }

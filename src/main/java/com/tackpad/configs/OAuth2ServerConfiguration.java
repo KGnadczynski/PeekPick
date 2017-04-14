@@ -16,6 +16,8 @@
 
 package com.tackpad.configs;
 
+import com.tackpad.models.enums.UserRoleType;
+import com.tackpad.models.oauth2.UserRole;
 import com.tackpad.services.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -65,6 +67,8 @@ public class OAuth2ServerConfiguration {
 					.antMatchers(HttpMethod.POST, "/messages").authenticated()
 					.antMatchers(HttpMethod.POST, "/messages/messageId/{\\\\d+}/image").authenticated()
 					.antMatchers(HttpMethod.GET, "/users/business/me").authenticated()
+					.antMatchers(HttpMethod.GET, "/users/page/1").access("hasRole('" + UserRoleType.ROLE_ADMIN.name() + "')")
+					.antMatchers(HttpMethod.POST, "/usernotifications").access("hasRole('" + UserRoleType.ROLE_ADMIN.name() + "')")
 				.anyRequest().permitAll();
 			// @formatter:on
 		}

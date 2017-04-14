@@ -2,9 +2,8 @@ insert into user(id, name, email, password, status) values (1,'Roy','test@user.c
 insert into user(id, name, email, password, status) values (2,'Craig','test@user2.com','spring', 'ACTIVE');
 insert into user(id, name, email, password, status) values (3,'Greg','test@user3.com','spring', 'NON_ACTIVE');
  
-insert into role(id, name) values (1,'ROLE_USER');
-insert into role(id, name) values (2,'ROLE_ADMIN');
-insert into role(id, name) values (3,'ROLE_GUEST'); 
+insert into userrole(id, name) values (1,'ROLE_ADMIN');
+insert into userrole(id, name) values (2,'ROLE_BUSINESS_USER');
 
 insert into user_role(user_id, role_id) values (1,1);
 insert into user_role(user_id, role_id) values (1,2);
