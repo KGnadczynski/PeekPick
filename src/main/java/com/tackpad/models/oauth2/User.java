@@ -68,7 +68,7 @@ public class User {
 	private String password;
 
 	@Valid
-	@ManyToOne(optional = true)
+	@ManyToOne
 	private Company company;
 
 	@NotEmpty
