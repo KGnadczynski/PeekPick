@@ -39,7 +39,7 @@ public class UserRole implements GrantedAuthority {
 	private UserRoleType name;
 
 	@JsonIgnore
-	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "userRoles", cascade = CascadeType.PERSIST)
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "userRoles")
 	private Set<User> users = new HashSet<User>();
 
 	@Override

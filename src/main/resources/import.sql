@@ -1,6 +1,11 @@
 insert into userrole(id, name) values (1,'ROLE_ADMIN');
 insert into userrole(id, name) values (2,'ROLE_BUSINESS_USER');
 
+INSERT INTO user (id,email,name,password,phoneNumber,status,company_id)
+  VALUES(1,'admin@admin.com', 'admin','$10$30z15Ft03Yv1zZJHyoP62O914IYDvgDIscPW3O/ZZCH1jFIhySLgq', '123123', 'ACTIVE', NULL);
+
+insert into user_role_role(id, name) values (2,'ROLE_BUSINESS_USER');
+
 INSERT INTO companycategory
 (id, name, parentCategory_id) VALUES
   (1, "Kultura i rozrywka", null),
