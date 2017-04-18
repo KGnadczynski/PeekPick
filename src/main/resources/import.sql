@@ -4,7 +4,7 @@ insert into userrole(id, name) values (2,'ROLE_BUSINESS_USER');
 insert into user (id,email,name,password,phoneNumber,status,company_id)
   VALUES(1,'admin@admin.com', 'admin','$10$30z15Ft03Yv1zZJHyoP62O914IYDvgDIscPW3O/ZZCH1jFIhySLgq', '123123', 'ACTIVE', NULL);
 
-insert into user_role_role(user_id, role_id) values (1,1);
+insert into user_user_role(user_id, role_id) values (1,1);
 
 INSERT INTO companycategory
 (id, name, parentCategory_id) VALUES
