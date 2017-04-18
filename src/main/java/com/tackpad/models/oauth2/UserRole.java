@@ -18,12 +18,10 @@ package com.tackpad.models.oauth2;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tackpad.models.enums.UserRoleType;
-import org.hibernate.annotations.*;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -41,8 +39,7 @@ public class UserRole implements GrantedAuthority {
 	private UserRoleType name;
 
 	@JsonIgnore
-	@ManyToMany(fetch = FetchType.LAZY)
-	@Cascade(org.hibernate.annotations.CascadeType.DELETE)
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "userRoles", cascade = CascadeType.PERSIST)
 	private Set<User> users = new HashSet<User>();
 
 	@Override
