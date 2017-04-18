@@ -35,7 +35,7 @@ public class SendFCM {
     @Autowired
     public SendFCMRequestsService sendFCMRequestsService;
 
-    @Scheduled(fixedRate = 60  * 60)
+    @Scheduled(fixedRate = 60  * 60 * 60)
     public void sendFCM() {
         List<UserNotification> userNotificationList = userNotificationService.gatListByStatus(UserNotificationStatus.NOT_SEND);
         for (UserNotification userNotification : userNotificationList) {
