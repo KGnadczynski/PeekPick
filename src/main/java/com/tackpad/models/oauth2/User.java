@@ -26,6 +26,7 @@ import com.tackpad.models.enums.UserStatus;
 import com.tackpad.requests.CreateBossinessUserForm;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -34,6 +35,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
+import  org.hibernate.annotations.CascadeType;
 
 @Getter
 @Setter
@@ -76,6 +78,7 @@ public class User {
 	private String phoneNumber;
 
 	@ManyToMany(fetch = FetchType.EAGER)
+	@Cascade(CascadeType.DELETE)
 	@JoinTable(name = "user_user_role", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "role_id") })
 	private Set<UserRole> userRoles = new HashSet<UserRole>();
 
