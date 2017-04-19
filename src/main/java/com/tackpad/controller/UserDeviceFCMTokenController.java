@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.method.P;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.Errors;
@@ -46,6 +47,11 @@ public class UserDeviceFCMTokenController extends BaseController  {
 
         if (userService.findById(userDeviceFCMToken.getUser().getId()) == null || !user.getId().equals(userDeviceFCMToken.getUser().getId())) {
             return badRequest(BadRequestResponseType.INVALID_USER_ID);
+        }
+
+        UserDeviceFCMToken deviceFCMToken = userDeviceFCMTokenService.getByUserIdAndDeviceType(userDeviceFCMToken.getUser().getId(), userDeviceFCMToken.getDeviceType());
+        if (deviceFCMToken != null) {
+            userDeviceFCMTokenService.delete(deviceFCMToken);
         }
 
         userDeviceFCMTokenService.save(userDeviceFCMToken);

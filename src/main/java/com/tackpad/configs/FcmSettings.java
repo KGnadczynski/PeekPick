@@ -1,13 +1,16 @@
 package com.tackpad.configs;
 
 import de.bytefish.fcmjava.http.options.IFcmClientSettings;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-@ConfigurationProperties(prefix = "fcm")
 @Component
 public class FcmSettings implements IFcmClientSettings {
+
+    @Value("${fcm.api-key}")
     private String apiKey;
+
+    @Value("${fcm.url}")
     private String url;
 
     @Override
@@ -20,5 +23,4 @@ public class FcmSettings implements IFcmClientSettings {
         return this.apiKey;
     }
 
-    //get / set methods
 }

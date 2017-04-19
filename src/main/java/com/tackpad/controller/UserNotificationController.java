@@ -6,6 +6,7 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.tackpad.models.*;
 import com.tackpad.models.enums.TokenType;
+import com.tackpad.models.enums.UserNotificationStatus;
 import com.tackpad.models.enums.UserRoleType;
 import com.tackpad.models.enums.UserStatus;
 import com.tackpad.models.oauth2.User;
@@ -17,6 +18,7 @@ import com.tackpad.requests.UpdatePasswordForm;
 import com.tackpad.responses.CompanyPage;
 import com.tackpad.responses.DiggitsResponse;
 import com.tackpad.responses.USerPage;
+import com.tackpad.responses.UserNotificationPage;
 import com.tackpad.responses.enums.BadRequestResponseType;
 import com.tackpad.services.*;
 import io.swagger.annotations.ApiResponse;
@@ -64,5 +66,64 @@ public class UserNotificationController extends BaseController {
         return success(userNotification);
     }
 
+    @GetMapping(value = "/page/{page}")
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = CompanyPage.class))
+    ResponseEntity getPage(Authentication authentication,
+                           @PathVariable("page") int page,
+                           @RequestParam(value = "pageSize", required=false) Integer pageSize,
+                           @RequestParam(value = "searchTerm", required=false) String searchTerm,
+                           @RequestParam(value = "userId", required=false) Long userId) {
 
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User currentUser = userService.getByEmail(userDetails.getUsername());
+
+        if (!hasRole(UserRoleType.ROLE_ADMIN) && !currentUser.getId().equals(userId)) {
+            return forbidden(BadRequestResponseType.INVALID_USER_ID);
+        }
+
+        UserNotificationPage uSerPage = userNotificationService.getPage(page, pageSize, searchTerm, userId);
+        return success(uSerPage);
+    }
+
+
+    @DeleteMapping(value = "/{userNotificationId}")
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = CompanyPage.class))
+    ResponseEntity delete(Authentication authentication,
+                          @PathVariable("userNotificationId") Long userNotificationId) {
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User currentUser = userService.getByEmail(userDetails.getUsername());
+        UserNotification userNotification = userNotificationService.get(userNotificationId);
+
+        if (!hasRole(UserRoleType.ROLE_ADMIN) && !currentUser.getId().equals(userNotification.getUser().getId())) {
+            return forbidden(BadRequestResponseType.INVALID_USER_ID);
+        }
+
+        userNotification.setStatus(UserNotificationStatus.DELETED);
+        userNotificationService.save(userNotification);
+
+        return success(userNotification);
+    }
+
+    @PutMapping()
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = User.class))
+    ResponseEntity update(Authentication authentication,
+                          @Validated(UserNotification.UpdateUserNotificationValidation.class)
+                          @RequestBody UserNotification userNotification, Errors errors) {
+
+        if (errors.hasErrors()) {
+            return badRequest(errors.getAllErrors());
+        }
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User currentUser = userService.getByEmail(userDetails.getUsername());
+
+        if (!currentUser.getId().equals(userNotification.getUser().getId())) {
+            return forbidden(BadRequestResponseType.INVALID_USER_ID);
+        }
+
+        userNotificationService.save(userNotification);
+
+        return success(userNotification);
+    }
 }

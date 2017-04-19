@@ -4,6 +4,7 @@ import com.tackpad.dao.UserDeviceFCMTokenDao;
 import com.tackpad.dao.UserNotificationDao;
 import com.tackpad.models.UserDeviceFCMToken;
 import com.tackpad.models.UserNotification;
+import com.tackpad.models.enums.DeviceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +20,15 @@ public class UserDeviceFCMTokenService extends BaseService {
         userDeviceFCMTokenDao.save(fcmToken);
     }
 
+    public void delete(UserDeviceFCMToken fcmToken) {
+        userDeviceFCMTokenDao.delete(fcmToken);
+    }
+
     public List<UserDeviceFCMToken> getByUserId(Long usedId) {
         return userDeviceFCMTokenDao.findByUserId(usedId);
+    }
+
+    public UserDeviceFCMToken getByUserIdAndDeviceType(Long userId, DeviceType deviceType) {
+        return userDeviceFCMTokenDao.getByUserIdAndDeviceType(userId, deviceType);
     }
 }

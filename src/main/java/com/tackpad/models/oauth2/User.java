@@ -16,6 +16,7 @@
 
 package com.tackpad.models.oauth2;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tackpad.models.Company;
@@ -32,6 +33,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -44,21 +46,24 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@NotNull(groups = {Message.UpdateMessageValidation.class,
 			UserNotification.CreateUserNotificationValidation.class,
-			UserDeviceFCMToken.UserDeviceFCMTokenValidation.class})
+			UserDeviceFCMToken.UserDeviceFCMTokenValidation.class,
+			UpdateUserValidation.class,
+			UserNotification.UpdateUserNotificationValidation.class})
 	private Long id;
 
 	@NotEmpty
-	@NotNull(groups = CreateBossinessUserForm.CreateBusinessUserValidation.class)
+	@NotNull(groups = {CreateBossinessUserForm.CreateBusinessUserValidation.class, UpdateUserValidation.class})
 	private String name;
 
 	@NotEmpty
 	@JsonProperty("email")
 	@Column(name = "email", unique = true, nullable = false)
-	@NotNull(groups = CreateBossinessUserForm.CreateBusinessUserValidation.class)
+	@NotNull(groups = {CreateBossinessUserForm.CreateBusinessUserValidation.class, UpdateUserValidation.class})
 	private String login;
 
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
+	@NotNull(groups = {UpdateUserValidation.class})
 	private UserStatus status;
 
 	@NotEmpty
@@ -72,12 +77,17 @@ public class User {
 	private Company company;
 
 	@NotEmpty
-	@NotNull(groups = CreateBossinessUserForm.CreateBusinessUserValidation.class)
+	@NotNull(groups = {CreateBossinessUserForm.CreateBusinessUserValidation.class, UpdateUserValidation.class})
 	private String phoneNumber;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_user_role", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "role_id") })
 	private Set<UserRole> userRoles = new HashSet<UserRole>();
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
+	@Column(nullable = false)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date createDate = new Date();
 
 	public User() {
 	}
@@ -110,4 +120,6 @@ public class User {
 	public void setEmail(String email) {
 		this.login = email;
 	}
+
+	public interface UpdateUserValidation{}
 }

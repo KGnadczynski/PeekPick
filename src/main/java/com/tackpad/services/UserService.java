@@ -59,7 +59,7 @@ public class UserService extends BaseService {
         return userDao.findByPhoneNumber(phoneNumber);
     }
 
-    public USerPage getPage(Integer pageNum, Integer pageSize) {
+    public USerPage getPage(Integer pageNum, Integer pageSize, String searchTerm) {
 
         if (pageSize == null) {
             pageSize = DEFAULT_PAGE_SIZE;
@@ -70,8 +70,12 @@ public class UserService extends BaseService {
         }
 
         USerPage response = new USerPage();
-        response.objectList = userDao.getPage(pageNum - 1, pageSize);
+        response.objectList = userDao.getPage(pageNum - 1, pageSize, searchTerm);
         response.isLastPage = response.objectList.size() != pageSize;
         return response;
+    }
+
+    public User getById(Long messageId) {
+        return userDao.findById(messageId);
     }
 }

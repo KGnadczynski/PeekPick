@@ -1,12 +1,11 @@
 package com.tackpad.dao;
 
-import com.tackpad.models.UserDeviceFCMToken;
 import com.tackpad.models.UserNotification;
 import com.tackpad.models.enums.UserNotificationStatus;
-import com.tackpad.models.oauth2.User;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -25,7 +24,26 @@ public class UserNotificationDaoImpl extends BaseDaoImpl<UserNotification> imple
 	public List<UserNotification> findListByStatus(UserNotificationStatus status) {
 		Session session = sessionFactory.getCurrentSession();
 		Criteria criteria = session.createCriteria(UserNotification.class, "m");
-		criteria.add(Restrictions.lt("status", status));
+		criteria.add(Restrictions.eq("status", status));
+		return criteria.list();
+	}
+
+	@Override
+	public List<UserNotification> getPage(int page, int pageSize, String searchTerm, Long userId) {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria criteria = session.createCriteria(UserNotification.class);
+		criteria.setMaxResults(pageSize);
+		criteria.setFirstResult(pageSize * page);
+		if (searchTerm != null) {
+			criteria.add(Restrictions.or(Restrictions.ilike("content", "%" + searchTerm+ "%"), Restrictions.ilike("title", "%" + searchTerm+ "%")));
+		}
+
+		if (userId != null) {
+			criteria.add(Restrictions.eq("user.id", userId));
+		}
+
+		criteria.add(Restrictions.not(Restrictions.eq("status", UserNotificationStatus.DELETED)));
+		criteria.addOrder(Order.desc("createDate"));
 		return criteria.list();
 	}
 }

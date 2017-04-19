@@ -4,10 +4,8 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import com.tackpad.models.Company;
-import com.tackpad.models.CompanyBranch;
-import com.tackpad.models.CompanyCategory;
-import com.tackpad.models.Token;
+import com.tackpad.models.*;
+import com.tackpad.models.enums.MessageStatus;
 import com.tackpad.models.enums.TokenType;
 import com.tackpad.models.enums.UserRoleType;
 import com.tackpad.models.enums.UserStatus;
@@ -123,6 +121,39 @@ public class UserController  extends BaseController {
         return success(user);
     }
 
+    @PutMapping("")
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = User.class))
+    ResponseEntity update(Authentication authentication,
+                          @Validated(User.UpdateUserValidation.class)
+                          @RequestBody User user, Errors errors) {
+
+        if (errors.hasErrors()) {
+            return badRequest(errors.getAllErrors());
+        }
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User currentUser = userService.getByEmail(userDetails.getUsername());
+
+        if (!hasRole(UserRoleType.ROLE_ADMIN) && !currentUser.getId().equals(user.getId())) {
+            return forbidden(BadRequestResponseType.INVALID_ID);
+        }
+
+        User savedUser = userService.getById(user.getId());
+
+        if (!savedUser.getEmail().equals(user.getEmail()) && userService.getByEmail(user.getEmail()) != null) {
+            return badRequest(BadRequestResponseType.EMAIL_ADDRESS_IS_USED);
+        }
+
+        if (!savedUser.getPhoneNumber().equals(user.getPhoneNumber()) && userService.getByPhoneNumber(user.getPhoneNumber()) != null) {
+            return badRequest(BadRequestResponseType.PHONE_NUMBER_IS_USED);
+        }
+
+        user.setPassword(savedUser.getPassword());
+        userService.merge(user);
+
+        return success(user);
+    }
+
     @GetMapping("/email")
     @ApiResponses(@ApiResponse(code = 200, message = "OK"))
     ResponseEntity checkEmailIsUsed(@RequestParam(value="email") String email) {
@@ -144,6 +175,12 @@ public class UserController  extends BaseController {
         return success(user);
     }
 
+    @GetMapping("/{userId}")
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = User.class))
+    ResponseEntity get(@PathVariable("userId") Long userId) {
+        User user = userService.getById(userId);
+        return success(user);
+    }
 
     @PostMapping("/diggits")
     ResponseEntity postDigits(@Validated @RequestBody Diggits diggits, Errors errors) throws UnirestException {
@@ -226,10 +263,33 @@ public class UserController  extends BaseController {
     @GetMapping(value = "/page/{page}")
     @ApiResponses(@ApiResponse(code = 200, message = "OK", response = CompanyPage.class))
     ResponseEntity getPage(@PathVariable("page") int page,
-                           @RequestParam(value = "pageSize", required=false) Integer pageSize) {
+                           @RequestParam(value = "pageSize", required=false) Integer pageSize,
+                           @RequestParam(value = "searchTerm", required=false) String searchTerm) {
 
-        USerPage uSerPage = userService.getPage(page, pageSize);
+        USerPage uSerPage = userService.getPage(page, pageSize, searchTerm);
         return success(uSerPage);
     }
 
+    @DeleteMapping(value = "/{userId}")
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = Message.class))
+    ResponseEntity deleteUser(Authentication authentication, @PathVariable("userId") Long userId) {
+
+        User user = userService.getById(userId);
+
+        if (user == null) {
+            return badRequest(BadRequestResponseType.INVALID_ID);
+        }
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User currentUser = userService.getByEmail(userDetails.getUsername());
+
+        if (!hasRole(UserRoleType.ROLE_ADMIN) && !currentUser.getId().equals(user.getId())) {
+            return forbidden(BadRequestResponseType.INVALID_ID);
+        }
+
+        user.setStatus(UserStatus.DELETED);
+        userService.merge(user);
+
+        return success(user);
+    }
 }

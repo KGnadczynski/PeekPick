@@ -66,6 +66,8 @@ public class OAuth2ServerConfiguration {
 				.authorizeRequests()
 					.antMatchers(HttpMethod.POST, "/messages").authenticated()
 					.antMatchers(HttpMethod.POST, "/messages/messageId/{\\\\d+}/image").authenticated()
+					.antMatchers(HttpMethod.PUT, "/users").authenticated()
+					.antMatchers(HttpMethod.DELETE, "/users/{\\\\d+}").authenticated()
 					.antMatchers(HttpMethod.GET, "/users/business/me").authenticated()
 					.antMatchers(HttpMethod.GET, "/users/page/1").access("hasRole('" + UserRoleType.ROLE_ADMIN.name() + "')")
 					.antMatchers(HttpMethod.POST, "/usernotifications").access("hasRole('" + UserRoleType.ROLE_ADMIN.name() + "')")

@@ -24,17 +24,23 @@ public class UserNotification {
 
     @Id
     @GeneratedValue
+    @NotNull(groups = {UpdateUserNotificationValidation.class})
     private Long id;
 
     /** Nazwa.*/
     @Column(nullable = false, length = 100000)
-    @NotNull(groups = {CreateUserNotificationValidation.class})
+    @NotNull(groups = {CreateUserNotificationValidation.class, UpdateUserNotificationValidation.class})
+    private String title;
+
+    /** Nazwa.*/
+    @Column(nullable = false, length = 100000)
+    @NotNull(groups = {CreateUserNotificationValidation.class, UpdateUserNotificationValidation.class})
     private String content;
 
     /** Typ.*/
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    @NotNull(groups = {CreateUserNotificationValidation.class})
+    @NotNull(groups = {CreateUserNotificationValidation.class, UpdateUserNotificationValidation.class})
     private UserNotificationType type;
 
     /** Data dodania.*/
@@ -46,7 +52,7 @@ public class UserNotification {
     /** Status.*/
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    @NotNull(groups = {CreateUserNotificationValidation.class})
+    @NotNull(groups = {CreateUserNotificationValidation.class, UpdateUserNotificationValidation.class})
     private UserNotificationStatus status = UserNotificationStatus.NOT_SEND;
 
     @ManyToOne(optional = false)
@@ -54,5 +60,6 @@ public class UserNotification {
     private User user;
 
     public interface CreateUserNotificationValidation {}
+    public interface UpdateUserNotificationValidation {}
 
 }

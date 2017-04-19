@@ -56,9 +56,10 @@ public class CompanyController extends BaseController {
     @GetMapping(value = "/page/{page}")
     @ApiResponses(@ApiResponse(code = 200, message = "OK", response = CompanyPage.class))
     ResponseEntity getPage(@PathVariable("page") int page,
-                           @RequestParam(value = "pageSize", required=false) Integer pageSize) {
+                           @RequestParam(value = "pageSize", required=false) Integer pageSize,
+                           @RequestParam(value = "searchTerm", required=false) String searchTerm) {
 
-        CompanyPage companyPage = companyService.getPage(page, pageSize);
+        CompanyPage companyPage = companyService.getPage(page, pageSize, searchTerm);
         return success(companyPage);
     }
 

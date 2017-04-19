@@ -24,7 +24,7 @@ public class CompanyService extends BaseService {
      *
      * @return List of Accounts
      */
-    public CompanyPage getPage(Integer pageNum, Integer pageSize) {
+    public CompanyPage getPage(Integer pageNum, Integer pageSize, String searchTerm) {
 
         if (pageSize == null) {
             pageSize = DEFAULT_PAGE_SIZE;
@@ -35,7 +35,7 @@ public class CompanyService extends BaseService {
         }
 
         CompanyPage response = new CompanyPage();
-        response.objectList = companyDao.getPage(pageNum - 1, pageSize);
+        response.objectList = companyDao.getPage(pageNum - 1, pageSize, searchTerm);
         return response;
     }
 

@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface UserNotificationDao extends BaseDao<UserNotification> {
 
-    List findListByStatus(UserNotificationStatus status);
+    List<UserNotification>  findListByStatus(UserNotificationStatus status);
+
+    List<UserNotification> getPage(int page, int pageSize, String searchTerm, Long userId);
 }
 

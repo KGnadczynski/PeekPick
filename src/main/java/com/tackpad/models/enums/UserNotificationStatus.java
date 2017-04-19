@@ -6,5 +6,7 @@ public enum UserNotificationStatus {
 
     WAS_SEND,
 
-    READ;
+    READ,
+
+    DELETED;
 }

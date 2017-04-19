@@ -33,14 +33,14 @@ public class TackpadServerApplication extends SpringBootServletInitializer {
 		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 	}
 
-	@Override
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(TackpadServerApplication.class);
-	}
-
 	@Bean
 	public IFcmClient fcmClient(FcmSettings settings) {
 		return new FcmClient(settings);
+	}
+
+	@Override
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+		return application.sources(TackpadServerApplication.class);
 	}
 
 	public static void main(String[] args) {

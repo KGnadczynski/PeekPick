@@ -6,6 +6,7 @@ import com.tackpad.models.enums.UserNotificationStatus;
 import com.tackpad.services.SendFCMRequestsService;
 import com.tackpad.services.UserDeviceFCMTokenService;
 import com.tackpad.services.UserNotificationService;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -13,27 +14,22 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class SendFCM {
+public class RemoveNotSendUserNotifications {
+
+    private static final int EXPIRED_DAY_COUNT = 3;
 
     @Autowired
     UserNotificationService userNotificationService;
 
-    @Autowired
-    public UserDeviceFCMTokenService userDeviceFCMTokenService;
-
-    @Autowired
-    public SendFCMRequestsService sendFCMRequestsService;
-
-    @Scheduled(fixedRate = 30000)
+    //3h
+    @Scheduled(fixedRate = 3*60*60*1000 )
     public void sendFCM() {
         List<UserNotification> userNotificationList = userNotificationService.gatListByStatus(UserNotificationStatus.NOT_SEND);
         for (UserNotification userNotification : userNotificationList) {
-            List<UserDeviceFCMToken> userDeviceFCMTokenList = userDeviceFCMTokenService.getByUserId(userNotification.getUser().getId());
-            for (UserDeviceFCMToken deviceFCMToken : userDeviceFCMTokenList) {
-                sendFCMRequestsService.sendPushMessages(deviceFCMToken.getToken(), userNotification);
+            if (userNotification.getCreateDate().after(DateTime.now().plusDays(EXPIRED_DAY_COUNT).toDate())) {
+                userNotification.setStatus(UserNotificationStatus.WAS_SEND);
+                userNotificationService.save(userNotification);
             }
-
         }
-
     }
 }

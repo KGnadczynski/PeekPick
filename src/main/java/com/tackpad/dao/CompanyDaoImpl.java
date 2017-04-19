@@ -20,11 +20,14 @@ public class CompanyDaoImpl extends BaseDaoImpl<Company> implements CompanyDao {
 	SessionFactory sessionFactory;
 
 	@Override
-	public List<Company> getPage(int page, int pageSize) {
+	public List<Company> getPage(int page, int pageSize, String searchTerm) {
 		Session session = sessionFactory.getCurrentSession();
 		Criteria criteria = session.createCriteria(Company.class);
 		criteria.setMaxResults(pageSize);
 		criteria.setFirstResult(pageSize * page);
+		if (searchTerm != null) {
+			criteria.add(Restrictions.ilike("name", "%" + searchTerm + "%"));
+		}
 		return criteria.list();
 	}
 
