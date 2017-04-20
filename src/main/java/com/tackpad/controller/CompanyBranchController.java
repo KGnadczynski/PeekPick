@@ -92,7 +92,7 @@ public class CompanyBranchController extends BaseController {
         return success(companyBranch);
     }
 
-    @PutMapping(value = "/{companyBranchId}")
+    @GetMapping(value = "/{companyBranchId}")
     @ApiResponses(@ApiResponse(code = 200, message = "OK", response = CompanyBranch.class))
     ResponseEntity get(@PathVariable("companyBranchId") Long companyBranchId) {
 
@@ -105,7 +105,7 @@ public class CompanyBranchController extends BaseController {
         return success(companyBranch);
     }
 
-    @GetMapping(value = "/{companyBranchId}")
+    @PutMapping(value = "/{companyBranchId}")
     @ApiResponses(@ApiResponse(code = 200, message = "OK", response = CompanyBranch.class))
     ResponseEntity update(Authentication authentication, @PathVariable("companyBranchId") Long companyBranchId,
                           @Validated(CompanyBranch.UpdateCompanyBranchValidation.class) @RequestBody CompanyBranch companyBranch, Errors errors) {
