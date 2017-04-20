@@ -61,7 +61,6 @@ public class CompanyBranchService extends BaseService {
      *
      * @return lista głównych kategorii
      */
-    @Cacheable(value = "companyBranchPages", cacheManager="timeoutCacheManager")
     public List<CompanyBranch> getListByCompanyId(Long id) {
 
         return companyBranchDao.findListByCompanyId(id);
