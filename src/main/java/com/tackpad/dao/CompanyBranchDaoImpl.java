@@ -40,7 +40,7 @@ public class CompanyBranchDaoImpl extends BaseDaoImpl<CompanyBranch> implements 
 		criteria.setMaxResults(pageSize);
 		criteria.setFirstResult(pageSize * page);
 		criteria.add(Restrictions.not(Restrictions.eq("status", CompanyBranchStatus.DELETE)));
-		return criteria.list();
+		return (List<CompanyBranch>) criteria.list();
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class CompanyBranchDaoImpl extends BaseDaoImpl<CompanyBranch> implements 
 		criteria.add(Restrictions.eq("company.id", companyId));
 		criteria.add(Restrictions.not(Restrictions.eq("status", CompanyBranchStatus.DELETE)));
 		criteria.addOrder(Order.desc("isMain"));
-		return criteria.list();
+		return (List<CompanyBranch>) criteria.list();
 	}
 
 	@Override
