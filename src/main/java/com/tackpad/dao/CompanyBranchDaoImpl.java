@@ -36,21 +36,19 @@ public class CompanyBranchDaoImpl extends BaseDaoImpl<CompanyBranch> implements 
 	@Override
 	public List<CompanyBranch> getPage(int page, int pageSize) {
 		Session session = sessionFactory.getCurrentSession();
-		final Criteria criteria = session.createCriteria(CompanyBranch.class);
-		criteria.setMaxResults(pageSize);
-		criteria.setFirstResult(pageSize * page);
-		criteria.add(Restrictions.not(Restrictions.eq("status", CompanyBranchStatus.DELETE)));
-		return (List<CompanyBranch>) criteria.list();
+		return session.createCriteria(CompanyBranch.class)
+				.add(Restrictions.not(Restrictions.eq("status", CompanyBranchStatus.DELETE)))
+				.setMaxResults(pageSize)
+				.setFirstResult(pageSize * page).list();
 	}
 
 	@Override
 	public List<CompanyBranch> findListByCompanyId(Long companyId) {
 		Session session = sessionFactory.getCurrentSession();
-		Criteria criteria = session.createCriteria(CompanyBranch.class);
-		criteria.add(Restrictions.eq("company.id", companyId));
-		criteria.add(Restrictions.not(Restrictions.eq("status", CompanyBranchStatus.DELETE)));
-		criteria.addOrder(Order.desc("isMain"));
-		return (List<CompanyBranch>) criteria.list();
+		return session.createCriteria(CompanyBranch.class)
+				.add(Restrictions.eq("company.id", companyId))
+				.add(Restrictions.not(Restrictions.eq("status", CompanyBranchStatus.DELETE)))
+				.addOrder(Order.desc("isMain")).list();
 	}
 
 	@Override
