@@ -149,10 +149,10 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 				sql.append("ORDER BY messageCreateDate desc");
 				break;
 			case END_DATE:
-				sql.append("ORDER BY messageEndDate desc");
+				sql.append("ORDER BY messageEndDate asc");
 				break;
 			case START_DATE:
-				sql.append("ORDER BY messageStartDate desc");
+				sql.append("ORDER BY messageStartDate asc");
 				break;
 		}
 

@@ -94,6 +94,19 @@ public class CompanyBranchController extends BaseController {
 
     @PutMapping(value = "/{companyBranchId}")
     @ApiResponses(@ApiResponse(code = 200, message = "OK", response = CompanyBranch.class))
+    ResponseEntity get(@PathVariable("companyBranchId") Long companyBranchId) {
+
+        CompanyBranch companyBranch = companyBranchService.getById(companyBranchId);
+
+        if (companyBranch == null) {
+            return badRequest(BadRequestResponseType.INVALID_ID);
+        }
+
+        return success(companyBranch);
+    }
+
+    @GetMapping(value = "/{companyBranchId}")
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = CompanyBranch.class))
     ResponseEntity update(Authentication authentication, @PathVariable("companyBranchId") Long companyBranchId,
                           @Validated(CompanyBranch.UpdateCompanyBranchValidation.class) @RequestBody CompanyBranch companyBranch, Errors errors) {
 
