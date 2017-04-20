@@ -99,7 +99,6 @@ public class CompanyBranchService extends BaseService {
         return response;
     }
 
-    @Cacheable(value = "companyBranchPages", cacheManager="timeoutCacheManager")
     public CompanyBranch getMainCompanyBranch(Long companyId) {
         return companyBranchDao.getMainCompanyBranch(companyId);
     }
