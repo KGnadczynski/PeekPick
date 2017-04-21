@@ -1,5 +1,6 @@
 package com.tackpad.dao;
 
+import com.tackpad.models.enums.UserStatus;
 import com.tackpad.models.oauth2.User;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -23,6 +24,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 		Session session = sessionFactory.getCurrentSession();
 		Criteria criteria = session.createCriteria(User.class);
 		criteria.add(Restrictions.eq("login", email));
+		criteria.add(Restrictions.not(Restrictions.eq("status", UserStatus.DELETED)));
 		return (User) criteria.uniqueResult();
 	}
 
@@ -31,6 +33,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 		Session session = sessionFactory.getCurrentSession();
 		Criteria criteria = session.createCriteria(User.class);
 		criteria.add(Restrictions.eq("phoneNumber", phoneNumber));
+		criteria.add(Restrictions.not(Restrictions.eq("status", UserStatus.DELETED)));
 		return (User) criteria.uniqueResult();
 	}
 
