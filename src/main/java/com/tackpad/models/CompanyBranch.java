@@ -87,7 +87,6 @@ public class CompanyBranch {
     /** Status.*/
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    @JsonIgnore
     private CompanyBranchStatus status = CompanyBranchStatus.NEW;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")

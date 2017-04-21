@@ -107,6 +107,10 @@ public class CompanyBranchDaoImpl extends BaseDaoImpl<CompanyBranch> implements 
 			sql.append(" and MESS_COM_BRA.Message_id IN ('" + StringUtils.join(messageIdList, "','") + "') ");
 		}
 
+		if (searchTerm != null) {
+			sql.append(" and MESS_COM_BRA.name LIKE :searchTerm OR MESS_COM_BRA.city LIKE :searchTerm OR MESS_COM_BRA.street LIKE :searchTerm ");
+		}
+
 		sql.append(" GROUP BY MESS_COM_BRA.companyBranchList_id ");
 
 		if (latitude != null && longitude != null) {
@@ -135,6 +139,10 @@ public class CompanyBranchDaoImpl extends BaseDaoImpl<CompanyBranch> implements 
 		if (latitude != null && longitude != null) {
 			query.setParameter("ulongitude", longitude);
 			query.setParameter("ulatitude", latitude);
+		}
+
+		if (searchTerm != null) {
+			query.setParameter("searchTerm", "%" + searchTerm + "%");
 		}
 
 		query.setFirstResult(pageSize * page);
