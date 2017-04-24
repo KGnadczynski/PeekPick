@@ -63,6 +63,9 @@ public class UserController  extends BaseController {
     @Autowired
     UserRoleService userRoleService;
 
+    @Autowired
+    CompanyAvailableMessageCountService companyAvailableMessageCountService;
+
     @PostMapping("/business")
     @ApiResponses(@ApiResponse(code = 200, message = "OK", response = User.class))
     ResponseEntity create(@Validated(CreateBossinessUserForm.CreateBusinessUserValidation.class)
@@ -109,6 +112,9 @@ public class UserController  extends BaseController {
         token.setTokenType(TokenType.TWITTER_AUTH);
         tokenService.save(token);
 
+        CompanyAvailableMessageCount companyAvailableMessageCount = new CompanyAvailableMessageCount();
+        companyAvailableMessageCount.setCompany(company);
+        companyAvailableMessageCountService.save(companyAvailableMessageCount);
         /*try {
             String tokenValue = tokenService.createConfirmAccountToken(user);
             sendEmailService.sendRegisterEmailConfirm(user.getEmail(), company.getName(), tokenValue);

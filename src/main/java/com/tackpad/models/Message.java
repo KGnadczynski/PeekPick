@@ -19,7 +19,7 @@ import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 
-@Entity
+@Entity(name = "Message")
 @Getter
 @Setter
 public class Message {

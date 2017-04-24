@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
  * Firma.
  * @author Przemysław Zynis
  */
-@Entity
+@Entity(name = "Company_category")
 @Getter
 @Setter
 public class CompanyCategory {

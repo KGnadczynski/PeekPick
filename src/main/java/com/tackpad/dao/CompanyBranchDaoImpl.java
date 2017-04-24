@@ -3,9 +3,6 @@ package com.tackpad.dao;
 
 import com.tackpad.models.*;
 import com.tackpad.models.enums.CompanyBranchStatus;
-import com.tackpad.models.enums.MessageStatus;
-import com.tackpad.models.enums.MessageType;
-import com.tackpad.models.oauth2.User;
 import com.tackpad.requests.enums.ListingSortType;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
@@ -37,7 +34,7 @@ public class CompanyBranchDaoImpl extends BaseDaoImpl<CompanyBranch> implements 
 	public List<CompanyBranch> getPage(int page, int pageSize) {
 		Session session = sessionFactory.getCurrentSession();
 		return session.createCriteria(CompanyBranch.class)
-				.add(Restrictions.not(Restrictions.eq("status", CompanyBranchStatus.DELETE)))
+				.add(Restrictions.not(Restrictions.eq("status", CompanyBranchStatus.DELETED)))
 				.setMaxResults(pageSize)
 				.setFirstResult(pageSize * page).list();
 	}
@@ -47,7 +44,7 @@ public class CompanyBranchDaoImpl extends BaseDaoImpl<CompanyBranch> implements 
 		Session session = sessionFactory.getCurrentSession();
 		return session.createCriteria(CompanyBranch.class)
 				.add(Restrictions.eq("company.id", companyId))
-				.add(Restrictions.not(Restrictions.eq("status", CompanyBranchStatus.DELETE)))
+				.add(Restrictions.not(Restrictions.eq("status", CompanyBranchStatus.DELETED)))
 				.addOrder(Order.desc("isMain")).list();
 	}
 
@@ -87,12 +84,12 @@ public class CompanyBranchDaoImpl extends BaseDaoImpl<CompanyBranch> implements 
 					"  as distance ");
 		}
 
-		sql.append("FROM companybranch as COM_BRA ");
+		sql.append("FROM company_branch as COM_BRA ");
 		sql.append("LEFT JOIN company as COM ON COM.id = COM_BRA.company_id ");
-		sql.append("INNER JOIN message_companybranch MESS_COM_BRA On MESS_COM_BRA.companyBranchList_id = COM_BRA.id ");
+		sql.append("INNER JOIN message_company_branch MESS_COM_BRA On MESS_COM_BRA.companyBranchList_id = COM_BRA.id ");
 
 		if (messageIdList == null) {
-			sql.append(" and COM_BRA.status != '" + CompanyBranchStatus.DELETE + "' ");
+			sql.append(" and COM_BRA.status != '" + CompanyBranchStatus.DELETED + "' ");
 		}
 
 		if (companyBranchId != null) {

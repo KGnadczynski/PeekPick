@@ -12,6 +12,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
  * Company service.
  * @author Przemysaw Zynis
@@ -77,5 +79,9 @@ public class UserService extends BaseService {
 
     public User getById(Long messageId) {
         return userDao.findById(messageId);
+    }
+
+    public List<User> getByCompanyId(Long companyId) {
+        return userDao.findByCompanyId(companyId);
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.lang.reflect.ParameterizedType;
+import java.util.List;
 
 
 @Repository
@@ -43,4 +44,5 @@ public class BaseDaoImpl<T> implements BaseDao<T> {
 		return session.get((Class<T>) ((ParameterizedType) getClass()
 				.getGenericSuperclass()).getActualTypeArguments()[0], id);
 	}
+
 }

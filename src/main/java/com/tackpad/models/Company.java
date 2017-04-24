@@ -19,7 +19,7 @@ import java.util.Date;
  * Firma.
  * @author Przemysław Zynis
  */
-@Entity
+@Entity(name = "Company")
 @Getter
 @Setter
 public class Company {

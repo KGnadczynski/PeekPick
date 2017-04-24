@@ -176,7 +176,7 @@ public class CompanyBranchController extends BaseController {
             return badRequest(BadRequestResponseType.CANNOT_DELETE_MAIN_COMPANY_BRANCH);
         }
 
-        companyBranch.setStatus(CompanyBranchStatus.DELETE);
+        companyBranch.setStatus(CompanyBranchStatus.DELETED);
         companyBranchService.save(companyBranch);
 
 

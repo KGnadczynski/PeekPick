@@ -3,13 +3,9 @@ package com.tackpad.models.enums;
 /**
  * Typ wiadomosci.
  */
-public enum MessageStatus {
-
-    NEW,
+public enum BusinessPlanStatus {
 
     ACTIVE,
-
-    ENDED,
 
     DELETED;
 }

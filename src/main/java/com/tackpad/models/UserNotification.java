@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
-@Entity
+@Entity(name = "User_notification")
 @Getter
 @Setter
 public class UserNotification {

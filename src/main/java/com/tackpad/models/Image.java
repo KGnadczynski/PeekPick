@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
 import java.util.Date;
 
-@Entity
+@Entity(name = "Image")
 @Getter
 @Setter
 public class Image {

@@ -77,8 +77,8 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 					"* cos( radians( COM_BRA.latitude ) ) " +
 					"* cos( radians( COM_BRA.longitude ) - radians(:ulongitude) ) " +
 					"+ sin( radians(:ulatitude) ) " +
-					"* sin( radians( COM_BRA.latitude )))) as distance from companybranch as COM_BRA " +
-					"                LEFT JOIN message_companybranch as MESS_COM_BRA ON COM_BRA.id = MESS_COM_BRA.companyBranchList_id " +
+					"* sin( radians( COM_BRA.latitude )))) as distance from company_branch as COM_BRA " +
+					"                LEFT JOIN message_company_branch as MESS_COM_BRA ON COM_BRA.id = MESS_COM_BRA.companyBranchList_id " +
 					"                where MESS_COM_BRA.Message_id = MES.id " +
 					"                order by distance limit 1 ) " +
 					"ELSE " +
@@ -92,14 +92,14 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 
 
 		sql.append("FROM message as MES ");
-		sql.append("LEFT JOIN messagelocation as MES_LOC ON MES_LOC.id = MES.location_id ");
+		sql.append("LEFT JOIN message_location as MES_LOC ON MES_LOC.id = MES.location_id ");
 		sql.append("LEFT JOIN user as USR ON USR.id = MES.user_id ");
 		sql.append("LEFT JOIN company as COM ON COM.id = USR.company_id ");
-		sql.append("LEFT JOIN companyCategory COM_CAT ON COM_CAT.id = COM.category_id ");
-		sql.append("LEFT JOIN companyCategory PAR_COM_CAT ON PAR_COM_CAT.id = COM_CAT.parentCategory_id ");
+		sql.append("LEFT JOIN company_category COM_CAT ON COM_CAT.id = COM.category_id ");
+		sql.append("LEFT JOIN company_category PAR_COM_CAT ON PAR_COM_CAT.id = COM_CAT.parentCategory_id ");
 
-		sql.append("INNER JOIN message_companybranch MESS_COM_BRA On MESS_COM_BRA.Message_id = MES.id ");
-		sql.append("INNER JOIN companybranch COM_BRA On COM_BRA.id = MESS_COM_BRA.companyBranchList_id where 1=1 ");
+		sql.append("INNER JOIN message_company_branch MESS_COM_BRA On MESS_COM_BRA.Message_id = MES.id ");
+		sql.append("INNER JOIN company_branch COM_BRA On COM_BRA.id = MESS_COM_BRA.companyBranchList_id where 1=1 ");
 
 		if (companyBranchId != null) {
 			sql.append(" and COM_BRA.id = :companyBranchId ");
@@ -133,7 +133,7 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 			sql.append(" and COM.name LIKE :searchTerm OR COM_BRA.name LIKE :searchTerm OR MES.content LIKE :searchTerm ");
 		}
 
-		sql.append(" and MES.status NOT LIKE '%DELETE%' ");
+		sql.append(" and MES.status NOT LIKE '%DELETED%' ");
 
 		sql.append(" GROUP BY MESS_COM_BRA.Message_id ");
 

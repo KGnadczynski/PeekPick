@@ -210,7 +210,7 @@ public class MessageController extends BaseController {
             return forbidden(BadRequestResponseType.INVALID_ID);
         }
 
-        message.setStatus(MessageStatus.DELETE);
+        message.setStatus(MessageStatus.DELETED);
         messageService.merge(message);
 
         return success(message);

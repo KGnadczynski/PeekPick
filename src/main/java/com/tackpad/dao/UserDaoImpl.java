@@ -38,6 +38,14 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 	}
 
 	@Override
+	public List<User> findByCompanyId(Long companyId) {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria criteria = session.createCriteria(User.class);
+		criteria.add(Restrictions.eq("company.id", companyId));
+		return criteria.list();
+	}
+
+	@Override
 	public List<User> getPage(int page, int pageSize, String searchTerm) {
 		Session session = sessionFactory.getCurrentSession();
 		Criteria criteria = session.createCriteria(User.class);

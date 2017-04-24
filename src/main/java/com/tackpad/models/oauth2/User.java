@@ -39,7 +39,7 @@ import java.util.Set;
 
 @Getter
 @Setter
-@Entity
+@Entity(name = "User")
 public class User {
 
 	@Id

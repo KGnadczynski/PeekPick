@@ -71,6 +71,9 @@ public class OAuth2ServerConfiguration {
 					.antMatchers(HttpMethod.GET, "/users/business/me").authenticated()
 					.antMatchers(HttpMethod.GET, "/users/page/1").access("hasRole('" + UserRoleType.ROLE_ADMIN.name() + "')")
 					.antMatchers(HttpMethod.POST, "/usernotifications").access("hasRole('" + UserRoleType.ROLE_ADMIN.name() + "')")
+					.antMatchers(HttpMethod.GET, "/companyavailablemessagecount/companyId/{\\\\d+}").authenticated()
+					.antMatchers(HttpMethod.POST, "/businessplans").access("hasRole('" + UserRoleType.ROLE_ADMIN.name() + "')")
+					.antMatchers(HttpMethod.POST, "/businessplans/{\\\\d+}").access("hasRole('" + UserRoleType.ROLE_ADMIN.name() + "')")
 				.anyRequest().permitAll();
 			// @formatter:on
 		}

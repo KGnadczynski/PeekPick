@@ -5,5 +5,5 @@ public enum CompanyBranchStatus {
 
     NEW,
 
-    DELETE;
+    DELETED;
 }

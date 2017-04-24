@@ -17,7 +17,7 @@ import java.util.Date;
 /**
  * @see https://firebase.google.com/docs/cloud-messaging/send-message
  */
-@Entity
+@Entity(name = "User_device_FCM_token")
 @Getter
 @Setter
 public class UserDeviceFCMToken {

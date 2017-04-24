@@ -19,7 +19,7 @@ import java.util.Date;
 /**
  * Oddzial firmy
  */
-@Entity
+@Entity(name = "Company_branch")
 @Getter
 @Setter
 public class CompanyBranch {
