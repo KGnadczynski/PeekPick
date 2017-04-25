@@ -1,9 +1,6 @@
 package com.tackpad.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tackpad.models.enums.MessageStatus;
-import com.tackpad.models.enums.MessageType;
-import com.tackpad.models.oauth2.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,12 +8,11 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
-import java.util.List;
 
-@Entity(name = "Company_available_message_count")
+@Entity(name = "Company_credit")
 @Getter
 @Setter
-public class CompanyAvailableMessageCount {
+public class CompanyCredit {
 
     @Id
     @GeneratedValue
@@ -28,10 +24,11 @@ public class CompanyAvailableMessageCount {
 
     @Column(nullable = false)
     @NotNull
-    private int availableMessageCount = 15;
+    private int credit = 15;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
     @Column(nullable = false)
-    @NotNull
+    @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdateForFreePlanDate = new Date();
 
 }

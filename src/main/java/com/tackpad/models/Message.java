@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.hibernate.annotations.Type;
+import org.joda.time.DateTime;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -58,6 +59,11 @@ public class Message {
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date createDate = new Date();
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
+    @Column(nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date expirationDate = DateTime.now().plusWeeks(2).toDate();
 
     /** Status.*/
     @Column(nullable = false)

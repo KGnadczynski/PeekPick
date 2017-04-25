@@ -85,4 +85,8 @@ public class MessageService extends BaseService {
     public List<Message> findByStatusAndWhereEndDateIsAfter(MessageStatus status, Date date) {
         return messageDao.findByStatusAndWhereEndDateIsAfter(status, date);
     }
+
+    public List<Message> findByStatusAndWhereExpirationDateIsAfter(MessageStatus status, Date date) {
+        return messageDao.findByStatusAndWhereExpirationDateIsAfter(status, date);
+    }
 }

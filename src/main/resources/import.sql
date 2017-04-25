@@ -9,12 +9,12 @@ insert into user (id,email,name,password,phoneNumber,status,company_id, createDa
 
 insert into user_user_role(user_id, role_id) values (1,1);
 
-insert into Business_plan(id, nettValue, grossValue, messageCount, status) values (1,5.0, 6.15, 5, 'ACTIVE');
-insert into Business_plan(id, nettValue, grossValue, messageCount, status) values (2,10.0, 12.3, 12, 'ACTIVE');
-insert into Business_plan(id, nettValue, grossValue, messageCount, status) values (3,20.0, 24.6, 25, 'ACTIVE');
-insert into Business_plan(id, nettValue, grossValue, messageCount, status) values (4,35.0, 43.05, 50, 'ACTIVE');
-insert into Business_plan(id, nettValue, grossValue, messageCount, status) values (5,60.0, 73.8, 100, 'ACTIVE');
-insert into Business_plan(id, nettValue, grossValue, messageCount, status) values (6,80.0, 98.4, 150, 'ACTIVE');
+insert into Business_plan(id, nettValue, grossValue, messageCount, status) values (1000,5.0, 6.15, 5, 'ACTIVE');
+insert into Business_plan(id, nettValue, grossValue, messageCount, status) values (2000,10.0, 12.3, 12, 'ACTIVE');
+insert into Business_plan(id, nettValue, grossValue, messageCount, status) values (3000,20.0, 24.6, 25, 'ACTIVE');
+insert into Business_plan(id, nettValue, grossValue, messageCount, status) values (4000,35.0, 43.05, 50, 'ACTIVE');
+insert into Business_plan(id, nettValue, grossValue, messageCount, status) values (5000,60.0, 73.8, 100, 'ACTIVE');
+insert into Business_plan(id, nettValue, grossValue, messageCount, status) values (6000,80.0, 98.4, 150, 'ACTIVE');
 
 INSERT INTO company_category
 (id, name, parentCategory_id) VALUES

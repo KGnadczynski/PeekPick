@@ -2,10 +2,7 @@ package com.tackpad.services;
 
 
 import com.tackpad.dao.BusinessPlanDao;
-import com.tackpad.dao.CompanyAvailableMessageCountDao;
 import com.tackpad.models.BusinessPlan;
-import com.tackpad.models.CompanyAvailableMessageCount;
-import com.tackpad.models.oauth2.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

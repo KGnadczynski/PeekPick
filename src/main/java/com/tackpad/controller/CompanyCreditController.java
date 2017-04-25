@@ -1,13 +1,11 @@
 package com.tackpad.controller;
 
-import com.tackpad.models.BusinessPlan;
 import com.tackpad.models.Company;
-import com.tackpad.models.CompanyAvailableMessageCount;
+import com.tackpad.models.CompanyCredit;
 import com.tackpad.models.enums.UserRoleType;
 import com.tackpad.models.oauth2.User;
 import com.tackpad.responses.enums.BadRequestResponseType;
-import com.tackpad.services.BusinessPlanService;
-import com.tackpad.services.CompanyAvailableMessageCountService;
+import com.tackpad.services.CompanyCreditService;
 import com.tackpad.services.CompanyService;
 import com.tackpad.services.UserService;
 import io.swagger.annotations.ApiResponse;
@@ -22,11 +20,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/companyavailablemessagecount")
-public class CompanyAvailableMessageCountController extends BaseController {
+@RequestMapping("/companycredits")
+public class CompanyCreditController extends BaseController {
 
     @Autowired
-    CompanyAvailableMessageCountService companyAvailableMessageCountService;
+    CompanyCreditService companyCreditService;
 
     @Autowired
     UserService userService;
@@ -35,7 +33,7 @@ public class CompanyAvailableMessageCountController extends BaseController {
     CompanyService companyService;
 
     @GetMapping("/companyId/{companyId}")
-    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = CompanyAvailableMessageCount.class, responseContainer="List"))
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = CompanyCredit.class, responseContainer="List"))
     ResponseEntity getByCompanyId(Authentication authentication,  @PathVariable("companyId") Long companyId) {
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -51,6 +49,6 @@ public class CompanyAvailableMessageCountController extends BaseController {
             return forbidden(BadRequestResponseType.INVALID_ID);
         }
 
-        return success(companyAvailableMessageCountService.getByCompanyId(companyId));
+        return success(companyCreditService.getByCompanyId(companyId));
     }
 }

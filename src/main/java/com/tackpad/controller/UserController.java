@@ -5,7 +5,6 @@ import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.tackpad.models.*;
-import com.tackpad.models.enums.MessageStatus;
 import com.tackpad.models.enums.TokenType;
 import com.tackpad.models.enums.UserRoleType;
 import com.tackpad.models.enums.UserStatus;
@@ -35,7 +34,6 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.QueryParam;
 import java.io.UnsupportedEncodingException;
 
 @Controller
@@ -64,7 +62,7 @@ public class UserController  extends BaseController {
     UserRoleService userRoleService;
 
     @Autowired
-    CompanyAvailableMessageCountService companyAvailableMessageCountService;
+    CompanyCreditService companyCreditService;
 
     @PostMapping("/business")
     @ApiResponses(@ApiResponse(code = 200, message = "OK", response = User.class))
@@ -112,9 +110,9 @@ public class UserController  extends BaseController {
         token.setTokenType(TokenType.TWITTER_AUTH);
         tokenService.save(token);
 
-        CompanyAvailableMessageCount companyAvailableMessageCount = new CompanyAvailableMessageCount();
-        companyAvailableMessageCount.setCompany(company);
-        companyAvailableMessageCountService.save(companyAvailableMessageCount);
+        CompanyCredit companyCredit = new CompanyCredit();
+        companyCredit.setCompany(company);
+        companyCreditService.save(companyCredit);
         /*try {
             String tokenValue = tokenService.createConfirmAccountToken(user);
             sendEmailService.sendRegisterEmailConfirm(user.getEmail(), company.getName(), tokenValue);

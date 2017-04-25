@@ -2,6 +2,8 @@ package com.tackpad.models;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tackpad.models.enums.Currency;
+import com.tackpad.models.enums.UserStatus;
 import com.tackpad.models.oauth2.User;
 import com.tackpad.requests.CreateBossinessUserForm;
 import lombok.Getter;
@@ -41,6 +43,11 @@ public class Company {
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date createDate = new Date();
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    @NotNull(groups = {CreateComapanyValidation.class, CreateBossinessUserForm.CreateBusinessUserValidation.class, UpdateComapanyValidation.class})
+    private Currency currency = Currency.PLN;
 
     @Transient
     private String mainImageUrl;

@@ -20,4 +20,6 @@ public interface MessageDao extends BaseDao<Message> {
     Long findCount(Long companyId);
 
 	List<Message> findByStatusAndWhereEndDateIsAfter(MessageStatus status, Date date);
+
+    List<Message> findByStatusAndWhereExpirationDateIsAfter(MessageStatus status, Date date);
 }

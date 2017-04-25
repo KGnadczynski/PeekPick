@@ -64,6 +64,7 @@ public class OAuth2ServerConfiguration {
 			// @formatter:off
 			http
 				.authorizeRequests()
+					.antMatchers(HttpMethod.POST, "/userdevicefcmtoken").authenticated()
 					.antMatchers(HttpMethod.POST, "/messages").authenticated()
 					.antMatchers(HttpMethod.POST, "/messages/messageId/{\\\\d+}/image").authenticated()
 					.antMatchers(HttpMethod.PUT, "/users").authenticated()

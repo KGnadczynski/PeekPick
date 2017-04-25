@@ -23,5 +23,7 @@ public enum  BadRequestResponseType {
 
     INVALID_USER_ID,
 
-    CANNOT_DELETE_MAIN_COMPANY_BRANCH;
+    CANNOT_DELETE_MAIN_COMPANY_BRANCH,
+
+    CREDIT_IS_NULL;
 }

@@ -263,6 +263,15 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 	}
 
 	@Override
+	public List<Message> findByStatusAndWhereExpirationDateIsAfter(MessageStatus status, Date date) {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria criteria = session.createCriteria(Message.class, "m");
+		criteria.add(Restrictions.lt("expirationDate", date));
+		criteria.add(Restrictions.eq("status", status));
+		return (List<Message>) criteria.list();
+	}
+
+	@Override
 	public Message findById(Long id) {
 		Session session = sessionFactory.getCurrentSession();
 		return (Message) session.get(Message.class, id);

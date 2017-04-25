@@ -55,6 +55,9 @@ public class MessageController extends BaseController {
     @Autowired
     public MessageLocationService messageLocationService;
 
+    @Autowired
+    public CompanyCreditService companyCreditService;
+
     /** Poviera strone wiadomosci.
      *
      * @param page - strona numer
@@ -182,6 +185,15 @@ public class MessageController extends BaseController {
             }
         }
 
+        //Sprawdzenie czy ma dostępne
+        CompanyCredit companyCredit = companyCreditService.getByCompanyId(user.getCompany().getId());
+        if (companyCredit.getCredit() == 0) {
+            return badRequest(BadRequestResponseType.CREDIT_IS_NULL);
+        }
+
+        companyCredit.setCredit(companyCredit.getCredit() - 1);
+        companyCreditService.save(companyCredit);
+
         message.setUser(user);
 
         if (messageLocation != null) {
@@ -248,6 +260,7 @@ public class MessageController extends BaseController {
 
         message.setUser(user);
         message.setCreateDate(currentMessage.getCreateDate());
+        message.setExpirationDate(currentMessage.getExpirationDate());
 
         messageService.merge(message);
 

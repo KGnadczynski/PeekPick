@@ -1,25 +1,17 @@
 package com.tackpad.scheduledtasks;
 
-import com.tackpad.models.CompanyAvailableMessageCount;
-import com.tackpad.models.Message;
+import com.tackpad.models.CompanyCredit;
 import com.tackpad.models.UserNotification;
-import com.tackpad.models.enums.MessageStatus;
 import com.tackpad.models.oauth2.User;
 import com.tackpad.services.*;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.context.support.MessageSourceSupport;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import static com.tackpad.models.enums.UserNotificationType.FREE_PLAN_UPDATED_INFO;
 
@@ -31,7 +23,7 @@ public class AddFreePlans {
     private static final int FREE_PLAN_MESSAGE_COUNT = 1;
 
     @Autowired
-    public CompanyAvailableMessageCountService companyAvailableMessageCountService;
+    public CompanyCreditService companyCreditService;
 
     @Autowired
     private UserService userService;
@@ -45,17 +37,17 @@ public class AddFreePlans {
     @Scheduled(fixedRate = 10000)
     public void removeEndedPost() {
         log.info(" ADD FREE PLANS TASK");
-        List<CompanyAvailableMessageCount> companyAvailableMessageCountList
-                = companyAvailableMessageCountService.getListByAvailableMessageCountAndLastUpdateForFreePlanDateAfter(0, DateTime.now().minusWeeks(2));
+        List<CompanyCredit> companyCreditList
+                = companyCreditService.getListByAvailableMessageCountAndLastUpdateForFreePlanDateAfter(0, DateTime.now().minusWeeks(2));
 
-        for (CompanyAvailableMessageCount companyAvailableMessageCount : companyAvailableMessageCountList) {
-            log.info(" ADD FREE PLAN FOR COMPANY {COMPANY ID}:" + companyAvailableMessageCount.getCompany());
+        for (CompanyCredit companyCredit : companyCreditList) {
+            log.info(" ADD FREE PLAN FOR COMPANY {COMPANY ID}:" + companyCredit.getCompany());
 
-            companyAvailableMessageCount.setAvailableMessageCount(FREE_PLAN_MESSAGE_COUNT);
-            companyAvailableMessageCount.setLastUpdateForFreePlanDate(DateTime.now().toDate());
-            companyAvailableMessageCountService.merge(companyAvailableMessageCount);
+            companyCredit.setCredit(FREE_PLAN_MESSAGE_COUNT);
+            companyCredit.setLastUpdateForFreePlanDate(DateTime.now().toDate());
+            companyCreditService.merge(companyCredit);
 
-            createUserNotification(companyAvailableMessageCount.getCompany().getId());
+            createUserNotification(companyCredit.getCompany().getId());
         }
     }
 
