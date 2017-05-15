@@ -33,7 +33,7 @@ public class MessageService extends BaseService {
                                List<Long> companyCategoryIdList, List<MessageType> messageTypeList,
                                List<MessageStatus> statusList,
                                Double latitude, Double longitude, Double range, String searchTerm,
-                               ListingSortType listingSortType) throws ParseException {
+                               Date startBeforeDate, ListingSortType listingSortType) throws ParseException {
 
         if (pageSize == null) {
             pageSize = DEFAULT_PAGE_SIZE;
@@ -53,7 +53,7 @@ public class MessageService extends BaseService {
 
         MessagePage response = new MessagePage();
         response.objectList = messageDao.getPage(pageNum - 1, pageSize, messageIdList, companyBranchId, companyId, companyCategoryMainIdList,
-                companyCategoryIdList, messageTypeList, statusList, latitude, longitude, range, searchTerm, listingSortType);
+                companyCategoryIdList, messageTypeList, statusList, latitude, longitude, range, searchTerm, startBeforeDate, listingSortType);
 
         if (response.objectList.size() < pageSize) {
             response.isLastPage = true;

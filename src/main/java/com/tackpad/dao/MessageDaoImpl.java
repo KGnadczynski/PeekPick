@@ -33,12 +33,12 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 	SessionFactory sessionFactory;
 
 	@Override
-	public List<Message> getPage(int page, int pageSize, List<Long> messageIdList, Long companyBranchId,  Long companyId,
-								 List<Long> companyCategoryMainIdList, List<Long> companyCategoryIdList,
-								 List<MessageType> messageTypeList,
-								 List<MessageStatus> statusList,
-								 Double latitude, Double longitude, Double range, String searchTerm,
-								 ListingSortType listingSortType) throws ParseException {
+	public List<Message> getPage(int page, int pageSize, List<Long> messageIdList, Long companyBranchId, Long companyId,
+                                 List<Long> companyCategoryMainIdList, List<Long> companyCategoryIdList,
+                                 List<MessageType> messageTypeList,
+                                 List<MessageStatus> statusList,
+                                 Double latitude, Double longitude, Double range, String searchTerm,
+                                 Date startBeforeDate, ListingSortType listingSortType) throws ParseException {
 
 		Session session = sessionFactory.getCurrentSession();
 
@@ -133,6 +133,10 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 			sql.append(" and COM.name LIKE :searchTerm OR COM_BRA.name LIKE :searchTerm OR MES.content LIKE :searchTerm ");
 		}
 
+		if (startBeforeDate != null) {
+			sql.append(" and MES.startDate < :startBeforeDate ");
+		}
+
 		sql.append(" and MES.status NOT LIKE '%DELETED%' ");
 
 		sql.append(" GROUP BY MESS_COM_BRA.Message_id ");
@@ -179,6 +183,9 @@ public class MessageDaoImpl extends BaseDaoImpl<Message> implements MessageDao {
 			query.setParameter("range", range);
 		}
 
+		if (startBeforeDate != null) {
+			query.setParameter("startBeforeDate", startBeforeDate);
+		}
 
 		query.setFirstResult(pageSize * page);
 		query.setMaxResults(pageSize);

@@ -26,7 +26,7 @@ public class CompanyBranch {
 
     @Id
     @GeneratedValue
-    @NotNull(groups = {Message.UpdateMessageValidation.class})
+    @NotNull(groups = {Message.UpdateMessageValidation.class, UpdateCompanyBranchValidation.class})
     private Long id;
 
     /** Nazwa.*/
