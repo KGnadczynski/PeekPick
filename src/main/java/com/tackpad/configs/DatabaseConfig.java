@@ -56,6 +56,15 @@ public class DatabaseConfig {
     @Value("${entitymanager.packagesToScan}")
     private String ENTITYMANAGER_PACKAGES_TO_SCAN;
 
+    @Value("${spring.datasource.tomcat.max-wait}")
+    private String DB_MAX_WAIT;
+
+    @Value("${spring.datasource.tomcat.max-active}")
+    private String DB_MAX_ACTIVE;
+
+    @Value("${spring.datasource.tomcat.test-on-borrow}")
+    private String DB_TEST_ON_BORROW;
+
     @Primary
     @Bean
     public DataSource dataSource() {
@@ -64,6 +73,11 @@ public class DatabaseConfig {
         dataSource.setUrl(DB_URL);
         dataSource.setUsername(DB_USERNAME);
         dataSource.setPassword(DB_PASSWORD);
+        Properties props = new Properties();
+        props.setProperty("spring.datasource.tomcat.max-wait",DB_MAX_WAIT);
+        props.setProperty("spring.datasource.tomcat.max-active",DB_MAX_ACTIVE);
+        props.setProperty("spring.datasource.tomcat.test-on-borrow",DB_TEST_ON_BORROW);
+        dataSource.setConnectionProperties(props);
         return dataSource;
     }
 
