@@ -13,9 +13,9 @@ import java.util.List;
 
 public interface MessageDao extends BaseDao<Message> {
 	List<Message> getPage(int page, int pageSize, List<Long> messageIdList, Long companyBranchId, Long companyId, List<Long> companyCategoryIdList,
-						  List<Long> companyCategoryMainIdList, List<MessageType> messageTypeList,
-						  List<MessageStatus> statusList, Double latitude,
-						  Double longitude, Double range, String searchTerm, ListingSortType listingSortType) throws ParseException;
+                          List<Long> companyCategoryMainIdList, List<MessageType> messageTypeList,
+                          List<MessageStatus> statusList, Double latitude,
+                          Double longitude, Double range, String searchTerm, Date startAfterDate, ListingSortType listingSortType) throws ParseException;
 
     Long findCount(Long companyId);
 

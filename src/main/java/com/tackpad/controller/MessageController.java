@@ -17,6 +17,7 @@ import com.tackpad.services.*;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.util.Collections;
+import java.util.Date;
 
 /**
  * 
@@ -78,6 +80,7 @@ public class MessageController extends BaseController {
                            @RequestParam(value = "longitude", required=false) Double longitude,
                            @RequestParam(value = "range", required=false) Double range,
                            @RequestParam(value = "statusList", required=false) String statusList,
+                           @RequestParam(value = "startBeforeDate", required=false) @DateTimeFormat(pattern="yyyy-MM-dd HH:mm") Date startBeforeDate,
                            @RequestParam(value = "sortType", required=false) String sortType) {
 
         MessagePage messagePage = null;
@@ -91,7 +94,7 @@ public class MessageController extends BaseController {
                     longListConverter.convert(companyCategoryIdList),
                     enumStringListConverter.convert(MessageType.class, messageTypeList),
                     enumStringListConverter.convert(MessageStatus.class, statusList),
-                    latitude, longitude, range, searchTerm, listingSortType);
+                    latitude, longitude, range, searchTerm, startBeforeDate, listingSortType);
         } catch (ParseException e) {
             e.printStackTrace();
         }
