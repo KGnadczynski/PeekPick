@@ -16,6 +16,7 @@ import com.tackpad.responses.MessagePage;
 import com.tackpad.services.*;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -264,6 +265,40 @@ public class MessageController extends BaseController {
         message.setUser(user);
         message.setCreateDate(currentMessage.getCreateDate());
         message.setExpirationDate(currentMessage.getExpirationDate());
+
+        messageService.merge(message);
+
+        return success(message);
+    }
+
+    @PutMapping(value = "/{messageId}/renew")
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = Message.class))
+    ResponseEntity renew(Authentication authentication, @PathVariable("messageId") Long messageId) {
+
+        Message message = messageService.getById(messageId);
+
+        if (message == null) {
+            return badRequest(BadRequestResponseType.INVALID_ID);
+        }
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User user = userService.getByEmail(userDetails.getUsername());
+
+        if (!hasRole(UserRoleType.ROLE_ADMIN) && !message.getUser().getId().equals(user.getId())) {
+            return forbidden(BadRequestResponseType.INVALID_ID);
+        }
+
+        //Sprawdzenie czy ma dostępne
+        CompanyCredit companyCredit = companyCreditService.getByCompanyId(user.getCompany().getId());
+        if (companyCredit.getCredit() == 0) {
+            return badRequest(BadRequestResponseType.CREDIT_IS_NULL);
+        }
+
+        companyCredit.setCredit(companyCredit.getCredit() - 1);
+        companyCreditService.save(companyCredit);
+
+        message.setStatus(MessageStatus.NEW);
+        message.setExpirationDate(DateTime.now().plusWeeks(2).toDate());
 
         messageService.merge(message);
 
