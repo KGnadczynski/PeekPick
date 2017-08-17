@@ -113,16 +113,21 @@ public class MessageController extends BaseController {
                 message.getUser().getCompany().setMainImageUrl(companyLogoImage.getImageUrl());
             }
 
-            try {
-                Page<CompanyBranch> companyBranchPage = companyBranchService.getPage(1, 1,
-                        Collections.singletonList(message.getId()), null,  null, latitude,
-                        longitude, null, null, ListingSortType.DISTANCE);
+            if (latitude != null && longitude != null) {
+                try {
+                    Page<CompanyBranch> companyBranchPage = companyBranchService.getPage(1, 1,
+                            Collections.singletonList(message.getId()), null, null, latitude,
+                            longitude, null, null, ListingSortType.DISTANCE);
 
-                if (!companyBranchPage.objectList.isEmpty()) {
-                    message.setNearestCompanyBranch(companyBranchPage.objectList.get(0));
+                    if (!companyBranchPage.objectList.isEmpty()) {
+                        message.setNearestCompanyBranch(companyBranchPage.objectList.get(0));
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
-            } catch (ParseException e) {
-                e.printStackTrace();
+            } else {
+                CompanyBranch companyBranch = companyBranchService.getMainCompanyBranch(message.getUser().getCompany().getId());
+                message.setNearestCompanyBranch(companyBranch);
             }
 
         }

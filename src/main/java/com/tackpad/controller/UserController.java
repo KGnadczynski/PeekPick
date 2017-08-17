@@ -10,10 +10,7 @@ import com.tackpad.models.enums.UserRoleType;
 import com.tackpad.models.enums.UserStatus;
 import com.tackpad.models.oauth2.User;
 import com.tackpad.models.oauth2.UserRole;
-import com.tackpad.requests.CreateBossinessUserForm;
-import com.tackpad.requests.Diggits;
-import com.tackpad.requests.UpdateEmailForm;
-import com.tackpad.requests.UpdatePasswordForm;
+import com.tackpad.requests.*;
 import com.tackpad.responses.CompanyPage;
 import com.tackpad.responses.DiggitsResponse;
 import com.tackpad.responses.USerPage;
@@ -24,6 +21,7 @@ import io.swagger.annotations.ApiResponses;
 import it.ozimov.springboot.templating.mail.service.exception.CannotSendEmailException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -39,6 +37,12 @@ import java.io.UnsupportedEncodingException;
 @Controller
 @RequestMapping("/users")
 public class UserController  extends BaseController {
+
+    @Value("${twitter.secret}")
+    private String twitterSecret;
+
+    @Value("${twitter.key}")
+    private String twitterKey;
 
     @Autowired
     public UserService userService;
@@ -76,6 +80,7 @@ public class UserController  extends BaseController {
         User user = createBossinessUserForm.getUser();
         CompanyBranch companyBranch = createBossinessUserForm.getCompanyBranch();
         Token token = createBossinessUserForm.getToken();
+
         Company company = companyBranch.getCompany();
 
         if (userService.getByEmail(user.getEmail()) != null) {
@@ -264,6 +269,55 @@ public class UserController  extends BaseController {
         return success(user);
     }
 
+    @PutMapping("/password/reset/token/{token}")
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = Token.class))
+    ResponseEntity token(@Validated @RequestBody PasswordForm passwordForm,
+                         @PathVariable("token") String tokenString, Errors errors) {
+
+        Token token = tokenService.getByValue(tokenString);
+
+        if (token == null) {
+            return badRequest(BadRequestResponseType.INVALID_TOKEN);
+        }
+
+        if (errors.hasErrors()) {
+            return badRequest(errors.getAllErrors());
+        }
+
+        token.getUser().setPassword(userService.encodeString(passwordForm.password));
+        userService.merge(token.getUser());
+
+        tokenService.delete(token);
+        return success(token);
+    }
+
+    @PutMapping(value = "/password/reset")
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = User.class))
+    ResponseEntity resetPassword(Authentication authentication,
+                                 @Validated @RequestBody ChangePasswordForm changePasswordForm, Errors errors) {
+
+        if (errors.hasErrors()) {
+            return badRequest(errors.getAllErrors());
+        }
+
+        User user = userService.getByEmail(changePasswordForm.email);
+
+        if (user == null) {
+            return badRequest(BadRequestResponseType.USER_NOT_FOUND);
+        }
+
+        String tokenValue = tokenService.createChangeEmailToken(user, user.getEmail());
+        try {
+            sendEmailService.sendResetPasswordLink(user.getEmail(), user.getCompany().getName(), tokenValue);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (CannotSendEmailException e) {
+            e.printStackTrace();
+        }
+
+        return success(user);
+    }
+
     @GetMapping(value = "/page/{page}")
     @ApiResponses(@ApiResponse(code = 200, message = "OK", response = CompanyPage.class))
     ResponseEntity getPage(@PathVariable("page") int page,
@@ -289,6 +343,30 @@ public class UserController  extends BaseController {
 
         if (!hasRole(UserRoleType.ROLE_ADMIN) && !currentUser.getId().equals(user.getId())) {
             return forbidden(BadRequestResponseType.INVALID_ID);
+        }
+
+        user.setStatus(UserStatus.DELETED);
+        userService.merge(user);
+
+        return success(user);
+    }
+
+    @PutMapping(value = "/delete")
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = Message.class))
+    ResponseEntity delete(Authentication authentication,
+                              @Validated @RequestBody PasswordForm passwordForm, Errors errors) {
+
+        if (errors.hasErrors()) {
+            return badRequest(errors.getAllErrors());
+        }
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User user = userService.getByEmail(userDetails.getUsername());
+
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+        if (!passwordEncoder.matches(passwordForm.password, user.getPassword())) {
+            return badRequest(BadRequestResponseType.WRONG_PASSWORD);
         }
 
         user.setStatus(UserStatus.DELETED);

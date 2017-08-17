@@ -32,4 +32,7 @@ public class Token {
 
     @ManyToOne(optional = true)
     private User user;
+
+    @Transient
+    private String secret;
 }

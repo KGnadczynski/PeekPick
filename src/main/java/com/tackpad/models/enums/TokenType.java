@@ -9,6 +9,8 @@ public enum TokenType {
 
     CHANGE_EMAIL,
 
-    TWITTER_AUTH;
+    TWITTER_AUTH,
+
+    RESET_PASSWORD;
 
 }

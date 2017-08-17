@@ -31,10 +31,11 @@ public class TokenService extends BaseService {
         tokenDao.save(token);
     }
 
-    public String createConfirmAccountToken(User user) {
+    public String createResetPasswordToken(User user, String email) {
         Token token = new Token();
-        token.setTokenType(TokenType.COMPLETE_REGISTER);
+        token.setTokenType(TokenType.RESET_PASSWORD);
         token.setUser(user);
+        token.setData(email);
         token.setValue(UUID.randomUUID().toString());
         tokenDao.save(token);
 
