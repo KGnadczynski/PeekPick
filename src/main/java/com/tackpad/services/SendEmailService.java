@@ -68,4 +68,22 @@ public class SendEmailService extends BaseService {
 
         emailService.send(email, "change_email_template.ftl", modelObject);
     }
+
+    public void sendResetPasswordLink(String emailAddress, String companyName, String tokenValue) throws
+            UnsupportedEncodingException, CannotSendEmailException {
+
+        //Defining the model object for the given Freemarker template
+        final Map<String, Object> modelObject = new HashMap<>();
+        modelObject.put("email", emailAddress);
+        modelObject.put("link", serverUrl + "/tokens/value/" + tokenValue);
+
+        final Email email = EmailImpl.builder()
+                .from(new InternetAddress("cicero@mala-tempora.currunt", "TackPad"))
+                .to(Lists.newArrayList(new InternetAddress(emailAddress, companyName)))
+                .subject("TackPad. Zmiana adresu email")
+                .body("")//Empty body
+                .encoding(Charset.forName("UTF-8")).build();
+
+        emailService.send(email, "reset_password_template.ftl", modelObject);
+    }
 }

@@ -84,4 +84,8 @@ public class UserService extends BaseService {
     public List<User> getByCompanyId(Long companyId) {
         return userDao.findByCompanyId(companyId);
     }
+
+    public String encodeString(String s) {
+        return passwordEncoder.encode(s);
+    }
 }

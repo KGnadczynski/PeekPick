@@ -27,5 +27,7 @@ public enum  BadRequestResponseType {
 
     CREDIT_IS_NULL,
 
-    BAD_TOKEN_VALUE;
+    BAD_TOKEN_VALUE,
+    
+    USER_NOT_FOUND;
 }
