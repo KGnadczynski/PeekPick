@@ -25,5 +25,7 @@ public enum  BadRequestResponseType {
 
     CANNOT_DELETE_MAIN_COMPANY_BRANCH,
 
-    CREDIT_IS_NULL;
+    CREDIT_IS_NULL,
+
+    BAD_TOKEN_VALUE;
 }

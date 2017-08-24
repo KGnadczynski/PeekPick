@@ -1,5 +1,6 @@
 package com.tackpad.controller;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
@@ -78,6 +79,11 @@ public class UserController  extends BaseController {
         Token token = createBossinessUserForm.getToken();
         Company company = companyBranch.getCompany();
 
+        /*boolean isSuccessful = FirebaseAuth.getInstance().verifyIdToken(token.getValue()).isSuccessful();
+        if (!isSuccessful) {
+            return forbidden(BadRequestResponseType.BAD_TOKEN_VALUE);
+        }*/
+
         if (userService.getByEmail(user.getEmail()) != null) {
             return badRequest(BadRequestResponseType.EMAIL_ADDRESS_IS_USED);
         }
@@ -106,9 +112,6 @@ public class UserController  extends BaseController {
         companyBranch.setCompany(company);
         companyBranch.setMain(true);
         companyBranchService.save(companyBranch);
-
-        token.setTokenType(TokenType.TWITTER_AUTH);
-        tokenService.save(token);
 
         CompanyCredit companyCredit = new CompanyCredit();
         companyCredit.setCompany(company);
