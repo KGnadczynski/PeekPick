@@ -294,10 +294,9 @@ public class UserController  extends BaseController {
         return success(token);
     }
 
-    @PutMapping(value = "/password/reset")
+        @PutMapping(value = "/password/reset")
     @ApiResponses(@ApiResponse(code = 200, message = "OK", response = User.class))
-    ResponseEntity resetPassword(Authentication authentication,
-                                 @Validated @RequestBody ChangePasswordForm changePasswordForm, Errors errors) {
+    ResponseEntity resetPassword(@Validated @RequestBody ChangePasswordForm changePasswordForm, Errors errors) {
 
         if (errors.hasErrors()) {
             return badRequest(errors.getAllErrors());
