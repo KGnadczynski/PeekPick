@@ -37,9 +37,9 @@ public abstract class BaseController {
      * @return {@link ResponseEntity}
      */
     public ResponseEntity success(Object obj) {
-
-        logger.info("Response: {}: " + obj);
-        return ResponseEntity.status(HttpStatus.OK).body(obj);
+        ResponseEntity responseEntity = ResponseEntity.status(HttpStatus.OK).body(obj);
+        logger.info("Response: {}: " + (String)  responseEntity.getBody().toString());
+        return responseEntity;
     }
 
     /**
@@ -49,9 +49,9 @@ public abstract class BaseController {
      * @return {@link ResponseEntity}
      */
     public ResponseEntity badRequest(Object obj) {
-
-        logger.info("Response: {}: " + obj);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(obj);
+        ResponseEntity responseEntity = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(obj);
+        logger.info("Response: {}: " + (String)  responseEntity.getBody().toString());
+        return responseEntity;
     }
 
     /**
@@ -64,9 +64,9 @@ public abstract class BaseController {
 
         BadRequestResponse badRequestResponse = new BadRequestResponse();
         badRequestResponse.error = badRequestResponseType;
-
-        logger.info("Response: {}: " + badRequestResponse);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(badRequestResponse);
+        ResponseEntity responseEntity = ResponseEntity.status(HttpStatus.BAD_REQUEST).body(badRequestResponse);
+        logger.info("Response: {}: " + (String) responseEntity.getBody());
+        return responseEntity;
     }
 
     public ResponseEntity forbidden(Object obj) {

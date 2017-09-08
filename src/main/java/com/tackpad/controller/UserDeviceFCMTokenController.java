@@ -1,9 +1,8 @@
 package com.tackpad.controller;
 
-import com.tackpad.models.CompanyBranch;
-import com.tackpad.models.Message;
-import com.tackpad.models.MessageLocation;
-import com.tackpad.models.UserDeviceFCMToken;
+import com.tackpad.models.*;
+import com.tackpad.models.enums.DeviceType;
+import com.tackpad.models.enums.TokenType;
 import com.tackpad.models.oauth2.User;
 import com.tackpad.responses.enums.BadRequestResponseType;
 import com.tackpad.services.UserDeviceFCMTokenService;
@@ -17,10 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/userdevicefcmtoken")
@@ -55,6 +51,24 @@ public class UserDeviceFCMTokenController extends BaseController  {
         }
 
         userDeviceFCMTokenService.save(userDeviceFCMToken);
+
+        return success(userDeviceFCMToken);
+    }
+
+    @DeleteMapping("/devicetype/{devicetype}")
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = UserDeviceFCMToken.class))
+    ResponseEntity remove(Authentication authentication, @PathVariable("devicetype") String devicetype) {
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User user = userService.getByEmail(userDetails.getUsername());
+
+        UserDeviceFCMToken userDeviceFCMToken = userDeviceFCMTokenService.getByUserIdAndDeviceType(user.getId(), DeviceType.valueOf(devicetype));
+
+        if (userDeviceFCMToken == null) {
+            return success(BadRequestResponseType.TOKEN_NOT_FOUND);
+        }
+
+        userDeviceFCMTokenService.delete(userDeviceFCMToken);
 
         return success(userDeviceFCMToken);
     }

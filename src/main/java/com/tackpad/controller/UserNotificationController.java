@@ -15,10 +15,7 @@ import com.tackpad.requests.CreateBossinessUserForm;
 import com.tackpad.requests.Diggits;
 import com.tackpad.requests.UpdateEmailForm;
 import com.tackpad.requests.UpdatePasswordForm;
-import com.tackpad.responses.CompanyPage;
-import com.tackpad.responses.DiggitsResponse;
-import com.tackpad.responses.USerPage;
-import com.tackpad.responses.UserNotificationPage;
+import com.tackpad.responses.*;
 import com.tackpad.responses.enums.BadRequestResponseType;
 import com.tackpad.services.*;
 import io.swagger.annotations.ApiResponse;
@@ -84,6 +81,21 @@ public class UserNotificationController extends BaseController {
         UserNotificationPage uSerPage = userNotificationService.getPage(page, pageSize, searchTerm, userId);
         return success(uSerPage);
     }
+
+    @GetMapping(value = "/status/{userNotificationStatus}/count")
+    @ApiResponses(@ApiResponse(code = 200, message = "OK", response = CompanyPage.class))
+    ResponseEntity getCount(Authentication authentication, @PathVariable("userNotificationStatus") String userNotificationStatus) {
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User currentUser = userService.getByEmail(userDetails.getUsername());
+
+
+        CountResponse countResponse = new CountResponse();
+        countResponse.count = userNotificationService.gatCountByStatus(UserNotificationStatus.valueOf(userNotificationStatus), currentUser.getId());
+
+        return success(countResponse);
+    }
+
 
 
     @DeleteMapping(value = "/{userNotificationId}")

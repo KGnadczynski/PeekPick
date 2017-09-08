@@ -122,7 +122,9 @@ public class CompanyBranchController extends BaseController {
             return badRequest(BadRequestResponseType.INVALID_ID);
         }
 
-        if (companyBranch.isMain()) {
+        companyBranch.setMain(currentCompanyBranch.isMain() && !companyBranch.isMain());
+
+        if (companyBranch.isMain() && !currentCompanyBranch.isMain()) {
             CompanyBranch companyBranchMain = companyBranchService.getMainCompanyBranch(user.getCompany().getId());
             companyBranchMain.setMain(false);
             companyBranchService.save(companyBranchMain);

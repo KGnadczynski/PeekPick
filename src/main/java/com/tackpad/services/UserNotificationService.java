@@ -24,6 +24,10 @@ public class UserNotificationService extends BaseService {
         return userNotificationDao.findListByStatus(status);
     }
 
+    public int gatCountByStatus(UserNotificationStatus status, Long userId) {
+        return userNotificationDao.gatCountByStatus(status, userId);
+    }
+
     public UserNotificationPage getPage(Integer pageNum, Integer pageSize, String searchTerm, Long userId) {
 
         if (pageSize == null) {

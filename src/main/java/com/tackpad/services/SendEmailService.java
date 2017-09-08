@@ -21,8 +21,8 @@ import java.util.Map;
 @Component
 public class SendEmailService extends BaseService {
 
-    @Value("${local.server.url}")
-    private String serverUrl;
+    @Value("${local.web.url}")
+    private String webUrl;
 
     @Autowired
     public EmailService emailService;
@@ -33,7 +33,7 @@ public class SendEmailService extends BaseService {
         //Defining the model object for the given Freemarker template
         final Map<String, Object> modelObject = new HashMap<>();
         modelObject.put("email", emailAddress);
-        modelObject.put("link", serverUrl + "/tokens/value/" + tokenValue);
+        modelObject.put("link", webUrl + "/tokens?value=" + tokenValue);
 
         final Email email = EmailImpl.builder()
                 .from(new InternetAddress(emailAddress, "TackPad"))
@@ -57,7 +57,7 @@ public class SendEmailService extends BaseService {
         //Defining the model object for the given Freemarker template
         final Map<String, Object> modelObject = new HashMap<>();
         modelObject.put("email", emailAddress);
-        modelObject.put("link", serverUrl + "/tokens/value/" + tokenValue);
+        modelObject.put("link", webUrl + "/tokens?value=" + tokenValue + "&type=change_email");
 
         final Email email = EmailImpl.builder()
                 .from(new InternetAddress("cicero@mala-tempora.currunt", "TackPad"))
@@ -75,7 +75,7 @@ public class SendEmailService extends BaseService {
         //Defining the model object for the given Freemarker template
         final Map<String, Object> modelObject = new HashMap<>();
         modelObject.put("email", emailAddress);
-        modelObject.put("link", serverUrl + "/tokens/value/" + tokenValue);
+        modelObject.put("link", webUrl + "/tokens?value=" + tokenValue + "&type=reset_password");
 
         final Email email = EmailImpl.builder()
                 .from(new InternetAddress("cicero@mala-tempora.currunt", "TackPad"))

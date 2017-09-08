@@ -6,6 +6,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -45,5 +46,14 @@ public class UserNotificationDaoImpl extends BaseDaoImpl<UserNotification> imple
 		criteria.add(Restrictions.not(Restrictions.eq("status", UserNotificationStatus.DELETED)));
 		criteria.addOrder(Order.desc("createDate"));
 		return criteria.list();
+	}
+
+	@Override
+	public int gatCountByStatus(UserNotificationStatus status, Long userId) {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria criteria = session.createCriteria(UserNotification.class, "m");
+		criteria.add(Restrictions.eq("status", status));
+		criteria.add(Restrictions.eq("user.id", userId));
+		return ((Number)criteria.setProjection(Projections.rowCount()).uniqueResult()).intValue();
 	}
 }

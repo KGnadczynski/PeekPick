@@ -29,5 +29,7 @@ public enum  BadRequestResponseType {
 
     BAD_TOKEN_VALUE,
 
-    USER_NOT_FOUND;
+    USER_NOT_FOUND,
+
+    TOKEN_NOT_FOUND;
 }
